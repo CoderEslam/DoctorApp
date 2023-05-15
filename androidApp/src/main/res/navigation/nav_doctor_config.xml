@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_doctor_config"
+    app:startDestination="@id/routeFragment">
+
+    <fragment
+        android:id="@+id/priceFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.PriceFragment"
+        android:label="fragment_price"
+        tools:layout="@layout/fragment_price" />
+    <fragment
+        android:id="@+id/routeFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.RouteFragment"
+        android:label="fragment_route"
+        tools:layout="@layout/fragment_route">
+        <action
+            android:id="@+id/action_routeFragment_to_priceFragment"
+            app:destination="@id/priceFragment" />
+        <action
+            android:id="@+id/action_routeFragment_to_doctorClinicsFragment"
+            app:destination="@id/doctorClinicsFragment" />
+        <action
+            android:id="@+id/action_routeFragment_to_doctorInfoFragment"
+            app:destination="@id/doctorInfoFragment" />
+        <action
+            android:id="@+id/action_routeFragment_to_assistantsFragment"
+            app:destination="@id/assistantsFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/doctorClinicsFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorClinicsFragment"
+        android:label="fragment_doctor_clinics"
+        tools:layout="@layout/fragment_doctor_clinics" />
+    <fragment
+        android:id="@+id/doctorInfoFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorInfoFragment"
+        android:label="fragment_doctor_info"
+        tools:layout="@layout/fragment_doctor_info" />
+    <fragment
+        android:id="@+id/assistantsFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.AssistantsFragment"
+        android:label="fragment_assistants"
+        tools:layout="@layout/fragment_assistants" />
+
+
+</navigation>

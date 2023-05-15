@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Home.DoctorDetails.DoctorDetailsActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg" />
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:stateListAnimator="@animator/default_not_elevated">
+
+        <com.doubleclick.doctorapp.android.views.MotionLayoutAppBarDriven
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:layoutDescription="@xml/scene_06"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            tools:applyMotionScene="false">
+
+            <ImageView
+                android:id="@+id/ivBanner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                android:src="@color/grey_600"
+                app:layout_constraintDimensionRatio="W,1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/ivGradient"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@+id/ivBanner"
+                app:layout_constraintDimensionRatio="W,1:3.2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/gradient_profile_cover" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/profileInfoCard"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:cardBackgroundColor="@color/white"
+                app:cardCornerRadius="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/space"
+                app:layout_constraintEnd_toEndOf="@+id/space"
+                app:layout_constraintStart_toStartOf="@+id/space"
+                app:layout_constraintTop_toTopOf="@+id/space" />
+
+            <TextView
+                android:id="@+id/tvProfileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="6dp"
+                android:fontFamily="@font/rubik_bold"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="Eslam Ghazy"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/tvProfileDescription"
+                app:layout_constraintEnd_toEndOf="@id/profileInfoCard"
+                app:layout_constraintStart_toStartOf="@id/profileInfoCard"
+                app:layout_constraintTop_toTopOf="@+id/space"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/tvProfileDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:alpha="0.5"
+                android:elevation="3dp"
+                android:ellipsize="end"
+                android:gravity="center_horizontal"
+                android:maxLines="2"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/space"
+                app:layout_constraintEnd_toEndOf="@id/profileInfoCard"
+                app:layout_constraintStart_toStartOf="@id/profileInfoCard"
+                app:layout_constraintTop_toBottomOf="@+id/tvProfileName"
+                tools:text="Space to write your profile description which can be up to 2 lines max" />
+
+
+            <Space
+                android:id="@+id/space"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivGradient"
+                app:layout_constraintDimensionRatio="W,1:2.27"
+                app:layout_constraintEnd_toEndOf="@+id/ivGradient"
+                app:layout_constraintStart_toStartOf="@+id/ivGradient" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <TextView
+                android:id="@+id/tvBookmarkedCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivGradient" />
+
+            <TextView
+                android:id="@+id/tvBookmarked"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Bookmarked"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/tvBookmarkedCount"
+                app:layout_constraintStart_toStartOf="@+id/tvBookmarkedCount"
+                app:layout_constraintTop_toBottomOf="@id/tvBookmarkedCount" />
+
+            <TextView
+                android:id="@+id/tvReactedCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/ivGradient" />
+
+            <TextView
+                android:id="@+id/tvReacted"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="Liked"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="@+id/tvReactedCount"
+                app:layout_constraintStart_toStartOf="@+id/tvReactedCount"
+                app:layout_constraintTop_toBottomOf="@id/tvReactedCount" />
+
+            <ImageView
+                android:id="@+id/ivCurve"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:elevation="1dp"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvBookmarked"
+                app:srcCompat="@color/white" />
+
+            <View
+                android:id="@+id/curveSidesFill"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/ivCurve"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvBookmarked" />
+
+            <Space
+                android:id="@+id/profileImageSpace"
+                android:layout_width="wrap_content"
+                android:layout_height="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profileInfoCard" />
+
+            <com.doubleclick.doctorapp.android.views.CircleImageView
+                android:id="@+id/ivProfile"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:elevation="5dp"
+                android:src="@drawable/avatars"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="1dp"
+                app:layout_constraintBottom_toBottomOf="@+id/profileImageSpace"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/loggedInProfileGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="tvReacted,tvReactedCount,tvBookmarked,tvBookmarkedCount" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:alpha="0"
+                android:background="@color/green"
+                android:elevation="4dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/background"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0"
+                android:background="@color/green"
+                android:elevation="4dp"
+                app:layout_constraintBottom_toTopOf="@id/toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </com.doubleclick.doctorapp.android.views.MotionLayoutAppBarDriven>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/layout_clinic_item" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/heart_loading" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

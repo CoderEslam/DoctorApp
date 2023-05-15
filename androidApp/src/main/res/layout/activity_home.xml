@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerlayout_normal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:edMenuBackground="@color/green"
+    app:edMenuSize="260dp"
+    app:edPosition="1"
+    tools:context=".Home.HomeActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/green"
+        android:elevation="10dp"
+        android:minHeight="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/scanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_qr_code_scanner"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <FrameLayout
+            android:id="@+id/home_activity_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+-->
+<com.doubleclick.doctorapp.android.views.flowingdrawer.FlowingDrawer xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawerlayout_normal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    app:edMenuBackground="@color/green"
+    app:edMenuSize="260dp"
+    app:edPosition="1"
+    tools:context=".Home.HomeActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- <androidx.fragment.app.FragmentContainerView
+             android:id="@+id/home_activity_fragment"
+             android:name="androidx.navigation.fragment.NavHostFragment"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             app:defaultNavHost="true"
+             app:layout_constraintBottom_toBottomOf="parent"
+             app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             app:layout_constraintTop_toTopOf="parent"
+             app:navGraph='@navigation/nav_main_graph' />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/green"
+                android:minHeight="?attr/actionBarSize"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/openMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:src="@drawable/menu"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+            <fragment
+                android:id="@+id/main_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:defaultNavHost="true"
+                app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                app:navGraph='@navigation/nav_home_graph' />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_navigation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:listitem="@layout/layout_navigation_item" />
+
+            <com.doubleclick.doctorapp.android.views.bubblenavigation.BubbleNavigationConstraintView
+                android:id="@+id/floating_top_bar_navigation"
+                android:layout_width="wrap_content"
+                android:layout_height="70dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:layout_marginBottom="18dp"
+                android:background="@drawable/bg_button_circle_green"
+                android:elevation="8dp"
+                android:padding="8dp"
+                android:visibility="gone"
+                app:bnc_mode="packed"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+                <com.doubleclick.doctorapp.android.views.bubblenavigation.BubbleToggleView
+                    android:id="@+id/bub_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:bt_active="true"
+                    app:bt_colorActive="@color/green"
+                    app:bt_colorInactive="@color/grey_text"
+                    app:bt_icon="@drawable/home"
+                    app:bt_shape="@drawable/rounded_rect"
+                    app:bt_shapeColor="@color/alpha_white"
+                    app:bt_title="@string/home"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/bub_favorite"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <com.doubleclick.doctorapp.android.views.bubblenavigation.BubbleToggleView
+                    android:id="@+id/bub_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:bt_active="true"
+                    app:bt_colorActive="@color/green"
+                    app:bt_colorInactive="@color/grey_text"
+                    app:bt_icon="@drawable/favorite"
+                    app:bt_shape="@drawable/rounded_rect"
+                    app:bt_shapeColor="@color/alpha_white"
+                    app:bt_title="@string/favorite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/bub_book"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/bub_home"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.doubleclick.doctorapp.android.views.bubblenavigation.BubbleToggleView
+                    android:id="@+id/bub_book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:bt_active="true"
+                    app:bt_colorActive="@color/green"
+                    app:bt_colorInactive="@color/grey_text"
+                    app:bt_icon="@drawable/book"
+                    app:bt_shape="@drawable/rounded_rect"
+                    app:bt_shapeColor="@color/alpha_white"
+                    app:bt_title="@string/book"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/bub_profile"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/bub_favorite"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.doubleclick.doctorapp.android.views.bubblenavigation.BubbleToggleView
+                    android:id="@+id/bub_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:bt_active="true"
+                    app:bt_colorActive="@color/green"
+                    app:bt_colorInactive="@color/grey_text"
+                    app:bt_icon="@drawable/person"
+                    app:bt_shape="@drawable/rounded_rect"
+                    app:bt_shapeColor="@color/alpha_white"
+                    app:bt_title="@string/profile"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/bub_book"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </com.doubleclick.doctorapp.android.views.bubblenavigation.BubbleNavigationConstraintView>
+
+
+            <com.doubleclick.doctorapp.android.views.SmoothButtom.SmoothBottomBar
+                android:id="@+id/bottomBar"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                app:backgroundColor="@color/white"
+                app:cornerRadius="15dp"
+                app:corners="top_left|top_right"
+                app:iconSize="24dp"
+                app:iconTint="@color/grey_text"
+                app:iconTintActive="@color/green"
+                app:indicatorColor="#2DFFFFFF"
+                app:indicatorRadius="20dp"
+                app:itemPadding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/menu_bottom"
+                app:sideMargins="10dp"
+                app:textColor="@color/black"
+                app:textSize="14sp" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--must be in edPosition 1-->
+    <com.doubleclick.doctorapp.android.views.flowingdrawer.FlowingMenuLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.doubleclick.doctorapp.android.views.CircleImageView
+                android:id="@+id/image_profile"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/person"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/rubik"
+                android:text="Eslam"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/image_profile" />
+
+            <TextView
+                android:id="@+id/user_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/rubik"
+                android:text="Eslam"
+                android:textColor="@color/black"
+                app:drawableStartCompat="@drawable/call"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerLeftSide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="@+id/logout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/user_contact"
+                app:layout_constraintVertical_bias="0.0"
+                tools:listitem="@layout/item_option" />
+
+
+            <LinearLayout
+                android:id="@+id/logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="24dp"
+                android:background="@drawable/bg_red"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/logout" />
+
+                <TextView
+                    android:layout_marginStart="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Logout"
+                    android:textSize="24sp" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.doubleclick.doctorapp.android.views.flowingdrawer.FlowingMenuLayout>
+
+
+</com.doubleclick.doctorapp.android.views.flowingdrawer.FlowingDrawer>
