@@ -33,7 +33,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="20dp"
@@ -181,6 +181,7 @@
                             android:orientation="horizontal">
 
                             <RadioButton
+                                android:id="@+id/radio_btn_male"
                                 style="@style/radioButton"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -190,6 +191,7 @@
                                 android:textColor="@color/text_grey" />
 
                             <RadioButton
+                                android:id="@+id/radio_btn_female"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="15dp"

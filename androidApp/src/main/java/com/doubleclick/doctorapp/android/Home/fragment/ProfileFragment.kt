@@ -143,6 +143,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun uploadImage(body: UploadRequestBody) {
+        binding.progressBar.visibility = View.VISIBLE
         GlobalScope.launch(Dispatchers.Main) {
             val id = requireActivity().getId().toString()
             val name = requireActivity().getName().toString()

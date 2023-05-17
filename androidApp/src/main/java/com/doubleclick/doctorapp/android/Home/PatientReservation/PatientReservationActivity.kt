@@ -18,7 +18,7 @@ import com.doubleclick.doctorapp.android.Model.*
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.GovernoratesModel
-import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
@@ -26,6 +26,7 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.ActivityPatientReservationBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
+import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.utils.getDays
 import com.doubleclick.doctorapp.android.utils.getMonth
@@ -49,6 +50,7 @@ class PatientReservationActivity : AppCompatActivity() {
     private var reason_visit: String = ""
     private var governoratesModel: String = ""
     private var areaModel: String = ""
+    private var patient_id: String = ""
     private var TOKEN: String = ""
     private lateinit var viewModel: MainViewModel
     private var governoratesModelList: List<GovernoratesModel> = mutableListOf()
@@ -72,10 +74,12 @@ class PatientReservationActivity : AppCompatActivity() {
         binding.spinnerYear.adapter = SpinnerAdapter(this@PatientReservationActivity, getYears())
         binding.spinnerMonth.adapter = SpinnerAdapter(this@PatientReservationActivity, getMonth())
         binding.spinnerDay.adapter = SpinnerAdapter(this@PatientReservationActivity, getDays())
-        binding.spinnerReason.adapter = SpinnerAdapter(this@PatientReservationActivity, reasonModelList)
+        binding.spinnerReason.adapter =
+            SpinnerAdapter(this@PatientReservationActivity, reasonModelList)
 
         GlobalScope.launch(Dispatchers.Main) {
             TOKEN = getToken().toString()
+            patient_id = getId().toString()
             viewModel.getGovernoratesList("${BEARER}$TOKEN")
                 .observe(this@PatientReservationActivity) {
                     it.enqueue(object : Callback<Governorates> {
@@ -271,13 +275,27 @@ class PatientReservationActivity : AppCompatActivity() {
         }
 
         binding.Continue.setOnClickListener {
-            viewModel.postPatient(
+            viewModel.postPatientReservations(
                 "${BEARER}$TOKEN",
-                PatientStore(
-                    name = binding.patientName.text.toString(),
-                    phone = binding.patientPhone.text.toString(),
-                    governorate_id = governoratesModel,
-                    area_id = areaModel
+                PatientReservationsModel(
+                    age = "$year/$month/$day",
+                    attend = "",
+                    cancel_reason = "",
+                    clinic = null,
+                    clinic_id = intent.extras?.getString("clinic_id").toString().toInt(),
+                    doctor = null,
+                    doctor_id = intent.extras?.getString("doctor_id").toString().toInt(),
+                    id = -1,
+                    kind = if (binding.radioBtnMale.isChecked) "male" else if (binding.radioBtnFemale.isChecked) "female" else "",
+                    notes = "",
+                    patient = null,
+                    patient_id = patient_id.toInt(),
+                    patient_phone = binding.patientPhone.text.toString(),
+                    reservation_date = binding.reservationDate.text.toString(),
+                    status = "",
+                    type = reason_visit,
+                    user = null,
+                    user_id = -1
                 )
             ).observe(this@PatientReservationActivity) {
                 it.clone().enqueue(object : Callback<Message> {

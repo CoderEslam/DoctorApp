@@ -20,6 +20,7 @@ import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
@@ -239,9 +240,22 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         return message;
     }
 
-
-
     //////////////////////////assistants//////////////////////////////////
+
+
+    //////////////////////////patient_reservations//////////////////////////////////
+    fun postPatientReservations(
+        token: String,
+        patientReservationsModel: PatientReservationsModel
+    ): LiveData<Call<Message>> {
+        message.value = repository.postPatientReservations(
+            token = token,
+            patientReservationsModel = patientReservationsModel
+        )
+        return message;
+    }
+
+    //////////////////////////patient_reservations//////////////////////////////////
 
 
 }

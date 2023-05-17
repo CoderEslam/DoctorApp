@@ -17,6 +17,7 @@ import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import okhttp3.MultipartBody
@@ -170,6 +171,19 @@ class RepositoryRemot {
     }
 
     //////////////////////////assistants//////////////////////////////////
+
+
+    //////////////////////////patient_reservations//////////////////////////////////
+    fun postPatientReservations(
+        token: String,
+        patientReservationsModel: PatientReservationsModel
+    ): Call<Message> {
+        return RetrofitInstance.api.postPatientReservations(
+            token = token,
+            patientReservationsModel = patientReservationsModel
+        )
+    }
+    //////////////////////////patient_reservations//////////////////////////////////
 
 
 }

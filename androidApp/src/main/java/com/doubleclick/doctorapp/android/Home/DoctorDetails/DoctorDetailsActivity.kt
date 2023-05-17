@@ -1,5 +1,6 @@
 package com.doubleclick.doctorapp.android.Home.DoctorDetails
 
+import android.annotation.SuppressLint
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -43,7 +44,8 @@ class DoctorDetailsActivity : AppCompatActivity() {
         binding = ActivityDoctorDetailesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         viewModel = ViewModelProvider(
-            this, MainViewModelFactory(RepositoryRemot())
+            this,
+            MainViewModelFactory(RepositoryRemot())
         )[MainViewModel::class.java]
         GlobalScope.launch(Dispatchers.Main) {
             binding.animationView.visibility = View.VISIBLE
@@ -53,14 +55,34 @@ class DoctorDetailsActivity : AppCompatActivity() {
             )
                 .observe(this@DoctorDetailsActivity) {
                     it.enqueue(object : Callback<DoctorsList> {
+                        @SuppressLint("SetTextI18n")
                         override fun onResponse(
                             call: Call<DoctorsList>,
                             response: Response<DoctorsList>
                         ) {
                             val data = response.body()!!.data[0]
                             binding.rv.adapter = DoctorClinicAdapter(data.clinics)
+
+                            Glide.with(this@DoctorDetailsActivity)
+                                .load("${IMAGE_URL}${data.user.user_image}")
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(binding.ivProfile)
+
+                            Glide.with(this@DoctorDetailsActivity)
+                                .load("${IMAGE_URL}${data.user.user_image}")
+                                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                .skipMemoryCache(true)
+                                .into(binding.ivBanner)
+
                             binding.tvProfileDescription.text =
-                                "General Specialty : ${data.general_specialty.name + " \n " + "Specialization : " + data.specialization.name}"
+                                "${getString(R.string.General_Specialty)} : ${
+                                    data.general_specialty.name + " \n " + "${
+                                        getString(
+                                            R.string.Specialization
+                                        )
+                                    } : " + data.specialization.name
+                                }"
                             binding.animationView.visibility = View.GONE
                         }
 
@@ -70,17 +92,6 @@ class DoctorDetailsActivity : AppCompatActivity() {
 
                     })
                 }
-            Glide.with(this@DoctorDetailsActivity)
-                .load("${IMAGE_URL}${getImage()}")
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.ivProfile)
-
-            Glide.with(this@DoctorDetailsActivity)
-                .load("${IMAGE_URL}${getImage()}")
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
-                .into(binding.ivBanner)
 
 
         }
