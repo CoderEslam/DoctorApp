@@ -20,6 +20,7 @@ import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
@@ -236,7 +237,7 @@ interface API {
     @POST("patient_reservations")
     fun postPatientReservations(
         @Header("Authorization") token: String,
-        @Body patientReservationsModel: PatientReservationsModel
+        @Body patientReservationsModel: PostPatientReservations
     ): Call<Message>
     //////////////////////////patient_reservations//////////////////////////////////
 

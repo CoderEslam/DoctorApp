@@ -119,9 +119,9 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
                     ItemNavigation(R.drawable.home, R.string.home, 0),
                     ItemNavigation(R.drawable.medical, R.string.favorite, 1),
                     ItemNavigation(R.drawable.privacy_policy, R.string.book, 2),
-                    ItemNavigation(R.drawable.help_center, R.string.profile, 3),
-                    ItemNavigation(R.drawable.setting, R.string.profile, 4),
-                    ItemNavigation(R.drawable.setting, R.string.profile, 5),
+                    ItemNavigation(R.drawable.help_center, R.string.help, 3),
+                    ItemNavigation(R.drawable.setting, R.string.settings, 4),
+                    ItemNavigation(R.drawable.setting, R.string.doctor, 5),
                 )
             )
 

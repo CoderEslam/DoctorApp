@@ -36,8 +36,8 @@ class DoctorClinicAdapter(val clinicData: List<ClinicData>) :
                 holder.itemView.context,
                 PatientReservationActivity::class.java
             )
-            intent.putExtra("clinic_id", clinicData[holder.bindingAdapterPosition].id)
-            intent.putExtra("doctor_id", clinicData[holder.bindingAdapterPosition].doctor_id)
+            intent.putExtra("clinic_id", clinicData[holder.bindingAdapterPosition].id.toString())
+            intent.putExtra("doctor_id", clinicData[holder.bindingAdapterPosition].doctor_id.toString())
             holder.itemView.context.startActivity(intent)
         }
     }

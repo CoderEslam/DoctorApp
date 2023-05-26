@@ -312,4 +312,6 @@
     <string name="female">Female</string>
     <string name="General_Specialty">General Specialty</string>
     <string name="Specialization">Specialization</string>
+    <string name="doctor">Doctor</string>
+    <string name="help">Help</string>
 </resources>

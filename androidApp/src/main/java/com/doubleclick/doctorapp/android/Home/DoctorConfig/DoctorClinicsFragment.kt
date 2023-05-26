@@ -32,6 +32,8 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentDoctorClinicsBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
+import com.doubleclick.doctorapp.android.views.SeekArc.SeekArc
+import com.doubleclick.doctorapp.android.views.SeekArc.`interface`.OnSeekArcChangeListener
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -160,7 +162,23 @@ class DoctorClinicsFragment : Fragment() {
 
                 })
             }
+            binding.seekArc.setOnSeekArcChangeListener(object : OnSeekArcChangeListener {
+                override fun onProgressChanged(
+                    seekArc: SeekArc?,
+                    progress: Int,
+                    fromUser: Boolean
+                ) {
+                    binding.price.text = seekArc?.progress.toString()
+                }
 
+                override fun onStartTrackingTouch(seekArc: SeekArc?) {
+
+                }
+
+                override fun onStopTrackingTouch(seekArc: SeekArc?) {
+                }
+
+            })
             binding.saturday.setOnClickListener {
                 addOrRemoveDay(0)
             }
@@ -196,7 +214,8 @@ class DoctorClinicsFragment : Fragment() {
                         overview = binding.overview.text.toString(),
                         governorate_id = governoratesModel,
                         area_id = areaModel,
-                        doctor_id = "3"
+                        doctor_id = "3",
+                        price = binding.price.text.toString()
                     )
 
 
@@ -439,6 +458,5 @@ class DoctorClinicsFragment : Fragment() {
         } else {
             daysList.add(index)
         }
-        Log.e(TAG, "addOrRemoveDay: ${daysList.toString()}")
     }
 }

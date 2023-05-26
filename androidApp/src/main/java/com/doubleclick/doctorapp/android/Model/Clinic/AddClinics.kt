@@ -11,4 +11,5 @@ data class AddClinics(
     val governorate_id: String,
     val area_id: String,
     val doctor_id: String,
+    val price: String,
 )

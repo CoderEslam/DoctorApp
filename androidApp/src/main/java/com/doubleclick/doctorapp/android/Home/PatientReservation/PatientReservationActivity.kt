@@ -19,6 +19,7 @@ import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.GovernoratesModel
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
@@ -277,25 +278,15 @@ class PatientReservationActivity : AppCompatActivity() {
         binding.Continue.setOnClickListener {
             viewModel.postPatientReservations(
                 "${BEARER}$TOKEN",
-                PatientReservationsModel(
+                PostPatientReservations(
                     age = "$year/$month/$day",
-                    attend = "",
-                    cancel_reason = "",
-                    clinic = null,
-                    clinic_id = intent.extras?.getString("clinic_id").toString().toInt(),
-                    doctor = null,
-                    doctor_id = intent.extras?.getString("doctor_id").toString().toInt(),
-                    id = -1,
+                    clinic_id = intent.extras?.getString("clinic_id")!!,
+                    doctor_id = intent.extras?.getString("doctor_id")!!,
                     kind = if (binding.radioBtnMale.isChecked) "male" else if (binding.radioBtnFemale.isChecked) "female" else "",
-                    notes = "",
-                    patient = null,
-                    patient_id = patient_id.toInt(),
+                    patient_id = patient_id,
                     patient_phone = binding.patientPhone.text.toString(),
                     reservation_date = binding.reservationDate.text.toString(),
-                    status = "",
                     type = reason_visit,
-                    user = null,
-                    user_id = -1
                 )
             ).observe(this@PatientReservationActivity) {
                 it.clone().enqueue(object : Callback<Message> {
@@ -305,7 +296,7 @@ class PatientReservationActivity : AppCompatActivity() {
                     ) {
                         Toast.makeText(
                             this@PatientReservationActivity,
-                            response.body()?.message,
+                            response.body()?.message.toString(),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
