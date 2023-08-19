@@ -76,4 +76,10 @@
         <item name="android:state_checked">true</item>
     </style>
 
+
+    <style name="alertDialog">
+        <item name="background">@color/color_less</item>
+        <item name="textColor">@color/green</item>
+    </style>
+
 </resources>

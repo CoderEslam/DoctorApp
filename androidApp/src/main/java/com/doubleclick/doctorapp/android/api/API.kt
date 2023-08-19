@@ -5,6 +5,7 @@ import com.doubleclick.doctorapp.android.Model.Clinic.AddClinics
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Area.StoreArea
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
+import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
 import com.doubleclick.doctorapp.android.Model.Auth.Login
 import com.doubleclick.doctorapp.android.Model.Auth.Registration
 import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
@@ -13,13 +14,13 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorInfo
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
+import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.google.gson.JsonObject
@@ -183,6 +184,12 @@ interface API {
         @Body patientStore: PatientStore
     ): Call<Message>
 
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("patients")
+    fun familyMemberPatient(
+        @Header("Authorization") token: String,
+    ): Call<PatientsList>
+
     //////////////////////////patients//////////////////////////////////
 
 
@@ -229,6 +236,21 @@ interface API {
         @Header("Authorization") token: String,
         @Body addAssistants: AddAssistants
     ): Call<Message>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("assistants")
+    fun getAssistants(
+        @Header("Authorization") token: String,
+    ): Call<AssistantsList>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @DELETE("assistants/{id}")
+    fun deleteAssistants(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Call<Message>
+
+
     //////////////////////////assistants//////////////////////////////////
 
 
@@ -239,6 +261,13 @@ interface API {
         @Header("Authorization") token: String,
         @Body patientReservationsModel: PostPatientReservations
     ): Call<Message>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("patient_reservations/{id}")
+    fun getPatientReservations(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Call<PatientReservationsList>
     //////////////////////////patient_reservations//////////////////////////////////
 
 

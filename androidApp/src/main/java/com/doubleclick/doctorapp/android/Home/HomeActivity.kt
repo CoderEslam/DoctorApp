@@ -117,11 +117,9 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
                 this@HomeActivity,
                 listOf(
                     ItemNavigation(R.drawable.home, R.string.home, 0),
-                    ItemNavigation(R.drawable.medical, R.string.favorite, 1),
-                    ItemNavigation(R.drawable.privacy_policy, R.string.book, 2),
-                    ItemNavigation(R.drawable.help_center, R.string.help, 3),
-                    ItemNavigation(R.drawable.setting, R.string.settings, 4),
-                    ItemNavigation(R.drawable.setting, R.string.doctor, 5),
+                    ItemNavigation(R.drawable.help_center, R.string.help, 1),
+                    ItemNavigation(R.drawable.setting, R.string.settings, 2),
+                    ItemNavigation(R.drawable.ic_baseline_manage_accounts_24, R.string.doctor, 3),
                 )
             )
 
@@ -241,19 +239,10 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
 
             }
             2 -> {
-
+                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
             }
             3 -> {
-
-            }
-            4 -> {
-
-            }
-            5 -> {
                 startActivity(Intent(this@HomeActivity, DoctorConfigActivity::class.java))
-            }
-            6 -> {
-                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
             }
         }
     }

@@ -8,9 +8,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.R
+import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import com.doubleclick.doctorapp.android.databinding.FragmentBookBinding
+import com.doubleclick.doctorapp.android.utils.Constants.BEARER
+import com.doubleclick.doctorapp.android.utils.SessionManger.getId
+import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.views.slycalendarview.SlyCalendarDialog
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -18,7 +29,7 @@ class BookFragment : Fragment(), SlyCalendarDialog.Callback {
 
 
     private lateinit var binding: FragmentBookBinding
-
+    private val TAG = "BookFragment"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -37,6 +48,26 @@ class BookFragment : Fragment(), SlyCalendarDialog.Callback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            Log.e(TAG, "onViewCreated: ${requireActivity().getId().toString()}")
+            RetrofitInstance.api.getPatientReservations(
+                BEARER + requireActivity().getToken(),
+                /*requireActivity().getId().toString()*/"1"
+            ).clone().enqueue(object : Callback<PatientReservationsList> {
+                override fun onResponse(
+                    call: Call<PatientReservationsList>,
+                    response: Response<PatientReservationsList>
+                ) {
+                    Log.e(TAG, "onResponse: ${response.body()?.data.toString()}")
+                }
+
+                override fun onFailure(call: Call<PatientReservationsList>, t: Throwable) {
+
+                }
+
+            })
+        }
 
         val dilog = SlyCalendarDialog()
             .setSingle(false)

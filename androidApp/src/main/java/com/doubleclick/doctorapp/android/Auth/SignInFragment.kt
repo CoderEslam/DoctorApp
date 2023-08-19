@@ -101,12 +101,12 @@ class SignInFragment : Fragment() {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 response.body()?.let { user ->
                                     requireActivity().updateSession(
-                                        user.user.device_token,
-                                        user.user.email,
-                                        binding.passwordSignIn.text.toString().trim(),
-                                        user.user.id.toString(),
-                                        user.user.name,
-                                        user.user.phone
+                                        user.user.device_token!!,
+                                        user.user.email!!,
+                                        binding.passwordSignIn.text.toString().trim()!!,
+                                        user.user.id.toString()!!,
+                                        user.user.name!!,
+                                        user.user.phone!!
                                     )
                                     requireActivity().setImage("${user.user.name}_${user.user.id}.jpg")
                                     startActivity(
@@ -142,12 +142,12 @@ class SignInFragment : Fragment() {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 response.body()?.let { user ->
                                     requireActivity().updateSession(
-                                        user.user.device_token,
-                                        user.user.phone,
+                                        user.user.device_token!!,
+                                        user.user.phone!!,
                                         binding.passwordSignIn.text.toString().trim(),
                                         user.user.id.toString(),
-                                        user.user.name,
-                                        user.user.phone
+                                        user.user.name!!,
+                                        user.user.phone!!
                                     )
                                     startActivity(
                                         Intent(

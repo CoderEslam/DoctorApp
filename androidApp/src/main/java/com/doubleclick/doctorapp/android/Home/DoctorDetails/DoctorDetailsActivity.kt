@@ -61,27 +61,27 @@ class DoctorDetailsActivity : AppCompatActivity() {
                             response: Response<DoctorsList>
                         ) {
                             val data = response.body()!!.data[0]
-                            binding.rv.adapter = DoctorClinicAdapter(data.clinics)
+                            binding.rv.adapter = data.clinics?.let { it1 -> DoctorClinicAdapter(it1) }
 
                             Glide.with(this@DoctorDetailsActivity)
-                                .load("${IMAGE_URL}${data.user.user_image}")
+                                .load("${IMAGE_URL}${data.user?.user_image}")
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.ivProfile)
 
                             Glide.with(this@DoctorDetailsActivity)
-                                .load("${IMAGE_URL}${data.user.user_image}")
+                                .load("${IMAGE_URL}${data.user?.user_image}")
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.ivBanner)
 
                             binding.tvProfileDescription.text =
                                 "${getString(R.string.General_Specialty)} : ${
-                                    data.general_specialty.name + " \n " + "${
+                                    data.general_specialty?.name + " \n " + "${
                                         getString(
                                             R.string.Specialization
                                         )
-                                    } : " + data.specialization.name
+                                    } : " + data.specialization?.name
                                 }"
                             binding.animationView.visibility = View.GONE
                         }

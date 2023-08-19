@@ -1,5 +1,6 @@
 package com.doubleclick.doctorapp.android.Adapters
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -7,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubleclick.doctorapp.android.BookingTime
 import com.doubleclick.doctorapp.android.FavoritesDoctor
+import com.doubleclick.doctorapp.android.Home.DoctorDetails.DoctorDetailsActivity
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.FavoriteDoctorsViewHolder
@@ -31,24 +33,42 @@ class FavoriteDoctorsAdapter(
 
     override fun onBindViewHolder(holder: FavoriteDoctorsViewHolder, position: Int) {
         holder.favorite_icon.setOnClickListener {
-            favorites.deleteFavorite(favoriteModel[holder.bindingAdapterPosition].id.toString())
+            favorites.deleteFavorite(
+                favoriteModel[holder.bindingAdapterPosition],
+                favoriteModel[holder.bindingAdapterPosition].id.toString()
+            )
         }
         holder.booking.setOnClickListener {
             booking.book()
         }
+
         try {
-            holder.name_doctor.text = favoriteModel[holder.bindingAdapterPosition].user.name
+            holder.name_doctor.text = favoriteModel[holder.bindingAdapterPosition].user?.name
             holder.specializations.text =
-                favoriteModel[holder.bindingAdapterPosition].doctor.specialization_id.toString()
+                favoriteModel[holder.bindingAdapterPosition].specialization?.name
             holder.genaral_specalization.text =
-                favoriteModel[holder.bindingAdapterPosition].doctor.general_specialty_id.toString()
-        }catch (_:NullPointerException){}
+                favoriteModel[holder.bindingAdapterPosition].general_specialty?.name
+        } catch (_: NullPointerException) {
+        }
         Glide.with(holder.itemView.context).apply {
-            load(IMAGE_URL + favoriteModel[holder.bindingAdapterPosition].user.user_image).apply {
+            load(IMAGE_URL + favoriteModel[holder.bindingAdapterPosition].user?.user_image).apply {
                 placeholder(ContextCompat.getDrawable(holder.itemView.context, R.drawable.girl))
                 into(holder.image_doctor)
             }
         }
+
+        holder.itemView.setOnClickListener {
+            holder.itemView.context.startActivity(
+                Intent(
+                    holder.itemView.context,
+                    DoctorDetailsActivity::class.java
+                ).putExtra(
+                    "doctor_id",
+                    favoriteModel[holder.bindingAdapterPosition].doctor_id.toString()
+                )
+            )
+        }
+
 
     }
 

@@ -2,14 +2,16 @@ package com.doubleclick.doctorapp.android.Home.DoctorConfig
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.doubleclick.doctorapp.android.R
+import com.doubleclick.doctorapp.android.databinding.ActivityDoctorConfigBinding
 
 class DoctorConfigActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityDoctorConfigBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_doctor_config)
+        binding = ActivityDoctorConfigBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
     }
-    
+
 }

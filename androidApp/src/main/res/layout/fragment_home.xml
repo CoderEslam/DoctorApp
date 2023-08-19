@@ -31,11 +31,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/rubik_light"
-            android:text="Hi Eslam Ghazy!"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Hi Eslam Ghazy!" />
 
         <com.doubleclick.doctorapp.android.views.CircleImageView
             android:id="@+id/imageProfile"
@@ -127,7 +127,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/rubik_medium"
-                    android:text="Docotor Vidoe"
+                    android:text="@string/medical_advice"
                     android:textColor="@color/grey_700"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"

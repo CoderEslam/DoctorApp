@@ -30,9 +30,6 @@ class RouteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.price.setOnClickListener {
-            findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToPriceFragment())
-        }
 
         binding.addClinic.setOnClickListener {
             findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorClinicsFragment())

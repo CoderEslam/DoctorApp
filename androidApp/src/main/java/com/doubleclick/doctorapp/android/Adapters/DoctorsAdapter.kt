@@ -22,13 +22,14 @@ class DoctorsAdapter(val doctorData: List<DoctorData>) : RecyclerView.Adapter<Do
 
     override fun onBindViewHolder(holder: DoctorsViewHolder, position: Int) {
         Glide.with(holder.itemView.context)
-            .load(IMAGE_URL + doctorData[holder.bindingAdapterPosition].user.user_image)
-            .placeholder(R.drawable.girl)
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true).into(holder.doctor_image)
+            .load(IMAGE_URL + doctorData[holder.bindingAdapterPosition].user?.user_image)
+//            .placeholder(R.drawable.girl)
+//            .diskCacheStrategy(DiskCacheStrategy.NONE)
+//            .skipMemoryCache(true)
+            .into(holder.doctor_image)
         holder.doctor_name.text = doctorData[holder.bindingAdapterPosition].name
         holder.general_specialie.text =
-            doctorData[holder.bindingAdapterPosition].general_specialty.name
+            doctorData[holder.bindingAdapterPosition].general_specialty?.name
         holder.itemView.setOnClickListener {
             val intent = Intent(
                 holder.itemView.context,

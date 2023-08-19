@@ -2,7 +2,6 @@ package com.doubleclick.doctorapp.android.Home.DoctorConfig
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.doubleclick.doctorapp.android.Adapters.SpinnerSpecializationAdapter
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorInfo
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Message
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization

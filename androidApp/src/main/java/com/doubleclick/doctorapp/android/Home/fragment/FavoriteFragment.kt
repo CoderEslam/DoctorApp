@@ -13,6 +13,7 @@ import com.doubleclick.doctorapp.android.Adapters.FavoriteDoctorsAdapter
 import com.doubleclick.doctorapp.android.BookingTime
 import com.doubleclick.doctorapp.android.FavoritesDoctor
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
+import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteModel
 import com.doubleclick.doctorapp.android.Model.Message
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
@@ -34,6 +35,8 @@ class FavoriteFragment() : Fragment(), BookingTime, FavoritesDoctor {
     private lateinit var viewModel: MainViewModel
     private val TAG = "FavoriteFragment"
     private var TOKEN = ""
+    private lateinit var favoriteDoctorsAdapter: FavoriteDoctorsAdapter
+    private var favoriteModelList: MutableList<FavoriteModel> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +70,9 @@ class FavoriteFragment() : Fragment(), BookingTime, FavoritesDoctor {
                             call: Call<FavoriteDoctor>,
                             response: Response<FavoriteDoctor>
                         ) {
-                            val favoriteDoctorsAdapter = FavoriteDoctorsAdapter(
-                                response.body()?.data!!,
+                            favoriteModelList = response.body()?.data!!.toMutableList()
+                            favoriteDoctorsAdapter = FavoriteDoctorsAdapter(
+                                favoriteModelList,
                                 this@FavoriteFragment,
                                 this@FavoriteFragment
                             )
@@ -93,10 +97,13 @@ class FavoriteFragment() : Fragment(), BookingTime, FavoritesDoctor {
         Toast.makeText(requireActivity(), "Book", Toast.LENGTH_SHORT).show()
     }
 
-    override fun deleteFavorite(id: String) {
+
+    override fun deleteFavorite(favoriteModel: FavoriteModel, id: String) {
         viewModel.deleteFavoriteDoctor("$BEARER${TOKEN}", id).observe(viewLifecycleOwner) {
             it.clone().enqueue(object : Callback<Message> {
                 override fun onResponse(call: Call<Message>, response: Response<Message>) {
+                    favoriteModelList.remove(favoriteModel)
+                    favoriteDoctorsAdapter.notifyItemRemoved(favoriteModelList.indexOf(favoriteModel))
                     Snackbar.make(
                         binding.root,
                         response.body()?.message.toString(),

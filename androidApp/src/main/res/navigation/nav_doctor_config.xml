@@ -6,18 +6,11 @@
     app:startDestination="@id/routeFragment">
 
     <fragment
-        android:id="@+id/priceFragment"
-        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.PriceFragment"
-        android:label="fragment_price"
-        tools:layout="@layout/fragment_price" />
-    <fragment
         android:id="@+id/routeFragment"
         android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.RouteFragment"
         android:label="fragment_route"
         tools:layout="@layout/fragment_route">
-        <action
-            android:id="@+id/action_routeFragment_to_priceFragment"
-            app:destination="@id/priceFragment" />
+
         <action
             android:id="@+id/action_routeFragment_to_doctorClinicsFragment"
             app:destination="@id/doctorClinicsFragment" />

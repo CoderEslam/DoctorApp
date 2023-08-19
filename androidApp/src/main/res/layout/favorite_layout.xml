@@ -8,9 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="15dp"
@@ -82,52 +82,6 @@
                 app:layout_constraintStart_toEndOf="@+id/image_doctor_card"
                 app:layout_constraintTop_toBottomOf="@+id/genaral_specalization" />
 
-            <!--   <LinearLayout
-                   android:id="@+id/linearLayout2"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginStart="14dp"
-                   android:layout_marginTop="8dp"
-                   android:gravity="center"
-                   android:orientation="horizontal"
-                   app:layout_constraintEnd_toEndOf="parent"
-                   app:layout_constraintHorizontal_bias="0.0"
-                   app:layout_constraintStart_toEndOf="@+id/image_doctor"
-                   app:layout_constraintTop_toBottomOf="@+id/experience_years">
-
-                   &lt;!&ndash; <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:background="@drawable/circle_green" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:fontFamily="@font/rubik_light"
-                        android:text="88%"
-                        android:textColor="@color/grey_text"
-                        android:textSize="11sp" />
-                    <Space
-                       android:layout_width="20dp"
-                       android:layout_height="1dp" />
-                        &ndash;&gt;
-
-                   <ImageView
-                       android:layout_width="10dp"
-                       android:layout_height="10dp"
-                       android:background="@drawable/circle_green" />
-
-                   <TextView
-                       android:id="@+id/all_patient"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:layout_marginStart="5dp"
-                       android:fontFamily="@font/rubik_light"
-                       android:text="69 Patient Stories"
-                       android:textColor="@color/grey_text"
-                       android:textSize="11sp" />
-               </LinearLayout>-->
 
             <ImageView
                 android:id="@+id/favorite_icon"

@@ -7,6 +7,7 @@ import com.doubleclick.doctorapp.android.Model.*
 import com.doubleclick.doctorapp.android.Model.Clinic.AddClinics
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
+import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
 import com.doubleclick.doctorapp.android.Model.Auth.Login
 import com.doubleclick.doctorapp.android.Model.Auth.Registration
 import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
@@ -15,16 +16,14 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorInfo
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
+import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
-import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
@@ -41,6 +40,15 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     /////////////////////////////Governorates/////////////////////////////////////
     private val araesList: MutableLiveData<Call<Araes>> = MutableLiveData()
     /////////////////////////////Governorates/////////////////////////////////////
+
+    //////////////////////////assistants//////////////////////////////////
+    private val assistantsList: MutableLiveData<Call<AssistantsList>> = MutableLiveData()
+    //////////////////////////assistants//////////////////////////////////
+
+    //////////////////////////patients//////////////////////////////////
+    private val patientsList: MutableLiveData<Call<PatientsList>> = MutableLiveData()
+
+    //////////////////////////patients//////////////////////////////////
 
     //////////////////////////Area//////////////////////////////////
     private val governoratesList: MutableLiveData<Call<Governorates>> = MutableLiveData()
@@ -191,9 +199,17 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////Days at clinic//////////////////////////////////
 
     //////////////////////////patient//////////////////////////////////
-    fun postPatient(token: String, patientStore: PatientStore): LiveData<Call<Message>> {
+    fun postfamilyMemberPatient(
+        token: String,
+        patientStore: PatientStore
+    ): LiveData<Call<Message>> {
         message.value = repository.postPatient(token = token, patientStore = patientStore);
         return message;
+    }
+
+    fun familyMemberPatient(token: String): LiveData<Call<PatientsList>> {
+        patientsList.value = repository.familyMemberPatient(token = token);
+        return patientsList;
     }
     //////////////////////////patient//////////////////////////////////
 
@@ -239,6 +255,11 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     fun postAssistants(token: String, addAssistants: AddAssistants): LiveData<Call<Message>> {
         message.value = repository.postAssistants(token = token, addAssistants = addAssistants)
         return message;
+    }
+
+    fun getAssistants(token: String): LiveData<Call<AssistantsList>> {
+        assistantsList.value = repository.getAssistants(token = token)
+        return assistantsList;
     }
 
     //////////////////////////assistants//////////////////////////////////

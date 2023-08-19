@@ -4,6 +4,7 @@ import com.doubleclick.doctorapp.android.Model.*
 import com.doubleclick.doctorapp.android.Model.Clinic.AddClinics
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
+import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
 import com.doubleclick.doctorapp.android.Model.Auth.Login
 import com.doubleclick.doctorapp.android.Model.Auth.Registration
 import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
@@ -12,12 +13,11 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorInfo
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
+import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
@@ -131,6 +131,10 @@ class RepositoryRemot {
         return RetrofitInstance.api.postPatient(token = token, patientStore = patientStore)
     }
 
+    fun familyMemberPatient(token: String): Call<PatientsList> {
+        return RetrofitInstance.api.familyMemberPatient(token = token)
+    }
+
 
     //////////////////////////user image//////////////////////////////////
     fun postUserImage(token: String, image: MultipartBody.Part): Call<Message> {
@@ -169,6 +173,10 @@ class RepositoryRemot {
 
     fun postAssistants(token: String, addAssistants: AddAssistants): Call<Message> {
         return RetrofitInstance.api.postAssistants(token = token, addAssistants = addAssistants)
+    }
+
+    fun getAssistants(token: String): Call<AssistantsList> {
+        return RetrofitInstance.api.getAssistants(token = token)
     }
 
     //////////////////////////assistants//////////////////////////////////
