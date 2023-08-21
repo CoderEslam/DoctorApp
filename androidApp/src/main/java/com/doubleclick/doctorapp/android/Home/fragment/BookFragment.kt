@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.doubleclick.doctorapp.android.Adapters.BookingAdapter
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
@@ -60,6 +61,9 @@ class BookFragment : Fragment(), SlyCalendarDialog.Callback {
                     response: Response<PatientReservationsList>
                 ) {
                     Log.e(TAG, "onResponse: ${response.body()?.data.toString()}")
+                    if (response.body()?.data != null) {
+                        binding.rvBooking.adapter = BookingAdapter(response.body()?.data!!)
+                    }
                 }
 
                 override fun onFailure(call: Call<PatientReservationsList>, t: Throwable) {
@@ -80,10 +84,10 @@ class BookFragment : Fragment(), SlyCalendarDialog.Callback {
             .setSelectedColor(ContextCompat.getColor(requireContext(), R.color.green))
 //            .show(requireActivity().supportFragmentManager, "SLY CALENDAR")
 
-        requireActivity().supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.calender_view, dilog)
-            .commit()
+//        requireActivity().supportFragmentManager
+//            .beginTransaction()
+//            .replace(R.id.calender_view, dilog)
+//            .commit()
     }
 
     override fun onCancelled() {

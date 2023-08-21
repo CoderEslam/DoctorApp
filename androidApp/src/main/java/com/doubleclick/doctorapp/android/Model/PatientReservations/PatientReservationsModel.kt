@@ -19,7 +19,7 @@ data class PatientReservationsModel(
     val patient: Patient?,
     val patient_id: Int,
     val patient_phone: String?,
-    val reservation_date: String?,
+    val reservation_date: String?, //
     val status: String?,
     val type: String?,
     val user: UserModel?,
