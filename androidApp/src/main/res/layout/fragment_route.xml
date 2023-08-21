@@ -9,14 +9,15 @@
     android:paddingTop="5dp"
     tools:context=".Home.DoctorConfig.RouteFragment">
 
-    <LinearLayout
+   <!-- <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            android:layout_marginStart="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp">
@@ -48,10 +49,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
+        <Space
+            android:layout_width="5dp"
+            android:layout_height="wrap_content" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="200dp"
-            android:layout_marginStart="10dp"
             android:layout_weight="1"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="10dp">
@@ -84,7 +88,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 
     <androidx.cardview.widget.CardView

@@ -36,12 +36,13 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/patent_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik_bold"
-                    android:text="Patient Name"
                     android:textColor="@color/green"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Patient Name" />
             </LinearLayout>
 
             <LinearLayout
@@ -59,12 +60,13 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/patent_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik_bold"
-                    android:text="Patient Phone"
                     android:textColor="@color/green"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Patient Phone" />
             </LinearLayout>
 
             <LinearLayout
@@ -82,12 +84,13 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/reservation_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/rubik_bold"
-                    android:text="Patient Phone"
                     android:textColor="@color/green"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    tools:text="Reservation Time" />
             </LinearLayout>
 
             <LinearLayout
@@ -105,9 +108,9 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -119,15 +122,14 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/doctor_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/rubik_bold"
-                        android:text="Doctor Name"
                         android:textColor="@color/green"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:text="Doctor Name" />
                 </LinearLayout>
-
-
 
 
             </LinearLayout>
@@ -147,9 +149,9 @@
                     android:textSize="18sp" />
 
                 <LinearLayout
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
@@ -161,15 +163,14 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:id="@+id/address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/rubik_bold"
-                        android:text="Doctor Name"
                         android:textColor="@color/green"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:text="Address" />
                 </LinearLayout>
-
-
 
 
             </LinearLayout>

@@ -18,6 +18,22 @@ class BookingAdapter(val patientReservationsModel: List<PatientReservationsModel
 
     override fun onBindViewHolder(holder: BookingViewHolder, position: Int) {
 
+        holder.patent_name.text = buildString {
+            append(if (patientReservationsModel[holder.bindingAdapterPosition].patient?.name != null) "${patientReservationsModel[holder.bindingAdapterPosition].patient?.name}" else "--")
+        }
+        holder.patent_phone.text = buildString {
+            append(if (patientReservationsModel[holder.bindingAdapterPosition].patient_phone != null) "${patientReservationsModel[holder.bindingAdapterPosition].patient_phone}" else "--")
+        }
+        holder.reservation_time.text = buildString {
+            append(if (patientReservationsModel[holder.bindingAdapterPosition].reservation_date != null) "${patientReservationsModel[holder.bindingAdapterPosition].reservation_date}" else "--")
+        }
+        holder.doctor_name.text = buildString {
+            append(if (patientReservationsModel[holder.bindingAdapterPosition].doctor?.name != null) "${patientReservationsModel[holder.bindingAdapterPosition].doctor?.name}" else "--")
+        }
+        holder.address.text = buildString {
+            append(if (patientReservationsModel[holder.bindingAdapterPosition].clinic?.address != null) "${patientReservationsModel[holder.bindingAdapterPosition].clinic?.address}" else "--")
+        }
+
     }
 
     override fun getItemCount(): Int = patientReservationsModel.size
