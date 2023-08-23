@@ -15,12 +15,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.DoctorVideoAdapter
 import com.doubleclick.doctorapp.android.Adapters.DoctorsAdapter
-import com.doubleclick.doctorapp.android.Adapters.SpacializationAdapter
-import com.doubleclick.doctorapp.android.Adapters.SpinnerSpecializationAdapter
+import com.doubleclick.doctorapp.android.Adapters.SpecializationAdapter
 import com.doubleclick.doctorapp.android.CreatePDF
 import com.doubleclick.doctorapp.android.Home.Filter.FilterActivity
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
@@ -71,9 +71,13 @@ class HomeFragment : Fragment(), CreatePDF {
             MainViewModelFactory(RepositoryRemot())
         )[MainViewModel::class.java]
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            binding.userName.text = "Hi ${requireActivity().getName()}!"
+            binding.userName.text = buildString {
+                append(getString(R.string.hi))
+                append(requireActivity().getName())
+                append("!")
+            }
             Glide.with(requireActivity()).load(
-                "${Constants.IMAGE_URL}${requireActivity().getName()}_${requireActivity().getId()}.jpg"
+                "${Constants.IMAGE_URL_USERS}${requireActivity().getName()}_${requireActivity().getId()}.jpg"
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
@@ -117,7 +121,7 @@ class HomeFragment : Fragment(), CreatePDF {
                         ) {
                             specializationList = response.body()!!
                             binding.homeRecyclerViewSpacification.adapter =
-                                SpacializationAdapter(specializationList.data)
+                                SpecializationAdapter(specializationList.data)
 
                         }
 

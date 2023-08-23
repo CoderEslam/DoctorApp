@@ -315,4 +315,5 @@
     <string name="doctor">Doctor</string>
     <string name="help">Help</string>
     <string name="medical_advice">Medical Advice</string>
+    <string name="hi">Hi </string>
 </resources>

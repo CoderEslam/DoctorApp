@@ -127,7 +127,7 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
             findViewById<TextView>(R.id.name).text = getName()
             findViewById<TextView>(R.id.user_contact).text = getCurrentUserEmail()
             Glide.with(this@HomeActivity).load(
-                "${Constants.IMAGE_URL}${getName()}_${getId()}.jpg"
+                "${Constants.IMAGE_URL_USERS}${getName()}_${getId()}.jpg"
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(findViewById<CircleImageView>(R.id.image_profile))

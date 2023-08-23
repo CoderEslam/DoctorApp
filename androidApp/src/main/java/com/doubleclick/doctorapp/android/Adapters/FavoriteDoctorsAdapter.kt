@@ -12,7 +12,7 @@ import com.doubleclick.doctorapp.android.Home.DoctorDetails.DoctorDetailsActivit
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.FavoriteDoctorsViewHolder
-import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL
+import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_USERS
 
 class FavoriteDoctorsAdapter(
     val favoriteModel: List<FavoriteModel>,
@@ -51,7 +51,7 @@ class FavoriteDoctorsAdapter(
         } catch (_: NullPointerException) {
         }
         Glide.with(holder.itemView.context).apply {
-            load(IMAGE_URL + favoriteModel[holder.bindingAdapterPosition].user?.user_image).apply {
+            load(IMAGE_URL_USERS + favoriteModel[holder.bindingAdapterPosition].user?.user_image).apply {
                 placeholder(ContextCompat.getDrawable(holder.itemView.context, R.drawable.girl))
                 into(holder.image_doctor)
             }

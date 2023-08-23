@@ -19,7 +19,7 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.ActivityDoctorDetailesBinding
 import com.doubleclick.doctorapp.android.utils.Constants
-import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL
+import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_USERS
 import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getImage
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
@@ -64,13 +64,13 @@ class DoctorDetailsActivity : AppCompatActivity() {
                             binding.rv.adapter = data.clinics?.let { it1 -> DoctorClinicAdapter(it1) }
 
                             Glide.with(this@DoctorDetailsActivity)
-                                .load("${IMAGE_URL}${data.user?.user_image}")
+                                .load("${IMAGE_URL_USERS}${data.user?.user_image}")
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.ivProfile)
 
                             Glide.with(this@DoctorDetailsActivity)
-                                .load("${IMAGE_URL}${data.user?.user_image}")
+                                .load("${IMAGE_URL_USERS}${data.user?.user_image}")
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.ivBanner)

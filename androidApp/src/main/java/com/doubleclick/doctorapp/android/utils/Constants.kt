@@ -13,7 +13,8 @@ object Constants {
 
     //    const val BASE_URL = "http://172.16.0.98:80/api/v1/"
     const val FCM_URL = "https://fcm.googleapis.com/"
-    const val IMAGE_URL = "https://doctor.spectrum-bpo.com/public/users_images/"
+    const val IMAGE_URL_USERS = "https://doctor.spectrum-bpo.com/public/users_images/"
+    const val IMAGE_URL_SPECIALIZATIONS = "https://doctor.spectrum-bpo.com/public/specialization_images/"
 
 
 }

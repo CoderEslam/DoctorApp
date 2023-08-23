@@ -10,7 +10,7 @@ import com.doubleclick.doctorapp.android.Home.DoctorDetails.DoctorDetailsActivit
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorData
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorsViewHolder
-import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL
+import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_USERS
 
 class DoctorsAdapter(val doctorData: List<DoctorData>) : RecyclerView.Adapter<DoctorsViewHolder>() {
 
@@ -22,7 +22,7 @@ class DoctorsAdapter(val doctorData: List<DoctorData>) : RecyclerView.Adapter<Do
 
     override fun onBindViewHolder(holder: DoctorsViewHolder, position: Int) {
         Glide.with(holder.itemView.context)
-            .load(IMAGE_URL + doctorData[holder.bindingAdapterPosition].user?.user_image)
+            .load(IMAGE_URL_USERS + doctorData[holder.bindingAdapterPosition].user?.user_image)
 //            .placeholder(R.drawable.girl)
 //            .diskCacheStrategy(DiskCacheStrategy.NONE)
 //            .skipMemoryCache(true)

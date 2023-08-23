@@ -39,7 +39,7 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentProfileBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
-import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL
+import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_USERS
 import com.doubleclick.doctorapp.android.utils.Constants.TOKEN
 import com.doubleclick.doctorapp.android.utils.SessionManger
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentPassword
@@ -159,7 +159,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
             Log.e("TOKEN", "onViewCreated: $TOKEN")
             patient_id = requireActivity().getId().toString()
             Glide.with(requireActivity()).load(
-                "$IMAGE_URL${requireActivity().getName()}_${requireActivity().getId()}.jpg"
+                "$IMAGE_URL_USERS${requireActivity().getName()}_${requireActivity().getId()}.jpg"
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
@@ -464,7 +464,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
                         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                             requireActivity().setImage("${name}_$id.jpg")
                             Glide.with(requireActivity()).load(
-                                "$IMAGE_URL${requireActivity().getImage()}"
+                                "$IMAGE_URL_USERS${requireActivity().getImage()}"
                             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.imageProfile)

@@ -1,20 +1,16 @@
 package com.doubleclick.doctorapp.android.Adapters
 
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.doubleclick.doctorapp.android.Home.Calender.CalendarViewActivity
-import com.doubleclick.doctorapp.android.Home.Filter.FilterActivity
-import com.doubleclick.doctorapp.android.Home.Live.DoctorLiveActivity
-import com.doubleclick.doctorapp.android.Home.PatientReservation.PatientReservationActivity
+import com.bumptech.glide.Glide
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.SpacificationViewHolder
+import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_SPECIALIZATIONS
 
-class SpacializationAdapter(val specializationModel: List<SpecializationModel>) :
+class SpecializationAdapter(val specializationModel: List<SpecializationModel>) :
     RecyclerView.Adapter<SpacificationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpacificationViewHolder {
@@ -24,6 +20,11 @@ class SpacializationAdapter(val specializationModel: List<SpecializationModel>) 
     }
 
     override fun onBindViewHolder(holder: SpacificationViewHolder, position: Int) {
+        Glide.with(holder.itemView.context)
+            .load(IMAGE_URL_SPECIALIZATIONS + specializationModel[holder.bindingAdapterPosition].specialization_image)
+            .placeholder(R.drawable.teeth)
+            .into(holder.image)
+
         holder.itemView.setOnClickListener {
             Toast.makeText(
                 holder.itemView.context,
