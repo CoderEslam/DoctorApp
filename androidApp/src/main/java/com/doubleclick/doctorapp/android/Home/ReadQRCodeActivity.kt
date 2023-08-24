@@ -17,7 +17,7 @@ class ReadQRCodeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_qrcode)
         val toolbar: Toolbar = findViewById(R.id.my_awesome_toolbar)
-        toolbar.setTitle("Scan Barcode")
+        toolbar.title = "Scan Barcode"
         setSupportActionBar(toolbar)
         Objects.requireNonNull(supportActionBar)?.setDisplayHomeAsUpEnabled(true)
 

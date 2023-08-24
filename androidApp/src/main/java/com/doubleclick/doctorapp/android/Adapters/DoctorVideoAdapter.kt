@@ -4,10 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdviceModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorVideoViewHolder
 
-class DoctorVideoAdapter() : RecyclerView.Adapter<DoctorVideoViewHolder>() {
+class DoctorVideoAdapter(
+    val medicalAdviceModelList: List<MedicalAdviceModel>?
+) : RecyclerView.Adapter<DoctorVideoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoctorVideoViewHolder {
         return DoctorVideoViewHolder(
@@ -28,6 +31,6 @@ class DoctorVideoAdapter() : RecyclerView.Adapter<DoctorVideoViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return 20;
+        return medicalAdviceModelList?.size ?: 0;
     }
 }

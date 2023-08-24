@@ -21,6 +21,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.AdapterNavigation
 import com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorConfigActivity
 import com.doubleclick.doctorapp.android.Home.Setting.SettingsActivity
+import com.doubleclick.doctorapp.android.Home.fragment.BottomDialogQRCode
 import com.doubleclick.doctorapp.android.ItemNavigationListener
 import com.doubleclick.doctorapp.android.Model.ItemNavigation
 import com.doubleclick.doctorapp.android.Model.SideMenu
@@ -124,13 +125,18 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
             )
 
         GlobalScope.launch(Dispatchers.Main) {
+            val userId = getId().toString()
             findViewById<TextView>(R.id.name).text = getName()
             findViewById<TextView>(R.id.user_contact).text = getCurrentUserEmail()
             Glide.with(this@HomeActivity).load(
-                "${Constants.IMAGE_URL_USERS}${getName()}_${getId()}.jpg"
+                "${Constants.IMAGE_URL_USERS}${getName()}_${userId}.jpg"
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(findViewById<CircleImageView>(R.id.image_profile))
+
+            binding.qr.setOnClickListener {
+                BottomDialogQRCode(userId).show(supportFragmentManager, "")
+            }
 
         }
     }

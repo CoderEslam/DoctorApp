@@ -19,11 +19,13 @@ import com.doubleclick.doctorapp.android.Adapters.SpecializationAdapter
 import com.doubleclick.doctorapp.android.CreatePDF
 import com.doubleclick.doctorapp.android.Home.Filter.FilterActivity
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
+import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
+import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import com.doubleclick.doctorapp.android.databinding.FragmentHomeBinding
 import com.doubleclick.doctorapp.android.utils.Constants
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
@@ -64,7 +66,6 @@ class HomeFragment : Fragment(), CreatePDF {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.homeRecyclerViewVideo.adapter = DoctorVideoAdapter();
 
         viewModel = ViewModelProvider(
             this@HomeFragment,
@@ -81,6 +82,23 @@ class HomeFragment : Fragment(), CreatePDF {
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
+
+            RetrofitInstance.api.getMedicalAdvices(BEARER+requireActivity().getToken().toString()).clone()
+                .enqueue(object : Callback<MedicalAdvice> {
+                    override fun onResponse(
+                        call: Call<MedicalAdvice>,
+                        response: Response<MedicalAdvice>
+                    ) {
+
+                        binding.homeRecyclerViewVideo.adapter =
+                            DoctorVideoAdapter(response.body()?.data);
+                    }
+
+                    override fun onFailure(call: Call<MedicalAdvice>, t: Throwable) {
+
+                    }
+
+                })
 
 
             binding.animationView.visibility = View.VISIBLE
@@ -140,14 +158,13 @@ class HomeFragment : Fragment(), CreatePDF {
                 val intent = Intent(requireActivity(), FilterActivity::class.java)
                 intent.putExtra("searchItem", s.toString())
                 startActivity(intent)
-                Log.v("TEST", "onItemSelected: index: $index, query: $s")
 
-                PDFConverter.createPdf(
-                    requireContext(),
-                    "",
-                    requireActivity(),
-                    this@HomeFragment
-                )
+//                PDFConverter.createPdf(
+//                    requireContext(),
+//                    "",
+//                    requireActivity(),
+//                    this@HomeFragment
+//                )
             }
 
             override fun onTextChanged(index: Int, s: CharSequence) {
