@@ -47,5 +47,8 @@
     <color name="default_badge_background_color">#f44336</color>
     <color name="default_inactive_shape_color">#e5e5e5</color>
     <color name="white_6">#0FFFFFFF</color>
-
+    <color name="exomedia_controls_button_normal">#FFFFFFFF</color>
+    <color name="exomedia_controls_button_pressed">#FFE0E0E0</color>
+    <color name="exomedia_controls_button_disabled">#FF757575</color>
+    <color name="exomedia_controls_button_focused_background">#5fffffff</color>
 </resources>

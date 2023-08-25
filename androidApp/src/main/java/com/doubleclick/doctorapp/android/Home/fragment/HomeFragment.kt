@@ -83,15 +83,15 @@ class HomeFragment : Fragment(), CreatePDF {
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
 
-            RetrofitInstance.api.getMedicalAdvices(BEARER+requireActivity().getToken().toString()).clone()
+            RetrofitInstance.api.getMedicalAdvices(BEARER + requireActivity().getToken().toString())
+                .clone()
                 .enqueue(object : Callback<MedicalAdvice> {
                     override fun onResponse(
                         call: Call<MedicalAdvice>,
                         response: Response<MedicalAdvice>
                     ) {
-
                         binding.homeRecyclerViewVideo.adapter =
-                            DoctorVideoAdapter(response.body()?.data);
+                            response.body()?.data?.let { DoctorVideoAdapter(it) };
                     }
 
                     override fun onFailure(call: Call<MedicalAdvice>, t: Throwable) {

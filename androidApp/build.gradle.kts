@@ -149,5 +149,15 @@ dependencies {
 //    implementation ("io.agora.rtc:full-sdk:3.3.1")
     implementation(group = "io.agora.rtc", name = "full-sdk", version = "4.1.1")
 
+    implementation("com.google.android.exoplayer:exoplayer:2.12.2")
+
+    implementation ("androidx.media3:media3-exoplayer:1.0.1")
+    implementation("androidx.media3:media3-exoplayer-dash:1.0.1")
+    implementation("androidx.media3:media3-ui:1.0.1")
+    implementation("androidx.media3:media3-exoplayer-hls:1.0.1")
+    implementation("com.github.bjoernpetersen:m3u-parser:1.3.0")
+    implementation("androidx.media3:media3-datasource-okhttp:1.0.1")
+    implementation ("androidx.media3:media3-exoplayer-smoothstreaming:1.0.1")
+
 
 }
