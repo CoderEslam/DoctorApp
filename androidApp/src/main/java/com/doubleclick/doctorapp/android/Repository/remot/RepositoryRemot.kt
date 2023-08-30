@@ -94,8 +94,8 @@ class RepositoryRemot {
         return RetrofitInstance.api.postDoctor(token = token, doctor = doctor)
     }
 
-    fun updateDoctor(token: String, updateDoctor: UpdateDoctor): Call<Message> {
-        return RetrofitInstance.api.updateDoctor(token = token, updateDoctor = updateDoctor)
+    fun updateDoctor(token: String, id: String, updateDoctor: UpdateDoctor): Call<Message> {
+        return RetrofitInstance.api.updateDoctor(token = token, id = id, updateDoctor = updateDoctor)
     }
     //////////////////////////Doctor store//////////////////////////////////
 

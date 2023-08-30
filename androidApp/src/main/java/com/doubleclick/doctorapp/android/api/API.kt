@@ -153,9 +153,11 @@ interface API {
     ): Call<Message>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @PUT("doctors")
+    @PUT("doctors/{id}")
     fun updateDoctor(
-        @Header("Authorization") token: String, @Body updateDoctor: UpdateDoctor
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Body updateDoctor: UpdateDoctor
     ): Call<Message>
     //////////////////////////Doctors//////////////////////////////////
 

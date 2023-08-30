@@ -163,8 +163,13 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         return message;
     }
 
-    fun updateDoctor(token: String, updateDoctor: UpdateDoctor): LiveData<Call<Message>> {
-        message.value = repository.updateDoctor(token = token, updateDoctor = updateDoctor);
+    fun updateDoctor(
+        token: String,
+        id: String,
+        updateDoctor: UpdateDoctor
+    ): LiveData<Call<Message>> {
+        message.value =
+            repository.updateDoctor(token = token, id = id, updateDoctor = updateDoctor);
         return message;
     }
     //////////////////////////Doctor store//////////////////////////////////

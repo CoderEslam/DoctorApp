@@ -26,6 +26,7 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentDoctorInfoBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
+import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -139,7 +140,9 @@ class DoctorInfoFragment : Fragment() {
                 if (isFieldsEmpty() && requireActivity().getToken()
                         ?.isNotEmpty() == true
                 ) viewModel.updateDoctor(
-                    "$BEARER${requireActivity().getToken()}", UpdateDoctor(
+                    "$BEARER${requireActivity().getToken()}",
+                    id = "3"/*requireActivity().getId().toString()*/,
+                    UpdateDoctor(
                         facebook_page_link = binding.facebookPageLink.text.toString(),
                         facebook_page_name = binding.facebookPageName.text.toString(),
                         general_specialty_id = general_specializations,
@@ -154,7 +157,9 @@ class DoctorInfoFragment : Fragment() {
                     it.clone().enqueue(object : Callback<Message> {
                         override fun onResponse(call: Call<Message>, response: Response<Message>) {
                             Toast.makeText(
-                                requireActivity(), response.body()?.message, Toast.LENGTH_SHORT
+                                requireActivity(),
+                                response.body()?.message.toString(),
+                                Toast.LENGTH_SHORT
                             ).show()
                         }
 
