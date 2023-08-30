@@ -15,6 +15,7 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
+import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
@@ -151,6 +152,11 @@ interface API {
         @Header("Authorization") token: String, @Body doctor: Doctor
     ): Call<Message>
 
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @PUT("doctors")
+    fun updateDoctor(
+        @Header("Authorization") token: String, @Body updateDoctor: UpdateDoctor
+    ): Call<Message>
     //////////////////////////Doctors//////////////////////////////////
 
     //////////////////////////Days at clinic//////////////////////////////////

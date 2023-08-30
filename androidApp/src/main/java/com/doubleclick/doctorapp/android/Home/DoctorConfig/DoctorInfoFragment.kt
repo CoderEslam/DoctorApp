@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.doubleclick.doctorapp.android.Adapters.SpinnerSpecializationAdapter
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
+import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
 import com.doubleclick.doctorapp.android.Model.Message
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
@@ -76,7 +77,7 @@ class DoctorInfoFragment : Fragment() {
                         ) {
                             specializationList = response.body()!!
                             binding.spinnerSpecializations.adapter =
-                                SpinnerSpecializationAdapter(requireActivity(), specializationList)
+                                SpinnerSpecializationAdapter(specializationList)
 
                         }
 
@@ -96,7 +97,7 @@ class DoctorInfoFragment : Fragment() {
                             general_specializationList = response.body()!!
                             binding.spinnerGeneralSpecializations.adapter =
                                 SpinnerSpecializationAdapter(
-                                    requireActivity(), general_specializationList
+                                    general_specializationList
                                 )
 
                         }
@@ -112,8 +113,7 @@ class DoctorInfoFragment : Fragment() {
                 .observe(viewLifecycleOwner) {
                     it.enqueue(object : Callback<DoctorsList> {
                         override fun onResponse(
-                            call: Call<DoctorsList>,
-                            response: Response<DoctorsList>
+                            call: Call<DoctorsList>, response: Response<DoctorsList>
                         ) {
                             val data = response.body()!!.data[0]
                             binding.clinicName.setText(data.name)
@@ -138,8 +138,8 @@ class DoctorInfoFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                 if (isFieldsEmpty() && requireActivity().getToken()
                         ?.isNotEmpty() == true
-                ) viewModel.postDoctor(
-                    "$BEARER${requireActivity().getToken()}", Doctor(
+                ) viewModel.updateDoctor(
+                    "$BEARER${requireActivity().getToken()}", UpdateDoctor(
                         facebook_page_link = binding.facebookPageLink.text.toString(),
                         facebook_page_name = binding.facebookPageName.text.toString(),
                         general_specialty_id = general_specializations,
@@ -154,9 +154,7 @@ class DoctorInfoFragment : Fragment() {
                     it.clone().enqueue(object : Callback<Message> {
                         override fun onResponse(call: Call<Message>, response: Response<Message>) {
                             Toast.makeText(
-                                requireActivity(),
-                                response.body()?.message,
-                                Toast.LENGTH_SHORT
+                                requireActivity(), response.body()?.message, Toast.LENGTH_SHORT
                             ).show()
                         }
 

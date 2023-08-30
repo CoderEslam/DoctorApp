@@ -1,6 +1,7 @@
 package com.doubleclick.doctorapp.android.Adapters
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ import com.doubleclick.doctorapp.android.ViewHolders.DoctorVideoViewHolder
 import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_MEDICAL_ADVICES_VIDEOS
 
 class DoctorVideoAdapter(
-    val medicalAdviceModelList: List<MedicalAdviceModel>
+    val medicalAdviceModelList: MutableList<MedicalAdviceModel>
 ) : RecyclerView.Adapter<DoctorVideoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoctorVideoViewHolder {
@@ -27,20 +28,26 @@ class DoctorVideoAdapter(
 
     override fun onBindViewHolder(holder: DoctorVideoViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
+            medicalAdviceModelList[0] = medicalAdviceModelList[holder.bindingAdapterPosition]
             holder.itemView.context.startActivity(
                 Intent(
                     holder.itemView.context,
                     DoctorVideoActivity::class.java
-                ).putParcelableArrayListExtra("medicalAdviceModelList", medicalAdviceModelList as java.util.ArrayList<out Parcelable>)
+                ).putParcelableArrayListExtra(
+                    "medicalAdviceModelList",
+                    medicalAdviceModelList as java.util.ArrayList<out Parcelable>
+                )
             )
         }
-
+        holder.video_view_doctor.setMedia(Uri.parse(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList[holder.bindingAdapterPosition].video_name))
+        /*
         Glide.with(holder.itemView)
-            .load(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList?.get(holder.bindingAdapterPosition)?.video_name)
+            .load(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList[holder.bindingAdapterPosition].video_name)
             .into(holder.video_view_doctor)
+            */
     }
 
     override fun getItemCount(): Int {
-        return medicalAdviceModelList?.size ?: 0;
+        return medicalAdviceModelList.size
     }
 }

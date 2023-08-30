@@ -14,6 +14,7 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
+import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
@@ -91,6 +92,10 @@ class RepositoryRemot {
     //////////////////////////Doctor store//////////////////////////////////
     fun postDoctor(token: String, doctor: Doctor): Call<Message> {
         return RetrofitInstance.api.postDoctor(token = token, doctor = doctor)
+    }
+
+    fun updateDoctor(token: String, updateDoctor: UpdateDoctor): Call<Message> {
+        return RetrofitInstance.api.updateDoctor(token = token, updateDoctor = updateDoctor)
     }
     //////////////////////////Doctor store//////////////////////////////////
 

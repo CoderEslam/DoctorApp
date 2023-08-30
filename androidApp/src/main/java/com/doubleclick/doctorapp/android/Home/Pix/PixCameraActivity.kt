@@ -1,7 +1,6 @@
 package com.doubleclick.doctorapp.android.Home.Pix
 
 import android.annotation.SuppressLint
-import android.net.DnsResolver
 import android.net.Uri
 import android.os.Bundle
 import android.os.ParcelFileDescriptor

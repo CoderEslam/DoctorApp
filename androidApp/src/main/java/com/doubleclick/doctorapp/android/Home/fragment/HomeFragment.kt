@@ -91,7 +91,7 @@ class HomeFragment : Fragment(), CreatePDF {
                         response: Response<MedicalAdvice>
                     ) {
                         binding.homeRecyclerViewVideo.adapter =
-                            response.body()?.data?.let { DoctorVideoAdapter(it) };
+                            response.body()?.data?.let { DoctorVideoAdapter(it.toMutableList()) };
                     }
 
                     override fun onFailure(call: Call<MedicalAdvice>, t: Throwable) {

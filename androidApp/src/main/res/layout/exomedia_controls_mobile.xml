@@ -1,30 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/exomedia_controls_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00000000">
+    android:background="#59000000">
 
     <!-- TODO: Closed Caption and Video Quality Controls -->
 
+
     <ImageButton
         android:id="@+id/exomedia_controls_play_pause_btn"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:background="@drawable/exomedia_controls_button_background"
         android:contentDescription="@string/exomedia_controls_accessibility_play_pause"
         android:scaleType="fitCenter"
         android:src="@drawable/exomedia_ic_play_arrow_white"
-        android:visibility="invisible"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
         app:tint="@color/exomedia_controls_button_foreground" />
 
     <ImageButton
@@ -62,6 +59,7 @@
         tools:visibility="visible" />
 
     <!-- TODO: Fullscreen Controls -->
+
 
     <ImageButton
         android:id="@+id/exomedia_controls_fullscreen_btn"
@@ -103,23 +101,22 @@
     <SeekBar
         android:id="@+id/exomedia_controls_video_seek"
         style="?android:seekBarStyle"
-        android:layout_width="5dp"
-        android:layout_height="3dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="43dp"
         android:paddingHorizontal="16dp"
         android:progressTint="@android:color/white"
         android:secondaryProgressTint="@android:color/white"
         android:thumbTint="@android:color/white"
-        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@id/exomedia_controls_guide_bottom"
         app:layout_constraintEnd_toStartOf="@id/exomedia_controls_guide_end"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/exomedia_controls_guide_start"
         tools:max="12349"
         tools:progress="10629"
         tools:secondaryProgress="12000" />
 
     <!-- TODO: Jump Forward/Back 10s -->
+
 
     <TextView
         android:id="@+id/exomedia_controls_title"
