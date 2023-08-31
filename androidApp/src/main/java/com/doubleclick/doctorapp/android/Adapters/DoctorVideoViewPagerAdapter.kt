@@ -19,7 +19,10 @@ class DoctorVideoViewPagerAdapter(
     val medicalAdviceModelList: List<MedicalAdviceModel>
 ) : RecyclerView.Adapter<DoctorVideoViewPagerViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoctorVideoViewPagerViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DoctorVideoViewPagerViewHolder {
         return DoctorVideoViewPagerViewHolder(
             LayoutInflater.from(parent.context).inflate(
                 R.layout.item_video_view_pager, parent, false
@@ -30,17 +33,15 @@ class DoctorVideoViewPagerAdapter(
     override fun onBindViewHolder(holder: DoctorVideoViewPagerViewHolder, position: Int) {
         holder.video_.setMedia(
             Uri.parse(
-                IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList?.get(
-                    holder.bindingAdapterPosition
-                )?.video_name
+                IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList[holder.bindingAdapterPosition].video_name
             )
         )
-        holder.video_.stop()
+        holder.video_.start()
 
-        Glide.with(holder.itemView)
-            .load(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList?.get(holder.bindingAdapterPosition)?.video_name)
-            .placeholder(R.drawable.logo)
-            .into(holder.video_view_doctor)
+//        Glide.with(holder.itemView)
+//            .load(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList?.get(holder.bindingAdapterPosition)?.video_name)
+//            .placeholder(R.drawable.logo)
+//            .into(holder.video_view_doctor)
     }
 
     override fun getItemCount(): Int {

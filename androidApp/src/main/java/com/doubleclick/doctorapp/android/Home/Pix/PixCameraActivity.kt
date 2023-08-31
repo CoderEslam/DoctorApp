@@ -20,10 +20,12 @@ import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
+import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.utils.UploadRequestBody
 import com.doubleclick.doctorapp.android.utils.getFileName
+import com.iceteck.silicompressorr.SiliCompressor
 import io.ak1.pix.helpers.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +40,7 @@ import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+
 
 private const val TAG = "PixCameraActivity"
 
@@ -90,6 +93,7 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
                         val outputStream = FileOutputStream(file)
                         inputStream.copyTo(outputStream)
                         val body = UploadRequestBody(file, "image", this@PixCameraActivity)
+                        uploadVideo(body)
                         listImages.add(
                             MultipartBody.Part.createFormData(
                                 "image[]",
@@ -99,60 +103,7 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
                         )
                     }
 
-                    viewModel.uploadPatientImages(
-                        "$BEARER${TOKEN}",
-                        type = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "Check Up F"
-                        ),
-                        doctor_id = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "1"
-                        ),
-                        patient_id = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "1"
-                        ),
-                        clinic_id = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "1"
-                        ),
-                        reservation_date = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "12-04-2024"
-                        ),
-                        patient_reservation_id = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "1"
-                        ),
-                        diagnosis = RequestBody.create(
-                            "multipart/form-data".toMediaTypeOrNull(),
-                            "test diagnosis"
-                        ),
-                        listImages
-                    ).observe(this@PixCameraActivity) {
-                        it.clone().enqueue(object : Callback<Message> {
-                            override fun onResponse(
-                                call: Call<Message>,
-                                response: Response<Message>
-                            ) {
-                                Toast.makeText(
-                                    this@PixCameraActivity,
-                                    "response = ${response.body()?.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
 
-                            override fun onFailure(call: Call<Message>, t: Throwable) {
-                                Toast.makeText(
-                                    this@PixCameraActivity,
-                                    "onFailure = ${t.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-
-                        })
-                    };
                     resultsFragment.setList(results.data)
 
                 }
@@ -180,6 +131,89 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
 
     override fun onProgressUpdate(percentage: Int) {
         Log.e(TAG, "onProgressUpdate: ${percentage}")
+    }
+
+    private fun uploadVideo(body: UploadRequestBody) {
+        RetrofitInstance.api.postMedicalAdvices(
+            "$BEARER 32|2MElkOa8MCUPp5O6hABry4cKKORIgHGBHUMUeuGY",
+            MultipartBody.Part.createFormData(
+                "video",
+                "${System.currentTimeMillis()}.mp4",
+                body
+            )
+        ).clone().enqueue(object : Callback<Message> {
+            override fun onResponse(call: Call<Message>, response: Response<Message>) {
+                Toast.makeText(
+                    this@PixCameraActivity,
+                    response.body()?.message.toString(),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onFailure(call: Call<Message>, t: Throwable) {
+
+            }
+
+        })
+
+
+    }
+
+    fun upload() {
+        viewModel.uploadPatientImages(
+            "$BEARER${TOKEN}",
+            type = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "Check Up F"
+            ),
+            doctor_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "1"
+            ),
+            patient_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "1"
+            ),
+            clinic_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "1"
+            ),
+            reservation_date = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "12-04-2024"
+            ),
+            patient_reservation_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "1"
+            ),
+            diagnosis = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                "test diagnosis"
+            ),
+            listImages
+        ).observe(this@PixCameraActivity) {
+            it.clone().enqueue(object : Callback<Message> {
+                override fun onResponse(
+                    call: Call<Message>,
+                    response: Response<Message>
+                ) {
+                    Toast.makeText(
+                        this@PixCameraActivity,
+                        "response = ${response.body()?.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onFailure(call: Call<Message>, t: Throwable) {
+                    Toast.makeText(
+                        this@PixCameraActivity,
+                        "onFailure = ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            })
+        };
     }
 
 }

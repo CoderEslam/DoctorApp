@@ -1,11 +1,13 @@
 package com.doubleclick.doctorapp.android.Home.DoctorConfig
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.doubleclick.doctorapp.android.Home.Pix.PixCameraActivity
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.databinding.FragmentRouteBinding
 
@@ -40,6 +42,10 @@ class RouteFragment : Fragment() {
 
         binding.doctorInfo.setOnClickListener {
             findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorInfoFragment())
+        }
+
+        binding.video.setOnClickListener {
+            startActivity(Intent(requireActivity(), PixCameraActivity::class.java))
         }
     }
 }

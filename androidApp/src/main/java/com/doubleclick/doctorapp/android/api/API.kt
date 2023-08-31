@@ -285,10 +285,11 @@ interface API {
         @Header("Authorization") token: String,
     ): Call<MedicalAdvice>
 
-    @Headers("Content-Type: application/json", "Accept: application/json")
+    @Multipart
     @POST("medical_advices")
     fun postMedicalAdvices(
         @Header("Authorization") token: String,
+        @Part video: MultipartBody.Part
     ): Call<Message>
 
 

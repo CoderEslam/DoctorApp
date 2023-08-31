@@ -1,13 +1,15 @@
 package com.doubleclick.doctorapp.android.Adapters
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.doubleclick.doctorapp.android.Home.DoctorVideoActivity
 import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdviceModel
 import com.doubleclick.doctorapp.android.R
@@ -39,6 +41,22 @@ class DoctorVideoAdapter(
                 )
             )
         }
+
+        // reference -> https://www.tutorialspoint.com/how-does-one-use-glide-to-download-an-image-into-a-bitmap
+        Glide.with(holder.itemView.context).asDrawable()
+            .load(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList[holder.bindingAdapterPosition].video_name)
+            .into(object : CustomTarget<Drawable>() {
+                override fun onResourceReady(
+                    resource: Drawable,
+                    transition: Transition<in Drawable>?
+                ) {
+                    holder.image.setImageDrawable(resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+
+            })
         holder.video_view_doctor.setMedia(Uri.parse(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList[holder.bindingAdapterPosition].video_name))
         /*
         Glide.with(holder.itemView)
