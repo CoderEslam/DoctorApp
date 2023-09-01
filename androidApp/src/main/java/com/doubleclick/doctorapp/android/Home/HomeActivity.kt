@@ -24,7 +24,6 @@ import com.doubleclick.doctorapp.android.Home.Setting.SettingsActivity
 import com.doubleclick.doctorapp.android.Home.fragment.BottomDialogQRCode
 import com.doubleclick.doctorapp.android.ItemNavigationListener
 import com.doubleclick.doctorapp.android.Model.ItemNavigation
-import com.doubleclick.doctorapp.android.Model.SideMenu
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.databinding.ActivityHomeBinding
 import com.doubleclick.doctorapp.android.databinding.LogoutBinding
@@ -35,11 +34,11 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.getName
 import com.doubleclick.doctorapp.android.utils.SessionManger.logoutManger
 import com.doubleclick.doctorapp.android.views.CircleImageView
 import com.doubleclick.doctorapp.android.views.flowingdrawer.ElasticDrawer
-import com.doubleclick.doctorapp.android.views.slidingrootnav.SlidingRootNav
 import com.doubleclick.doctorapp.android.views.slidingrootnav.callback.LogoutListener
 import com.google.zxing.client.android.Intents
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
+import com.journeyapps.barcodescanner.ScanOptions
 import io.ak1.pix.models.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -124,6 +123,9 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
                 )
             )
 
+        binding.scannQr.setOnClickListener {
+            barcodeLauncher.launch(ScanOptions())
+        }
         GlobalScope.launch(Dispatchers.Main) {
             val userId = getId().toString()
             findViewById<TextView>(R.id.name).text = getName()

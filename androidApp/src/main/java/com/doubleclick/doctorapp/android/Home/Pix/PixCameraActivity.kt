@@ -92,7 +92,7 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
                             )
                         val outputStream = FileOutputStream(file)
                         inputStream.copyTo(outputStream)
-                        val body = UploadRequestBody(file, "image", this@PixCameraActivity)
+                        val body = UploadRequestBody(file, "video", this@PixCameraActivity)
                         uploadVideo(body)
                         listImages.add(
                             MultipartBody.Part.createFormData(
@@ -135,7 +135,7 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
 
     private fun uploadVideo(body: UploadRequestBody) {
         RetrofitInstance.api.postMedicalAdvices(
-            "$BEARER 32|2MElkOa8MCUPp5O6hABry4cKKORIgHGBHUMUeuGY",
+            "$BEARER$TOKEN",
             MultipartBody.Part.createFormData(
                 "video",
                 "${System.currentTimeMillis()}.mp4",

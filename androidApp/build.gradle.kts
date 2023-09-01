@@ -129,7 +129,6 @@ dependencies {
 
     implementation("com.android.support:palette-v7:25.0.0")
 
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation("dev.turingcomplete:kotlin-onetimepassword:2.4.0")
 
@@ -151,13 +150,17 @@ dependencies {
 
     implementation("com.google.android.exoplayer:exoplayer:2.12.2")
 
-    implementation ("androidx.media3:media3-exoplayer:1.0.1")
+    implementation("androidx.media3:media3-exoplayer:1.0.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.0.1")
     implementation("androidx.media3:media3-ui:1.0.1")
     implementation("androidx.media3:media3-exoplayer-hls:1.0.1")
     implementation("com.github.bjoernpetersen:m3u-parser:1.3.0")
     implementation("androidx.media3:media3-datasource-okhttp:1.0.1")
-    implementation ("androidx.media3:media3-exoplayer-smoothstreaming:1.0.1")
+    implementation("androidx.media3:media3-exoplayer-smoothstreaming:1.0.1")
 
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0") {
+        isTransitive = false
+    }
+    implementation("com.google.zxing:core:3.3.0")
 
 }

@@ -24,7 +24,7 @@
             android:layout_height="60dp"
             android:background="@color/white"
             android:scaleType="centerInside"
-            android:src="@drawable/avatar"
+            android:src="@drawable/person"
             app:civ_border_color="@color/white"
             app:civ_border_width="1dp" />
 

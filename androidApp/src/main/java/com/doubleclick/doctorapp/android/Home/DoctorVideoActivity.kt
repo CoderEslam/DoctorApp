@@ -1,14 +1,9 @@
 package com.doubleclick.doctorapp.android.Home
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.annotation.RequiresApi
-import com.doubleclick.doctorapp.android.Adapters.DoctorVideoAdapter
 import com.doubleclick.doctorapp.android.Adapters.DoctorVideoViewPagerAdapter
 import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdviceModel
-import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.databinding.ActivityDoctorVideoBinding
 import kotlinx.android.synthetic.main.menu_left_drawer.*
 import java.util.ArrayList

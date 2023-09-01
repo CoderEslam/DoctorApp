@@ -57,6 +57,7 @@ class DoctorVideoAdapter(
                 }
 
             })
+
         holder.video_view_doctor.setMedia(Uri.parse(IMAGE_URL_MEDICAL_ADVICES_VIDEOS + medicalAdviceModelList[holder.bindingAdapterPosition].video_name))
         /*
         Glide.with(holder.itemView)

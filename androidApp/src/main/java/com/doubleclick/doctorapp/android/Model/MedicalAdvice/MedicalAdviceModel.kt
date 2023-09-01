@@ -7,6 +7,7 @@ data class MedicalAdviceModel(
     val doctor: Doctor?,
     val doctor_id: Int,
     val id: Int,
+    val user: User?,
     val user_id: Int,
     val video_name: String?
 ) : Parcelable {
@@ -14,6 +15,7 @@ data class MedicalAdviceModel(
         parcel.readParcelable(Doctor::class.java.classLoader),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readParcelable(User::class.java.classLoader),
         parcel.readInt(),
         parcel.readString()
     ) {
@@ -23,27 +25,13 @@ data class MedicalAdviceModel(
         parcel.writeParcelable(doctor, flags)
         parcel.writeInt(doctor_id)
         parcel.writeInt(id)
+        parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
         parcel.writeString(video_name)
     }
 
     override fun describeContents(): Int {
         return 0
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as MedicalAdviceModel
-
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return id
     }
 
     companion object CREATOR : Parcelable.Creator<MedicalAdviceModel> {

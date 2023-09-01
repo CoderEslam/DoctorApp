@@ -33,7 +33,8 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.multisearchview.MultiSearchView
-import com.doubleclick.smarthealth.android.pdf.PDFConverter
+import com.journeyapps.barcodescanner.ScanContract
+import com.journeyapps.barcodescanner.ScanIntentResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -47,6 +48,7 @@ class HomeFragment : Fragment(), CreatePDF {
     private lateinit var viewModel: MainViewModel
     private val TAG = "HomeFragment"
     private lateinit var specializationList: Specialization
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,6 +151,9 @@ class HomeFragment : Fragment(), CreatePDF {
 
                     })
                 }
+
+
+
         }
 
 

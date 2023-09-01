@@ -1,15 +1,22 @@
 package com.doubleclick.doctorapp.android.Home.DoctorConfig
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.doubleclick.doctorapp.android.Adapters.PixAdapter
 import com.doubleclick.doctorapp.android.Home.Pix.PixCameraActivity
+import com.doubleclick.doctorapp.android.Home.fragment.fragmentBody
+import com.doubleclick.doctorapp.android.Home.options
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.databinding.FragmentRouteBinding
+import io.ak1.pix.helpers.PixEventCallback
+import io.ak1.pix.helpers.pixFragment
 
 
 class RouteFragment : Fragment() {
@@ -47,5 +54,19 @@ class RouteFragment : Fragment() {
         binding.video.setOnClickListener {
             startActivity(Intent(requireActivity(), PixCameraActivity::class.java))
         }
+
+       /* pixFragment(options) {
+            when (it.status) {
+                PixEventCallback.Status.SUCCESS -> {
+
+                }//use results as it.data
+
+                PixEventCallback.Status.BACK_PRESSED -> {
+
+                }// back pressed called
+
+            }
+        }*/
+
     }
 }
