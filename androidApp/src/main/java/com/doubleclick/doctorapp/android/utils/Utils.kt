@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.Transformation
+import android.widget.EditText
 
 
 fun ContentResolver.getFileName(fileUri: Uri): String {
@@ -77,5 +78,12 @@ fun View.collapse(v: View) {
     // Collapse speed of 1dp/ms
     a.duration = (initialHeight / v.context.resources.displayMetrics.density).toInt().toLong()
     v.startAnimation(a)
+}
+
+fun String.isNotNullOrEmptyString(): Boolean {
+    return !(this.isEmpty() || this.isBlank() || this == "null")
+}
+fun EditText.isNotNullOrEmptyEditText(): Boolean {
+    return !(this.text.isEmpty() || this.text.isBlank() || this.text.toString() == "null")
 }
 

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/patient_reservations"
+        android:contentDescription="@string/patient_reservations"
+        android:title="@string/patient_reservations" />
+    <item
+        android:id="@+id/patient_visits"
+        android:contentDescription="@string/patient_visits"
+        android:title="@string/patient_visits" />
+
+</menu>

@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 
 var options = Options()
 
-class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener {
+class HomeActivity : AppCompatActivity(), ItemNavigationListener {
 
     private lateinit var navController: NavController
     private val barcodeLauncher = registerForActivityResult(
@@ -125,6 +125,20 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
 
         binding.scannQr.setOnClickListener {
             barcodeLauncher.launch(ScanOptions())
+        }
+
+        binding.logout.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            val view = LogoutBinding.inflate(layoutInflater)
+            view.ok.setOnClickListener {
+                GlobalScope.launch(Dispatchers.Main) {
+                    logoutManger()
+                    finish()
+                }
+            }
+            builder.setView(view.root)
+            builder.show()
+
         }
         GlobalScope.launch(Dispatchers.Main) {
             val userId = getId().toString()
@@ -223,20 +237,6 @@ class HomeActivity : AppCompatActivity(), LogoutListener, ItemNavigationListener
         }
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    override fun logout() {
-        val builder = AlertDialog.Builder(this)
-        val view = LogoutBinding.inflate(layoutInflater)
-        view.ok.setOnClickListener {
-            GlobalScope.launch(Dispatchers.Main) {
-                logoutManger()
-                finish()
-            }
-        }
-        builder.setView(view.root)
-        builder.show()
-
-    }
 
     override fun itemNavigation(index: Int) {
         when (index) {

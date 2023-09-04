@@ -23,6 +23,7 @@ import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
+import com.doubleclick.doctorapp.android.Search
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
@@ -42,7 +43,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class HomeFragment : Fragment(), CreatePDF {
+class HomeFragment : Fragment(), CreatePDF, Search {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: MainViewModel
@@ -76,6 +77,7 @@ class HomeFragment : Fragment(), CreatePDF {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.userName.text = buildString {
                 append(getString(R.string.hi))
+                append(" ")
                 append(requireActivity().getName())
                 append("!")
             }
@@ -141,7 +143,7 @@ class HomeFragment : Fragment(), CreatePDF {
                         ) {
                             specializationList = response.body()!!
                             binding.homeRecyclerViewSpacification.adapter =
-                                SpecializationAdapter(specializationList.data)
+                                SpecializationAdapter(this@HomeFragment, specializationList.data)
 
                         }
 
@@ -151,7 +153,6 @@ class HomeFragment : Fragment(), CreatePDF {
 
                     })
                 }
-
 
 
         }
@@ -173,18 +174,18 @@ class HomeFragment : Fragment(), CreatePDF {
             }
 
             override fun onTextChanged(index: Int, s: CharSequence) {
-                Log.v("TEST", "changed: index: $index, query: $s")
+                Log.e("TEST", "changed: index: $index, query: $s")
             }
 
             override fun onSearchComplete(index: Int, s: CharSequence) {
                 val intent = Intent(requireActivity(), FilterActivity::class.java)
                 intent.putExtra("searchItem", s.toString())
                 startActivity(intent)
-                Log.v("TEST", "complete: index: $index, query: $s")
+                Log.e("TEST", "complete: index: $index, query: $s")
             }
 
             override fun onSearchItemRemoved(index: Int) {
-                Log.v("TEST", "remove: index: $index")
+                Log.e("TEST", "remove: index: $index")
             }
 
         })
@@ -194,6 +195,12 @@ class HomeFragment : Fragment(), CreatePDF {
     }
 
     override fun onStopCreating() {
+    }
+
+    override fun search(name: String) {
+        val intent = Intent(requireActivity(), FilterActivity::class.java)
+        intent.putExtra("searchItem", name)
+        startActivity(intent)
     }
 
 }

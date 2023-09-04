@@ -6,16 +6,11 @@ import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Area.StoreArea
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
 import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
-import com.doubleclick.doctorapp.android.Model.Auth.Login
-import com.doubleclick.doctorapp.android.Model.Auth.Registration
-import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
+import com.doubleclick.doctorapp.android.Model.Auth.*
 import com.doubleclick.doctorapp.android.Model.Days.Days
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
-import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
-import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
+import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
@@ -39,6 +34,13 @@ interface API {
     fun login(
         @Body login: Login
     ): Call<ResopnsLogin>
+
+    @Headers("Content-Type: application/json")
+    @POST("update_user_info")
+    fun updateAccount(
+        @Header("Authorization") token: String,
+        @Body updateAccount: UpdateAccount
+    ): Call<UpdateUser>
 
     @Headers("Content-Type: application/json")
     @POST("register")
@@ -147,6 +149,13 @@ interface API {
     ): Call<DoctorsList>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("search")
+    fun searchDoctor(
+        @Header("Authorization") token: String,
+        @Body searchDoctor: SearchDoctor
+    ): Call<DoctorsList>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
     @POST("doctors")
     fun postDoctor(
         @Header("Authorization") token: String, @Body doctor: Doctor
@@ -213,6 +222,12 @@ interface API {
 
 
     //////////////////////////patient_visits//////////////////////////////////
+
+    @GET("patient_visits/{id}")
+    fun getPatientVisits(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+    ): Call<Message>
 
     @Multipart
     @POST("patient_visits")

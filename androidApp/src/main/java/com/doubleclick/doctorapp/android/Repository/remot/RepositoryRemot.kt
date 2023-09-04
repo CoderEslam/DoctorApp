@@ -5,16 +5,11 @@ import com.doubleclick.doctorapp.android.Model.Clinic.AddClinics
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
 import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
-import com.doubleclick.doctorapp.android.Model.Auth.Login
-import com.doubleclick.doctorapp.android.Model.Auth.Registration
-import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
+import com.doubleclick.doctorapp.android.Model.Auth.*
 import com.doubleclick.doctorapp.android.Model.Days.Days
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
-import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
-import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
+import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
@@ -34,6 +29,10 @@ class RepositoryRemot {
 
     fun createAccount(registration: Registration): Call<ResopnsLogin> {
         return RetrofitInstance.api.createAccount(registration)
+    }
+
+    fun updateAccount(token: String, updateAccount: UpdateAccount): Call<UpdateUser> {
+        return RetrofitInstance.api.updateAccount(token, updateAccount)
     }
 
     fun getDays(token: String): Call<Days> {
@@ -95,7 +94,11 @@ class RepositoryRemot {
     }
 
     fun updateDoctor(token: String, id: String, updateDoctor: UpdateDoctor): Call<Message> {
-        return RetrofitInstance.api.updateDoctor(token = token, id = id, updateDoctor = updateDoctor)
+        return RetrofitInstance.api.updateDoctor(
+            token = token,
+            id = id,
+            updateDoctor = updateDoctor
+        )
     }
     //////////////////////////Doctor store//////////////////////////////////
 
@@ -107,6 +110,10 @@ class RepositoryRemot {
 
     fun getDoctorsInfoById(token: String, id: String): Call<DoctorsList> {
         return RetrofitInstance.api.getDoctorsInfoById(token = token, id = id)
+    }
+
+    fun searchDoctor(token: String, searchDoctor: SearchDoctor): Call<DoctorsList> {
+        return RetrofitInstance.api.searchDoctor(token = token, searchDoctor = searchDoctor)
     }
 
     //////////////////////////Doctors//////////////////////////////////
@@ -171,6 +178,10 @@ class RepositoryRemot {
             diagnosis = diagnosis,
             images = images
         )
+    }
+
+    fun getPatientVisits(token: String, id: String): Call<Message> {
+        return RetrofitInstance.api.getPatientVisits(token = token, id = id)
     }
     //////////////////////////patient_visits//////////////////////////////////
 

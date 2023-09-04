@@ -81,6 +81,34 @@ object SessionManger {
         return preferences[nameKey]
     }
 
+    suspend fun Context.setName(name: String) {
+        val nameKey = stringPreferencesKey(ConstantsSession.NAME_KEY.text)
+        dataStore.edit { preferences ->
+            preferences[nameKey] = name
+        }
+    }
+
+    suspend fun Context.setToken(token: String) {
+        val tokenKey = stringPreferencesKey(ConstantsSession.TOKEN_KEY.text)
+        dataStore.edit { preferences ->
+            preferences[tokenKey] = token
+        }
+    }
+
+    suspend fun Context.setPhone(phone: String) {
+        val phoneKey = stringPreferencesKey(ConstantsSession.PHONE_KEY.text)
+        dataStore.edit { preferences ->
+            preferences[phoneKey] = phone
+        }
+    }
+
+    suspend fun Context.setEmail(email: String) {
+        val emailKey = stringPreferencesKey(ConstantsSession.EMAIL_KEY.text)
+        dataStore.edit { preferences ->
+            preferences[emailKey] = email
+        }
+    }
+
     suspend fun Context.getPhone(): String? {
         val phoneKey = stringPreferencesKey(ConstantsSession.PHONE_KEY.text)
         val preferences = dataStore.data.first()

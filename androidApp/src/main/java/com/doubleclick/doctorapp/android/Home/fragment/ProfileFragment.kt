@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -24,33 +25,42 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.AdapterFamilyMember
+import com.doubleclick.doctorapp.android.Adapters.BookingAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGovernoratesAdapter
+import com.doubleclick.doctorapp.android.FamilyOption
 import com.doubleclick.doctorapp.android.Model.Area.Araes
+import com.doubleclick.doctorapp.android.Model.Auth.UpdateAccount
+import com.doubleclick.doctorapp.android.Model.Auth.UpdateUser
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.GovernoratesModel
 import com.doubleclick.doctorapp.android.Model.Message
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
+import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import com.doubleclick.doctorapp.android.databinding.FragmentProfileBinding
+import com.doubleclick.doctorapp.android.utils.*
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
 import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_USERS
 import com.doubleclick.doctorapp.android.utils.Constants.TOKEN
-import com.doubleclick.doctorapp.android.utils.SessionManger
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentPassword
+import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentUserEmail
 import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getImage
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
+import com.doubleclick.doctorapp.android.utils.SessionManger.getPhone
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
+import com.doubleclick.doctorapp.android.utils.SessionManger.setEmail
 import com.doubleclick.doctorapp.android.utils.SessionManger.setImage
-import com.doubleclick.doctorapp.android.utils.UploadRequestBody
-import com.doubleclick.doctorapp.android.utils.expand
-import com.doubleclick.doctorapp.android.utils.getFileName
+import com.doubleclick.doctorapp.android.utils.SessionManger.setName
+import com.doubleclick.doctorapp.android.utils.SessionManger.setPhone
+import com.doubleclick.doctorapp.android.utils.SessionManger.setToken
 import com.doubleclick.doctorapp.android.views.CustomSpinner.CustomSpinner
 import com.iceteck.silicompressorr.SiliCompressor
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -67,14 +77,14 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 
-class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
+class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOption {
 
     private lateinit var binding: FragmentProfileBinding
 
     private val smokingList = listOf("No", "Yes")
     private val alcoholDrinkingList = listOf("No", "Yes")
     private val bloodTypeList = listOf("A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-")
-    private val materielStatusList = listOf("أعزب", "متزوج", "أرمل", "مطلق")
+    private val materielStatusList = listOf("Single", "Married", "Widower", "Divorced")
     private lateinit var uri: Uri;
     private val TAG = "ProfileFragment"
     private lateinit var viewModel: MainViewModel
@@ -155,6 +165,8 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.etName.setText(requireActivity().getName().toString())
+            binding.etEmail.setText(requireActivity().getCurrentUserEmail().toString())
+            binding.etNumberContact.setText(requireActivity().getPhone().toString())
             TOKEN = BEARER + requireActivity().getToken().toString()
             Log.e("TOKEN", "onViewCreated: $TOKEN")
             patient_id = requireActivity().getId().toString()
@@ -164,25 +176,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
 
-            viewModel.familyMemberPatient(TOKEN)
-                .observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<PatientsList> {
-                        override fun onResponse(
-                            call: Call<PatientsList>,
-                            response: Response<PatientsList>
-                        ) {
-                            Log.e(TAG, "onResponse: ${response.body()!!.data!!}")
-                            binding.rvFamilyMember.adapter =
-                                AdapterFamilyMember(response.body()!!.data!!.toMutableList())
-                        }
-
-                        override fun onFailure(call: Call<PatientsList>, t: Throwable) {
-                            Log.e(TAG, "onFailure: ${t.message}")
-
-                        }
-
-                    })
-                }
+            familyMember()
 
             binding.addFamilyMember.setOnClickListener {
                 // Create the object of AlertDialog Builder class
@@ -212,7 +206,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
                     view.findViewById(R.id.arrow_spinner_marital_status)
                 setUpSpinner(spinner_gov, arrow_spinner_gov, requireActivity())
                 setUpSpinner(spinner_area, arrow_spinner_area, requireActivity())
-                val boold = setUpSpinner(
+                val blood = setUpSpinner(
                     spinner_blood,
                     arrow_spinner_blood,
                     requireActivity(),
@@ -292,7 +286,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
                             alcohol_drinking = drink,
                             weight = et_weight.text.toString().trim(),
                             height = et_height.text.toString().trim(),
-                            blood_type = boold,
+                            blood_type = blood,
                             materiel_status = status
                         )
                     )
@@ -306,10 +300,96 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
                 builder.show()
             }
 
+            binding.save.setOnClickListener {
+                if (validation()) {
+                    viewModel.updateAccount(
+                        token = TOKEN,
+                        updateAccount = UpdateAccount(
+                            name = binding.etName.text.toString(),
+                            phone = binding.etNumberContact.text.toString(),
+                            email = binding.etEmail.text.toString()
+                        )
+                    ).observe(viewLifecycleOwner) {
+                        it.clone().enqueue(object : Callback<UpdateUser> {
+                            override fun onResponse(
+                                call: Call<UpdateUser>,
+                                response: Response<UpdateUser>
+                            ) {
+                                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+                                    response.body()?.user?.name?.let { name ->
+                                        requireActivity().setName(
+                                            name
+                                        )
+                                    }
+                                    response.body()?.user?.device_token?.let { device_token ->
+                                        requireActivity().setToken(
+                                            device_token
+                                        )
+                                    }
+                                    response.body()?.user?.phone?.let { phone ->
+                                        requireActivity().setPhone(
+                                            phone
+                                        )
+                                    }
+                                    response.body()?.user?.email?.let { email ->
+                                        requireActivity().setEmail(
+                                            email
+                                        )
+                                    }
+                                }
+
+                                Toast.makeText(
+                                    requireActivity(),
+                                    response.body()?.message.toString(),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+
+                            override fun onFailure(call: Call<UpdateUser>, t: Throwable) {
+
+                            }
+
+                        })
+                    }
+                } else {
+                    Toast.makeText(requireActivity(), "Something wrong", Toast.LENGTH_LONG).show()
+                }
+            }
+
 
         }
 
 
+    }
+
+    private fun familyMember() {
+        viewModel.familyMemberPatient(TOKEN)
+            .observe(viewLifecycleOwner) {
+                it.clone().enqueue(object : Callback<PatientsList> {
+                    override fun onResponse(
+                        call: Call<PatientsList>,
+                        response: Response<PatientsList>
+                    ) {
+                        binding.rvFamilyMember.adapter =
+                            AdapterFamilyMember(
+                                this@ProfileFragment,
+                                response.body()!!.data!!.toMutableList()
+                            )
+                    }
+
+                    override fun onFailure(call: Call<PatientsList>, t: Throwable) {
+                        Log.e(TAG, "onFailure: ${t.message}")
+
+                    }
+
+                })
+            }
+    }
+
+    private fun validation(): Boolean {
+        return binding.etEmail.isNotNullOrEmptyEditText() &&
+                binding.etName.isNotNullOrEmptyEditText() &&
+                binding.etNumberContact.isNotNullOrEmptyEditText()
     }
 
     private fun openImage() {
@@ -325,7 +405,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
                         call: Call<Message>,
                         response: Response<Message>
                     ) {
-
+                        familyMember()
                     }
 
                     override fun onFailure(call: Call<Message>, t: Throwable) {
@@ -485,6 +565,52 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback {
 
     override fun onProgressUpdate(percentage: Int) {
         binding.progressBar.progress = percentage
+    }
+
+    override fun patientReservations(patient_reservations: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            RetrofitInstance.api.getPatientReservations(
+                BEARER + requireActivity().getToken(),
+                patient_reservations
+            ).clone().enqueue(object : Callback<PatientReservationsList> {
+                override fun onResponse(
+                    call: Call<PatientReservationsList>,
+                    response: Response<PatientReservationsList>
+                ) {
+                    if (response.body()?.data != null) {
+                        BottomDialogPatiant(response.body()?.data!!).show(childFragmentManager, "")
+                    }
+                }
+
+                override fun onFailure(call: Call<PatientReservationsList>, t: Throwable) {
+
+                }
+
+            })
+        }
+    }
+
+    override fun patientVisits(patient_visits: String) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            RetrofitInstance.api.getPatientReservations(
+                BEARER + requireActivity().getToken(),
+                patient_visits
+            ).clone().enqueue(object : Callback<PatientReservationsList> {
+                override fun onResponse(
+                    call: Call<PatientReservationsList>,
+                    response: Response<PatientReservationsList>
+                ) {
+                    if (response.body()?.data != null) {
+                        BottomDialogPatiant(response.body()?.data!!).show(childFragmentManager, "")
+                    }
+                }
+
+                override fun onFailure(call: Call<PatientReservationsList>, t: Throwable) {
+
+                }
+
+            })
+        }
     }
 
 

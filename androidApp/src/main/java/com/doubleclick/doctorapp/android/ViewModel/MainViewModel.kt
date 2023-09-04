@@ -8,16 +8,11 @@ import com.doubleclick.doctorapp.android.Model.Clinic.AddClinics
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
 import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
-import com.doubleclick.doctorapp.android.Model.Auth.Login
-import com.doubleclick.doctorapp.android.Model.Auth.Registration
-import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
+import com.doubleclick.doctorapp.android.Model.Auth.*
 import com.doubleclick.doctorapp.android.Model.Days.Days
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
-import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
-import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
-import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
+import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
@@ -34,6 +29,8 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     private val loginResponseMutableLiveData: MutableLiveData<Call<ResopnsLogin>> =
         MutableLiveData()
     private val registerResponseMutableLiveData: MutableLiveData<Call<ResopnsLogin>> =
+        MutableLiveData()
+    private val updateUserMutableLiveData: MutableLiveData<Call<UpdateUser>> =
         MutableLiveData()
     private val days: MutableLiveData<Call<Days>> = MutableLiveData()
     private val favoriteDoctor: MutableLiveData<Call<FavoriteDoctor>> = MutableLiveData()
@@ -79,6 +76,13 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
             repository.createAccount(registration = registration);
         return registerResponseMutableLiveData;
     }
+
+    fun updateAccount(token: String, updateAccount: UpdateAccount): LiveData<Call<UpdateUser>> {
+        updateUserMutableLiveData.value = repository.updateAccount(token, updateAccount);
+        return updateUserMutableLiveData;
+    }
+
+
     //////////////////////////Auth//////////////////////////////////
 
 
@@ -185,6 +189,11 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         doctorsInfo.value = repository.getDoctorsInfoById(token = token, id = id);
         return doctorsInfo;
     }
+
+    fun searchDoctor(token: String, searchDoctor: SearchDoctor): LiveData<Call<DoctorsList>> {
+        doctorsList.value = repository.searchDoctor(token = token, searchDoctor = searchDoctor);
+        return doctorsList;
+    }
     //////////////////////////Doctors//////////////////////////////////
 
 
@@ -233,6 +242,10 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////user image//////////////////////////////////
 
     //////////////////////////patient_visits//////////////////////////////////
+
+    fun getPatientVisits(token: String, id: String){
+
+    }
 
     fun uploadPatientImages(
         token: String,

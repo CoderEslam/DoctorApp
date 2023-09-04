@@ -322,4 +322,7 @@
     <string name="exomedia_controls_accessibility_next">Next Media</string>
     <string name="exomedia_controls_live">Live</string>
     <string name="i_agree">I Agree</string>
+    <string name="family_members">Family Members</string>
+    <string name="patient_reservations">Patient Reservations</string>
+    <string name="patient_visits">Patient Visits</string>
 </resources>

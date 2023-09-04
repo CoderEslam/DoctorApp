@@ -2,15 +2,18 @@ package com.doubleclick.doctorapp.android.Adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationModel
 import com.doubleclick.doctorapp.android.R
+import com.doubleclick.doctorapp.android.Search
 import com.doubleclick.doctorapp.android.ViewHolders.SpacificationViewHolder
 import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_SPECIALIZATIONS
 
-class SpecializationAdapter(val specializationModel: List<SpecializationModel>) :
+class SpecializationAdapter(
+    val search: Search,
+    val specializationModel: List<SpecializationModel>
+) :
     RecyclerView.Adapter<SpacificationViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SpacificationViewHolder {
@@ -26,11 +29,7 @@ class SpecializationAdapter(val specializationModel: List<SpecializationModel>) 
             .into(holder.image)
 
         holder.itemView.setOnClickListener {
-            Toast.makeText(
-                holder.itemView.context,
-                specializationModel[holder.bindingAdapterPosition].name,
-                Toast.LENGTH_SHORT
-            ).show()
+            search.search(specializationModel[holder.bindingAdapterPosition].name.toString())
         }
     }
 
