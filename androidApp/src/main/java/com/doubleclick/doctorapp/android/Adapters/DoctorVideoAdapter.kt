@@ -37,7 +37,7 @@ class DoctorVideoAdapter(
                     DoctorVideoActivity::class.java
                 ).putParcelableArrayListExtra(
                     "medicalAdviceModelList",
-                    medicalAdviceModelList as java.util.ArrayList<out Parcelable>
+                    medicalAdviceModelList as ArrayList<out Parcelable>
                 )
             )
         }

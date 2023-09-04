@@ -1,5 +1,6 @@
 package com.doubleclick.doctorapp.android.Home
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.doubleclick.doctorapp.android.Adapters.DoctorVideoViewPagerAdapter
@@ -19,7 +20,14 @@ class DoctorVideoActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val list: ArrayList<MedicalAdviceModel>? =
-            intent.getParcelableArrayListExtra("medicalAdviceModelList")
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getParcelableArrayListExtra(
+                    "medicalAdviceModelList",
+                    MedicalAdviceModel::class.java
+                )
+            } else {
+                intent.getParcelableArrayListExtra("medicalAdviceModelList")
+            }
 
         binding.videos.adapter = DoctorVideoViewPagerAdapter(list!!)
 
