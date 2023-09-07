@@ -11,11 +11,10 @@ import com.doubleclick.doctorapp.android.Model.Patient.PatientModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.views.CircleImageView
 
-class SpinnerAdapter(
-    var context: Context,
-    val mList: List<String>
+class SpinnerFamilyMemberAdapter(
+    val patientModelList: List<PatientModel>
 ) : BaseAdapter() {
-    override fun getCount(): Int = mList.size
+    override fun getCount(): Int = patientModelList.size
 
     override fun getItem(i: Int): Any = i
 
@@ -23,9 +22,9 @@ class SpinnerAdapter(
 
     override fun getView(i: Int, p1: View?, viewGroup: ViewGroup?): View {
         val rootView: View =
-            LayoutInflater.from(context).inflate(R.layout.spinner_layout, viewGroup, false)
+            LayoutInflater.from(viewGroup?.context).inflate(R.layout.spinner_layout, viewGroup, false)
         val text: TextView = rootView.findViewById(R.id.text_spinner);
-        text.text = mList[i]
+        text.text = patientModelList[i].name
         return rootView;
     }
 }

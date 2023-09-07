@@ -227,8 +227,8 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         return message;
     }
 
-    fun familyMemberPatient(token: String): LiveData<Call<PatientsList>> {
-        patientsList.value = repository.familyMemberPatient(token = token);
+    fun getFamilyMemberPatient(token: String): LiveData<Call<PatientsList>> {
+        patientsList.value = repository.getFamilyMemberPatient(token = token);
         return patientsList;
     }
     //////////////////////////patient//////////////////////////////////

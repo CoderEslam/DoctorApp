@@ -143,8 +143,8 @@ class RepositoryRemot {
         return RetrofitInstance.api.postPatient(token = token, patientStore = patientStore)
     }
 
-    fun familyMemberPatient(token: String): Call<PatientsList> {
-        return RetrofitInstance.api.familyMemberPatient(token = token)
+    fun getFamilyMemberPatient(token: String): Call<PatientsList> {
+        return RetrofitInstance.api.getFamilyMemberPatient(token = token)
     }
 
 

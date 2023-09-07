@@ -18,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -68,6 +69,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import org.apache.http.client.utils.CloneUtils.clone
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -296,7 +298,6 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
                 builder.setNegativeButton("No") { dialog, which ->
                     dialog.cancel()
                 }
-                view.expand(ll_family)
                 builder.show()
             }
 
@@ -363,7 +364,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
     }
 
     private fun familyMember() {
-        viewModel.familyMemberPatient(TOKEN)
+        viewModel.getFamilyMemberPatient(TOKEN)
             .observe(viewLifecycleOwner) {
                 it.clone().enqueue(object : Callback<PatientsList> {
                     override fun onResponse(
@@ -567,11 +568,11 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
         binding.progressBar.progress = percentage
     }
 
-    override fun patientReservations(patient_reservations: String) {
+    override fun patientReservations(patient_reservations_id: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             RetrofitInstance.api.getPatientReservations(
                 BEARER + requireActivity().getToken(),
-                patient_reservations
+                patient_reservations_id
             ).clone().enqueue(object : Callback<PatientReservationsList> {
                 override fun onResponse(
                     call: Call<PatientReservationsList>,
@@ -590,11 +591,11 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
         }
     }
 
-    override fun patientVisits(patient_visits: String) {
+    override fun patientVisits(patient_visits_id: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             RetrofitInstance.api.getPatientReservations(
                 BEARER + requireActivity().getToken(),
-                patient_visits
+                patient_visits_id
             ).clone().enqueue(object : Callback<PatientReservationsList> {
                 override fun onResponse(
                     call: Call<PatientReservationsList>,

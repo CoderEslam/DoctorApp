@@ -18,7 +18,9 @@ import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
 import com.doubleclick.doctorapp.android.Model.Message
+import com.doubleclick.doctorapp.android.Model.Specialization.GeneralSpecialty
 import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationModel
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
@@ -110,7 +112,10 @@ class DoctorInfoFragment : Fragment() {
                     })
                 }
 
-            viewModel.getDoctorsInfoById("$BEARER${requireActivity().getToken()}", "3")
+            viewModel.getDoctorsInfoById(
+                "$BEARER${requireActivity().getToken()}",
+                "3" /*here must put id of doctor*/
+            )
                 .observe(viewLifecycleOwner) {
                     it.enqueue(object : Callback<DoctorsList> {
                         override fun onResponse(
@@ -124,6 +129,26 @@ class DoctorInfoFragment : Fragment() {
                             binding.instagramPageLink.setText(data.instagram_page_link)
                             binding.instagramPageName.setText(data.instagram_page_name)
                             binding.animationView.visibility = View.GONE
+
+
+                            binding.spinnerSpecializations.setSelection(
+                                specializationList.data.indexOf(
+                                    data.specialization
+                                ), true
+                            )
+                            val general_specialty = SpecializationModel(
+                                id = data.general_specialty_id,
+                                "",
+                                "",
+                                "",
+                                null,
+                                0
+                            )
+                            binding.spinnerGeneralSpecializations.setSelection(
+                                general_specializationList.data.indexOf(
+                                    general_specialty
+                                ), true
+                            )
                         }
 
                         override fun onFailure(call: Call<DoctorsList>, t: Throwable) {

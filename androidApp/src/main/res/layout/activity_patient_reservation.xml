@@ -80,19 +80,33 @@
                         android:textColor="@color/black"
                         android:textSize="14sp" />
 
-                    <EditText
-                        android:id="@+id/patient_name"
+                    <LinearLayout
+                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/bg_txt_gray"
-                        android:fontFamily="@font/rubik"
-                        android:hint="Patient Name"
-                        android:inputType="textPersonName"
-                        android:paddingStart="15dp"
-                        android:paddingEnd="15dp"
-                        android:textColor="@color/green"
-                        android:textColorHint="@color/text_grey" />
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <com.doubleclick.doctorapp.android.views.CustomSpinner.CustomSpinner
+                            android:id="@+id/spinner_patient_name"
+                            android:layout_width="0dp"
+                            android:layout_height="50dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_weight="1"
+                            android:dropDownVerticalOffset="40dp" />
+
+                        <ImageView
+                            android:id="@+id/arrow_patient_name"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_margin="5dp"
+                            android:rotation="0"
+                            android:src="@drawable/arrow"
+                            app:tint="@color/text_grey" />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -228,7 +242,7 @@
                     <EditText
                         android:id="@+id/patient_phone"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_txt_gray"
                         android:fontFamily="@font/rubik"
@@ -265,7 +279,7 @@
                     <EditText
                         android:id="@+id/reservation_date"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/bg_txt_gray"
                         android:editable="false"
@@ -298,7 +312,7 @@
                     <com.doubleclick.doctorapp.android.views.CustomSpinner.CustomSpinner
                         android:id="@+id/spinner_reason"
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        android:layout_height="50dp"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:background="@drawable/bg_spinner_up"

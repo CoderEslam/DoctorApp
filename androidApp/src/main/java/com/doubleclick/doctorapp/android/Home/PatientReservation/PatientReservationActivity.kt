@@ -13,11 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.doubleclick.doctorapp.android.Adapters.SpinnerAdapter
+import com.doubleclick.doctorapp.android.Adapters.SpinnerFamilyMemberAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGovernoratesAdapter
 import com.doubleclick.doctorapp.android.Model.*
 import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.GovernoratesModel
+import com.doubleclick.doctorapp.android.Model.Patient.PatientModel
+import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsModel
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
@@ -51,12 +54,13 @@ class PatientReservationActivity : AppCompatActivity() {
     private var reason_visit: String = ""
     private var governoratesModel: String = ""
     private var areaModel: String = ""
-    private var patient_id: String = ""
     private var TOKEN: String = ""
     private lateinit var viewModel: MainViewModel
     private var governoratesModelList: List<GovernoratesModel> = mutableListOf()
     private var areaModelList: List<GovernoratesModel> = mutableListOf()
     private var reasonModelList: List<String> = mutableListOf()
+    private var patientModelList: MutableList<PatientModel> = mutableListOf()
+    private lateinit var patientModel: PatientModel
     private lateinit var mTimePicker: TimePickerDialog
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -80,7 +84,27 @@ class PatientReservationActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.Main) {
             TOKEN = getToken().toString()
-            patient_id = getId().toString()
+            viewModel.getFamilyMemberPatient(
+                "${BEARER}$TOKEN"
+            ).observe(this@PatientReservationActivity) {
+                it.clone().enqueue(object : Callback<PatientsList> {
+                    override fun onResponse(
+                        call: Call<PatientsList>,
+                        response: Response<PatientsList>
+                    ) {
+                        if (response.body()?.data != null) {
+                            patientModelList = response.body()?.data?.toMutableList()!!
+                            setupFamilyMember(patientModelList)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<PatientsList>, t: Throwable) {
+
+                    }
+
+                })
+            }
+
             viewModel.getGovernoratesList("${BEARER}$TOKEN")
                 .observe(this@PatientReservationActivity) {
                     it.enqueue(object : Callback<Governorates> {
@@ -283,7 +307,7 @@ class PatientReservationActivity : AppCompatActivity() {
                     clinic_id = intent.extras?.getString("clinic_id")!!,
                     doctor_id = intent.extras?.getString("doctor_id")!!,
                     kind = if (binding.radioBtnMale.isChecked) "male" else if (binding.radioBtnFemale.isChecked) "female" else "",
-                    patient_id = patient_id,
+                    patient_id = patientModel.id.toString(),
                     patient_phone = binding.patientPhone.text.toString(),
                     reservation_date = binding.reservationDate.text.toString(),
                     type = reason_visit,
@@ -333,5 +357,44 @@ class PatientReservationActivity : AppCompatActivity() {
             mTimePicker.setTitle("Select Time")
             mTimePicker.show()
         }
+    }
+
+    fun setupFamilyMember(patientModelList: MutableList<PatientModel>) {
+        binding.spinnerPatientName.adapter = SpinnerFamilyMemberAdapter(patientModelList)
+        binding.spinnerPatientName.setSpinnerEventsListener(object :
+            OnSpinnerEventsListener {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowOpened(spinner: Spinner?) {
+                binding.arrowPatientName.rotation = 180f
+            }
+
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowClosed(spinner: Spinner?) {
+                binding.arrowPatientName.rotation = 0f
+            }
+
+        })
+
+        binding.spinnerPatientName.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                    patientModel = patientModelList[i]
+                    Toast.makeText(
+                        this@PatientReservationActivity,
+                        patientModel.id.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    patientModel = patientModelList[0]
+                    Toast.makeText(
+                        this@PatientReservationActivity,
+                        patientModel.id.toString(),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+
+            }
     }
 }

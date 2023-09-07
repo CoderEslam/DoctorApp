@@ -24,8 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-
             <ImageView
                 android:id="@+id/doctor_image"
                 android:layout_width="match_parent"
@@ -41,7 +39,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:fontFamily="@font/rubik_medium"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
                 android:textColor="@color/grey_700"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,7 +1,6 @@
 package com.doubleclick.doctorapp.android
 
 interface FamilyOption {
-    fun patientReservations(patient_reservations: String)
-    fun patientVisits(patient_visits: String)
-
+    fun patientReservations(patient_reservations_id: String)
+    fun patientVisits(patient_visits_id: String)
 }

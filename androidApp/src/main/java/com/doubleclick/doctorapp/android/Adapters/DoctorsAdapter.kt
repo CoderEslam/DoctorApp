@@ -25,6 +25,7 @@ class DoctorsAdapter(val doctorData: List<DoctorData>) : RecyclerView.Adapter<Do
             .load(IMAGE_URL_USERS + doctorData[holder.bindingAdapterPosition].user?.user_image)
             .into(holder.doctor_image)
         holder.doctor_name.text = doctorData[holder.bindingAdapterPosition].name
+        holder.doctor_name.isSelected = true
         holder.general_specialie.text =
             doctorData[holder.bindingAdapterPosition].general_specialty?.name
         holder.itemView.setOnClickListener {

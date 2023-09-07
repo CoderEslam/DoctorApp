@@ -204,7 +204,7 @@ interface API {
 
     @Headers("Content-Type: application/json", "Accept: application/json")
     @GET("patients")
-    fun familyMemberPatient(
+    fun getFamilyMemberPatient(
         @Header("Authorization") token: String,
     ): Call<PatientsList>
 
@@ -287,7 +287,7 @@ interface API {
     ): Call<Message>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @GET("patient_reservations/{id}")
+    @GET("patient_reservations/patient/{id}")
     fun getPatientReservations(
         @Header("Authorization") token: String,
         @Path("id") id: String
