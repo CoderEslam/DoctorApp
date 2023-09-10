@@ -11,11 +11,12 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
-import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -23,11 +24,11 @@ import retrofit2.Call
 
 class RepositoryRemot {
 
-    fun loginAccount(login: Login): Call<ResopnsLogin> {
+    fun loginAccount(login: Login): Call<LoginCallback> {
         return RetrofitInstance.api.login(login)
     }
 
-    fun createAccount(registration: Registration): Call<ResopnsLogin> {
+    fun createAccount(registration: RegistrationUser): Call<LoginCallback> {
         return RetrofitInstance.api.createAccount(registration)
     }
 
@@ -77,21 +78,21 @@ class RepositoryRemot {
 
     //////////////////////////Specializations//////////////////////////////////
 
-    fun getSpecializations(token: String): Call<Specialization> {
+    fun getSpecializations(token: String): Call<SpecializationList> {
         return RetrofitInstance.api.getSpecializations(token = token)
     }
     //////////////////////////Specializations//////////////////////////////////
 
     //////////////////////////general_specialties//////////////////////////////////
-    fun getGeneralSpecialties(token: String): Call<Specialization> {
+    fun getGeneralSpecialties(token: String): Call<GeneralSpecializationList> {
         return RetrofitInstance.api.getGeneralSpecialties(token = token)
     }
     //////////////////////////general_specialties//////////////////////////////////
 
     //////////////////////////Doctor store//////////////////////////////////
-    fun postDoctor(token: String, doctor: Doctor): Call<Message> {
-        return RetrofitInstance.api.postDoctor(token = token, doctor = doctor)
-    }
+//    fun postDoctor(token: String, doctor: Doctor): Call<Message> {
+//        return RetrofitInstance.api.postDoctor(token = token, doctor = doctor)
+//    }
 
     fun updateDoctor(token: String, id: String, updateDoctor: UpdateDoctor): Call<Message> {
         return RetrofitInstance.api.updateDoctor(

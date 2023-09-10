@@ -6,14 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationModel
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.R
 
 class SpinnerGeneralSpecializationAdapter(
-    var context: Context,
-    val specialization: Specialization
+    val generalSpecializationModel: List<GeneralSpecializationModel>?
 ) : BaseAdapter() {
-    override fun getCount(): Int = specialization.data.size
+    override fun getCount(): Int = generalSpecializationModel?.size ?: 0
 
     override fun getItem(i: Int): Any = i
 
@@ -21,9 +22,10 @@ class SpinnerGeneralSpecializationAdapter(
 
     override fun getView(i: Int, p1: View?, viewGroup: ViewGroup?): View {
         val rootView: View =
-            LayoutInflater.from(context).inflate(R.layout.spinner_layout, viewGroup, false)
+            LayoutInflater.from(viewGroup?.context)
+                .inflate(R.layout.spinner_layout , viewGroup, false)
         val text: TextView = rootView.findViewById(R.id.text_spinner);
-        text.text = specialization.data[i].name
+        text.text = generalSpecializationModel?.get(i)?.name
         return rootView;
     }
 }

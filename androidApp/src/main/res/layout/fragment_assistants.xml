@@ -173,17 +173,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
                     android:background="@drawable/bg_txt_gray"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
                     android:orientation="horizontal">
 
                     <com.doubleclick.doctorapp.android.views.CustomSpinner.CustomSpinner
                         android:id="@+id/spinner_assistant_clinic"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:dropDownVerticalOffset="40dp" />
+                        android:dropDownVerticalOffset="40dp"
+                        tools:listitem="@layout/spinner_layout" />
 
 
                     <ImageView

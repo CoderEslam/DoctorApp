@@ -8,6 +8,7 @@ import com.doubleclick.doctorapp.android.R
 
 class DoctorsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val doctor_image: ImageView = itemView.findViewById(R.id.doctor_image);
+    val favorite: ImageView = itemView.findViewById(R.id.favorite);
     val doctor_name: TextView = itemView.findViewById(R.id.doctor_name);
     val general_specialie: TextView = itemView.findViewById(R.id.general_specialie);
 

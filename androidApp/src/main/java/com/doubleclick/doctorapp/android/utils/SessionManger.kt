@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.first
  */
 object SessionManger {
 
-    private val TAG = "SsuessionManger"
+    private val TAG = "SessionManger"
 
     suspend fun Context.updateSession(
         token: String,
@@ -20,7 +20,8 @@ object SessionManger {
         password: String,
         id: String,
         name: String,
-        phone: String
+        phone: String,
+        role: String,
     ) {
         val jwtTokenKey = stringPreferencesKey(ConstantsSession.TOKEN_KEY.text)
         val passwordKey = stringPreferencesKey(ConstantsSession.PASSWORD_KEY.text)
@@ -28,6 +29,7 @@ object SessionManger {
         val idKey = stringPreferencesKey(ConstantsSession.ID_KEY.text)
         val nameKey = stringPreferencesKey(ConstantsSession.NAME_KEY.text)
         val phoneKey = stringPreferencesKey(ConstantsSession.PHONE_KEY.text)
+        val roleKey = stringPreferencesKey(ConstantsSession.ROLE.text)
 
         /*
         * to save name , email , token in local phone by preferences
@@ -42,6 +44,7 @@ object SessionManger {
             preferences[idKey] = id
             preferences[nameKey] = name
             preferences[phoneKey] = phone
+            preferences[roleKey] = role
         }
 
 
@@ -150,6 +153,12 @@ object SessionManger {
         val emailKey = stringPreferencesKey(ConstantsSession.EMAIL_KEY.text)
         val preferences = dataStore.data.first()
         return preferences[emailKey]
+    }
+
+    suspend fun Context.getRole(): String? {
+        val roleKey = stringPreferencesKey(ConstantsSession.ROLE.text)
+        val preferences = dataStore.data.first()
+        return preferences[roleKey]
     }
 
 

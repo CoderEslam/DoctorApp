@@ -13,13 +13,14 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.doubleclick.doctorapp.android.Adapters.SpinnerGeneralSpecializationAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerSpecializationAdapter
-import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationModel
 import com.doubleclick.doctorapp.android.Model.Message
-import com.doubleclick.doctorapp.android.Model.Specialization.GeneralSpecialty
-import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationModel
 import com.doubleclick.doctorapp.android.OnSpinnerEventsListener
 import com.doubleclick.doctorapp.android.R
@@ -28,7 +29,6 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentDoctorInfoBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
-import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,8 +44,8 @@ class DoctorInfoFragment : Fragment() {
     private val TAG = "DoctorSpecializationFra"
 
     private var specializations: Int = -1
-    private lateinit var specializationList: Specialization
-    private lateinit var general_specializationList: Specialization
+    private lateinit var specializationList: List<SpecializationModel>
+    private lateinit var generalSpecializationList: List<GeneralSpecializationModel>
 
 
     private var general_specializations: Int = -1
@@ -74,17 +74,19 @@ class DoctorInfoFragment : Fragment() {
             binding.animationView.visibility = View.VISIBLE
             viewModel.getSpecializations("$BEARER${requireActivity().getToken()}")
                 .observe(viewLifecycleOwner) {
-                    it.enqueue(object : Callback<Specialization> {
+                    it.enqueue(object : Callback<SpecializationList> {
                         override fun onResponse(
-                            call: Call<Specialization>, response: Response<Specialization>
+                            call: Call<SpecializationList>, response: Response<SpecializationList>
                         ) {
-                            specializationList = response.body()!!
-                            binding.spinnerSpecializations.adapter =
-                                SpinnerSpecializationAdapter(specializationList)
+                            if (response.body()?.data != null) {
+                                specializationList = response.body()?.data!!
+                                binding.spinnerSpecializations.adapter =
+                                    SpinnerSpecializationAdapter(specializationList)
 
+                            }
                         }
 
-                        override fun onFailure(call: Call<Specialization>, t: Throwable) {
+                        override fun onFailure(call: Call<SpecializationList>, t: Throwable) {
 
                         }
 
@@ -93,19 +95,24 @@ class DoctorInfoFragment : Fragment() {
 
             viewModel.getGeneralSpecialties("$BEARER${requireActivity().getToken()}")
                 .observe(viewLifecycleOwner) {
-                    it.enqueue(object : Callback<Specialization> {
+                    it.enqueue(object : Callback<GeneralSpecializationList> {
                         override fun onResponse(
-                            call: Call<Specialization>, response: Response<Specialization>
+                            call: Call<GeneralSpecializationList>,
+                            response: Response<GeneralSpecializationList>
                         ) {
-                            general_specializationList = response.body()!!
-                            binding.spinnerGeneralSpecializations.adapter =
-                                SpinnerSpecializationAdapter(
-                                    general_specializationList
-                                )
-
+                            if (response.body()?.data != null) {
+                                generalSpecializationList = response.body()?.data!!
+                                binding.spinnerGeneralSpecializations.adapter =
+                                    SpinnerGeneralSpecializationAdapter(
+                                        generalSpecializationList
+                                    )
+                            }
                         }
 
-                        override fun onFailure(call: Call<Specialization>, t: Throwable) {
+                        override fun onFailure(
+                            call: Call<GeneralSpecializationList>,
+                            t: Throwable
+                        ) {
 
                         }
 
@@ -121,34 +128,38 @@ class DoctorInfoFragment : Fragment() {
                         override fun onResponse(
                             call: Call<DoctorsList>, response: Response<DoctorsList>
                         ) {
-                            val data = response.body()!!.data[0]
-                            binding.clinicName.setText(data.name)
-                            binding.websiteLink.setText(data.website)
-                            binding.facebookPageLink.setText(data.facebook_page_link)
-                            binding.facebookPageName.setText(data.facebook_page_name)
-                            binding.instagramPageLink.setText(data.instagram_page_link)
-                            binding.instagramPageName.setText(data.instagram_page_name)
-                            binding.animationView.visibility = View.GONE
+                            if (response.body()?.data != null) {
+                                val data = response.body()?.data?.get(0)
+                                binding.clinicName.setText(data?.name)
+                                binding.websiteLink.setText(data?.website)
+                                binding.facebookPageLink.setText(data?.facebook_page_link)
+                                binding.facebookPageName.setText(data?.facebook_page_name)
+                                binding.instagramPageLink.setText(data?.instagram_page_link)
+                                binding.instagramPageName.setText(data?.instagram_page_name)
+                                binding.animationView.visibility = View.GONE
 
 
-                            binding.spinnerSpecializations.setSelection(
-                                specializationList.data.indexOf(
-                                    data.specialization
-                                ), true
-                            )
-                            val general_specialty = SpecializationModel(
-                                id = data.general_specialty_id,
-                                "",
-                                "",
-                                "",
-                                null,
-                                0
-                            )
-                            binding.spinnerGeneralSpecializations.setSelection(
-                                general_specializationList.data.indexOf(
-                                    general_specialty
-                                ), true
-                            )
+                                /*binding.spinnerSpecializations.setSelection(
+                                    specializationList.data?.indexOf(
+                                        data?.specialization
+                                    ), true
+                                )*/
+                                val general_specialty = data?.general_specialty_id?.let { it1 ->
+                                    SpecializationModel(
+                                        id = it1,
+                                        "",
+                                        "",
+                                        "",
+                                        null,
+                                        0
+                                    )
+                                }
+                                /* binding.spinnerGeneralSpecializations.setSelection(
+                                     general_specializationList.data?.indexOf(
+                                         general_specialty
+                                     ), true
+                                 )*/
+                            }
                         }
 
                         override fun onFailure(call: Call<DoctorsList>, t: Throwable) {
@@ -181,11 +192,13 @@ class DoctorInfoFragment : Fragment() {
                 ).observe(viewLifecycleOwner) {
                     it.clone().enqueue(object : Callback<Message> {
                         override fun onResponse(call: Call<Message>, response: Response<Message>) {
-                            Toast.makeText(
-                                requireActivity(),
-                                response.body()?.message.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            if (response.body()?.message != null) {
+                                Toast.makeText(
+                                    requireActivity(),
+                                    response.body()?.message.toString(),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
 
                         override fun onFailure(call: Call<Message>, t: Throwable) {
@@ -201,14 +214,14 @@ class DoctorInfoFragment : Fragment() {
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
                     try {
-                        specializations = specializationList.data[i].id
+                        specializations = specializationList?.get(i)?.id!!
                     } catch (_: IndexOutOfBoundsException) {
                     }
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     try {
-                        specializations = specializationList.data[0].id
+                        specializations = specializationList?.get(0)?.id!!
                     } catch (_: IndexOutOfBoundsException) {
                     }
                 }
@@ -219,7 +232,7 @@ class DoctorInfoFragment : Fragment() {
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
                     try {
-                        general_specializations = general_specializationList.data[i].id
+                        general_specializations = generalSpecializationList?.get(i)?.id!!
                     } catch (_: IndexOutOfBoundsException) {
                     }
 
@@ -227,7 +240,7 @@ class DoctorInfoFragment : Fragment() {
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
                     try {
-                        general_specializations = general_specializationList.data[0].id
+                        general_specializations = generalSpecializationList?.get(0)?.id!!
                     } catch (_: IndexOutOfBoundsException) {
                     }
 

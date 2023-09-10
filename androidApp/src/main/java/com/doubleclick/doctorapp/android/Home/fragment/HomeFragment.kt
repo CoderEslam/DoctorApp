@@ -17,10 +17,14 @@ import com.doubleclick.doctorapp.android.Adapters.DoctorVideoAdapter
 import com.doubleclick.doctorapp.android.Adapters.DoctorsAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpecializationAdapter
 import com.doubleclick.doctorapp.android.CreatePDF
+import com.doubleclick.doctorapp.android.FavoritesDoctor
 import com.doubleclick.doctorapp.android.Home.Filter.FilterActivity
+import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
+import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteModel
 import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
-import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.Message
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.Search
@@ -34,8 +38,7 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.multisearchview.MultiSearchView
-import com.journeyapps.barcodescanner.ScanContract
-import com.journeyapps.barcodescanner.ScanIntentResult
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -43,12 +46,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class HomeFragment : Fragment(), CreatePDF, Search {
+class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var viewModel: MainViewModel
     private val TAG = "HomeFragment"
-    private lateinit var specializationList: Specialization
+    private var token = ""
+    private lateinit var specializationList: SpecializationList
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +79,7 @@ class HomeFragment : Fragment(), CreatePDF, Search {
             MainViewModelFactory(RepositoryRemot())
         )[MainViewModel::class.java]
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            token = BEARER + requireActivity().getToken().toString()
             binding.userName.text = buildString {
                 append(getString(R.string.hi))
                 append(" ")
@@ -87,7 +92,7 @@ class HomeFragment : Fragment(), CreatePDF, Search {
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
 
-            RetrofitInstance.api.getMedicalAdvices(BEARER + requireActivity().getToken().toString())
+            RetrofitInstance.api.getMedicalAdvices(token = token)
                 .clone()
                 .enqueue(object : Callback<MedicalAdvice> {
                     override fun onResponse(
@@ -106,7 +111,7 @@ class HomeFragment : Fragment(), CreatePDF, Search {
 
 
             binding.animationView.visibility = View.VISIBLE
-            viewModel.getDoctorsList("$BEARER${requireActivity().getToken()}")
+            viewModel.getDoctorsList(token = token)
                 .observe(viewLifecycleOwner) {
                     it.enqueue(object : Callback<DoctorsList> {
                         @SuppressLint("NotifyDataSetChanged")
@@ -117,7 +122,12 @@ class HomeFragment : Fragment(), CreatePDF, Search {
                             if (response.body() != null) {
 
                                 binding.homeRecyclerViewPopular.adapter =
-                                    DoctorsAdapter(response.body()!!.data)
+                                    response.body()?.data?.let { doctors ->
+                                        DoctorsAdapter(
+                                            doctors,
+                                            this@HomeFragment
+                                        )
+                                    }
 
 
                                 binding.animationView.visibility = View.GONE
@@ -135,19 +145,25 @@ class HomeFragment : Fragment(), CreatePDF, Search {
                     })
                 }
 
-            viewModel.getSpecializations("$BEARER${requireActivity().getToken()}")
+            viewModel.getSpecializations(token = token)
                 .observe(viewLifecycleOwner) {
-                    it.enqueue(object : Callback<Specialization> {
+                    it.enqueue(object : Callback<SpecializationList> {
                         override fun onResponse(
-                            call: Call<Specialization>, response: Response<Specialization>
+                            call: Call<SpecializationList>, response: Response<SpecializationList>
                         ) {
-                            specializationList = response.body()!!
-                            binding.homeRecyclerViewSpacification.adapter =
-                                SpecializationAdapter(this@HomeFragment, specializationList.data)
-
+                            if (response.body() != null) {
+                                specializationList = response.body()!!
+                                binding.homeRecyclerViewSpacification.adapter =
+                                    specializationList.data?.let { it1 ->
+                                        SpecializationAdapter(
+                                            this@HomeFragment,
+                                            it1
+                                        )
+                                    }
+                            }
                         }
 
-                        override fun onFailure(call: Call<Specialization>, t: Throwable) {
+                        override fun onFailure(call: Call<SpecializationList>, t: Throwable) {
 
                         }
 
@@ -201,6 +217,30 @@ class HomeFragment : Fragment(), CreatePDF, Search {
         val intent = Intent(requireActivity(), FilterActivity::class.java)
         intent.putExtra("searchItem", name)
         startActivity(intent)
+    }
+
+    override fun deleteFavorite(favoriteModel: FavoriteModel, id: String) {
+
+    }
+
+    override fun setFavorite(id: String) {
+        viewModel.putFavoriteDoctor(token = token, doctor_id = DoctorId(id))
+            .observe(viewLifecycleOwner) {
+                it.clone().enqueue(object : Callback<Message> {
+                    override fun onResponse(call: Call<Message>, response: Response<Message>) {
+                        Snackbar.make(
+                            requireView(),
+                            response.body()?.message.toString(),
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    override fun onFailure(call: Call<Message>, t: Throwable) {
+
+                    }
+
+                })
+            }
     }
 
 }

@@ -14,11 +14,12 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
-import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -26,9 +27,9 @@ import retrofit2.Call
 
 class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
 
-    private val loginResponseMutableLiveData: MutableLiveData<Call<ResopnsLogin>> =
+    private val loginResponseMutableLiveData: MutableLiveData<Call<LoginCallback>> =
         MutableLiveData()
-    private val registerResponseMutableLiveData: MutableLiveData<Call<ResopnsLogin>> =
+    private val registerResponseMutableLiveData: MutableLiveData<Call<LoginCallback>> =
         MutableLiveData()
     private val updateUserMutableLiveData: MutableLiveData<Call<UpdateUser>> =
         MutableLiveData()
@@ -57,21 +58,21 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////message//////////////////////////////////
 
     /////////////////////////Clinic//////////////////////////////////
-    private val specializations: MutableLiveData<Call<Specialization>> = MutableLiveData()
+    private val specializations: MutableLiveData<Call<SpecializationList>> = MutableLiveData()
     //////////////////////////Clinic//////////////////////////////////
 
     /////////////////////////general_specialties//////////////////////////////////
-    private val general_specialties: MutableLiveData<Call<Specialization>> = MutableLiveData()
+    private val general_specialties: MutableLiveData<Call<GeneralSpecializationList>> = MutableLiveData()
     //////////////////////////general_specialties//////////////////////////////////
 
 
     //////////////////////////Auth//////////////////////////////////
-    fun getLoginResponse(login: Login): LiveData<Call<ResopnsLogin>> {
+    fun getLoginResponse(login: Login): LiveData<Call<LoginCallback>> {
         loginResponseMutableLiveData.value = repository.loginAccount(login);
         return loginResponseMutableLiveData;
     }
 
-    fun getRegisterResponse(registration: Registration): LiveData<Call<ResopnsLogin>> {
+    fun getRegisterResponse(registration: RegistrationUser): LiveData<Call<LoginCallback>> {
         registerResponseMutableLiveData.value =
             repository.createAccount(registration = registration);
         return registerResponseMutableLiveData;
@@ -148,24 +149,24 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
 
 
     //////////////////////////Specializations//////////////////////////////////
-    fun getSpecializations(token: String): LiveData<Call<Specialization>> {
+    fun getSpecializations(token: String): LiveData<Call<SpecializationList>> {
         specializations.value = repository.getSpecializations(token = token);
         return specializations;
     }
     //////////////////////////Specializations//////////////////////////////////
 
     //////////////////////////general_specialties//////////////////////////////////
-    fun getGeneralSpecialties(token: String): LiveData<Call<Specialization>> {
+    fun getGeneralSpecialties(token: String): LiveData<Call<GeneralSpecializationList>> {
         general_specialties.value = repository.getGeneralSpecialties(token = token);
         return general_specialties;
     }
     //////////////////////////general_specialties//////////////////////////////////
 
     //////////////////////////Doctor store//////////////////////////////////
-    fun postDoctor(token: String, doctor: Doctor): LiveData<Call<Message>> {
-        message.value = repository.postDoctor(token = token, doctor = doctor);
-        return message;
-    }
+//    fun postDoctor(token: String, doctor: Doctor): LiveData<Call<Message>> {
+//        message.value = repository.postDoctor(token = token, doctor = doctor);
+//        return message;
+//    }
 
     fun updateDoctor(
         token: String,

@@ -1,0 +1,58 @@
+package com.doubleclick.doctorapp.android.Model.Doctor
+
+import android.os.Parcel
+import android.os.Parcelable
+
+data class DoctorPhone(
+    val doctor_id: Int,
+    val id: Int,
+    val phone: String?,
+    val type: String?,
+    val user_id: Int
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readInt()
+    ) {
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as DoctorPhone
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(doctor_id)
+        parcel.writeInt(id)
+        parcel.writeString(phone)
+        parcel.writeString(type)
+        parcel.writeInt(user_id)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<DoctorPhone> {
+        override fun createFromParcel(parcel: Parcel): DoctorPhone {
+            return DoctorPhone(parcel)
+        }
+
+        override fun newArray(size: Int): Array<DoctorPhone?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

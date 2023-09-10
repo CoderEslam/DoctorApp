@@ -1,8 +1,7 @@
-package com.doubleclick.doctorapp.android.Model.PatientReservations
+package com.doubleclick.doctorapp.android.Model.Doctor
 
 import android.os.Parcel
 import android.os.Parcelable
-
 
 data class Clinic(
     val address: String?,

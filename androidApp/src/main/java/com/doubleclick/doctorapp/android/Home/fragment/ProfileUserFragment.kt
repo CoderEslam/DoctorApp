@@ -18,15 +18,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.compose.runtime.snapshots.Snapshot.Companion.observe
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.AdapterFamilyMember
-import com.doubleclick.doctorapp.android.Adapters.BookingAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGovernoratesAdapter
 import com.doubleclick.doctorapp.android.FamilyOption
@@ -45,12 +41,10 @@ import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
-import com.doubleclick.doctorapp.android.databinding.FragmentProfileBinding
+import com.doubleclick.doctorapp.android.databinding.FragmentProfileUserBinding
 import com.doubleclick.doctorapp.android.utils.*
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
 import com.doubleclick.doctorapp.android.utils.Constants.IMAGE_URL_USERS
-import com.doubleclick.doctorapp.android.utils.Constants.TOKEN
-import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentPassword
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentUserEmail
 import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getImage
@@ -63,13 +57,13 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.setName
 import com.doubleclick.doctorapp.android.utils.SessionManger.setPhone
 import com.doubleclick.doctorapp.android.utils.SessionManger.setToken
 import com.doubleclick.doctorapp.android.views.CustomSpinner.CustomSpinner
+import com.google.android.material.snackbar.Snackbar
 import com.iceteck.silicompressorr.SiliCompressor
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import org.apache.http.client.utils.CloneUtils.clone
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,14 +73,14 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
 
-class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOption {
+class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOption {
 
-    private lateinit var binding: FragmentProfileBinding
+    private lateinit var binding: FragmentProfileUserBinding
 
-    private val smokingList = listOf("No", "Yes")
-    private val alcoholDrinkingList = listOf("No", "Yes")
-    private val bloodTypeList = listOf("A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-")
-    private val materielStatusList = listOf("Single", "Married", "Widower", "Divorced")
+    private lateinit var smokingList: List<String>
+    private lateinit var alcoholDrinkingList: List<String>
+    private lateinit var bloodTypeList: List<String>
+    private lateinit var materielStatusList: List<String>
     private lateinit var uri: Uri;
     private val TAG = "ProfileFragment"
     private lateinit var viewModel: MainViewModel
@@ -126,7 +120,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
                 binding.progressBar.visibility = View.VISIBLE
                 val outputStream = FileOutputStream(file)
                 inputStream.copyTo(outputStream)
-                val body = UploadRequestBody(file, "image", this@ProfileFragment)
+                val body = UploadRequestBody(file, "image", this@ProfileUserFragment)
                 uploadImage(body)
 
             } catch (e: NullPointerException) {
@@ -149,13 +143,18 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        binding = FragmentProfileUserBinding.inflate(inflater, container, false)
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        smokingList = resources.getStringArray(R.array.smokingList).toList()
+        alcoholDrinkingList = resources.getStringArray(R.array.alcoholDrinkingList).toList()
+        bloodTypeList = resources.getStringArray(R.array.bloodTypeList).toList()
+        materielStatusList = resources.getStringArray(R.array.materielStatusList).toList()
+
         viewModel = ViewModelProvider(
             this,
             MainViewModelFactory(RepositoryRemot())
@@ -189,7 +188,6 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
                 val et_phone: TextView = view.findViewById(R.id.et_phone)
                 val et_height: TextView = view.findViewById(R.id.et_height)
                 val et_weight: TextView = view.findViewById(R.id.et_weight)
-                val ll_family: LinearLayout = view.findViewById(R.id.ll_family)
                 val spinner_gov: CustomSpinner = view.findViewById(R.id.spinner_gov)
                 val spinner_area: CustomSpinner = view.findViewById(R.id.spinner_area)
                 val spinner_blood: CustomSpinner = view.findViewById(R.id.spinner_blood)
@@ -373,7 +371,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
                     ) {
                         binding.rvFamilyMember.adapter =
                             AdapterFamilyMember(
-                                this@ProfileFragment,
+                                this@ProfileUserFragment,
                                 response.body()!!.data!!.toMutableList()
                             )
                     }
@@ -407,6 +405,7 @@ class ProfileFragment : Fragment(), UploadRequestBody.UploadCallback, FamilyOpti
                         response: Response<Message>
                     ) {
                         familyMember()
+                        Snackbar.make(requireView(), "Done", Snackbar.LENGTH_SHORT).show()
                     }
 
                     override fun onFailure(call: Call<Message>, t: Throwable) {

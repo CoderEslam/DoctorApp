@@ -1,19 +1,17 @@
-package com.doubleclick.doctorapp.android.Model.Specialization
+package com.doubleclick.doctorapp.android.Model.GeneralSpecialization
 
 import android.os.Parcel
 import android.os.Parcelable
 
-data class SpecializationModel(
+data class GeneralSpecializationModel(
     val id: Int,
     val name: String?,
-    val specialization_image: String?,
     val status: String?,
     val user: User?,
     val user_id: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
-        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readParcelable(User::class.java.classLoader),
@@ -24,7 +22,6 @@ data class SpecializationModel(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(id)
         parcel.writeString(name)
-        parcel.writeString(specialization_image)
         parcel.writeString(status)
         parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
@@ -38,7 +35,7 @@ data class SpecializationModel(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as SpecializationModel
+        other as GeneralSpecializationModel
 
         if (id != other.id) return false
 
@@ -49,12 +46,12 @@ data class SpecializationModel(
         return id
     }
 
-    companion object CREATOR : Parcelable.Creator<SpecializationModel> {
-        override fun createFromParcel(parcel: Parcel): SpecializationModel {
-            return SpecializationModel(parcel)
+    companion object CREATOR : Parcelable.Creator<GeneralSpecializationModel> {
+        override fun createFromParcel(parcel: Parcel): GeneralSpecializationModel {
+            return GeneralSpecializationModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<SpecializationModel?> {
+        override fun newArray(size: Int): Array<GeneralSpecializationModel?> {
             return arrayOfNulls(size)
         }
     }

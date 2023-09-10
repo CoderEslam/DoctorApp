@@ -12,6 +12,7 @@ import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
+import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
 import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
@@ -19,7 +20,7 @@ import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
-import com.doubleclick.doctorapp.android.Model.Specialization.Specialization
+import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -33,7 +34,7 @@ interface API {
     @POST("login")
     fun login(
         @Body login: Login
-    ): Call<ResopnsLogin>
+    ): Call<LoginCallback>
 
     @Headers("Content-Type: application/json")
     @POST("update_user_info")
@@ -45,8 +46,8 @@ interface API {
     @Headers("Content-Type: application/json")
     @POST("register")
     fun createAccount(
-        @Body registration: Registration
-    ): Call<ResopnsLogin>
+        @Body registration: RegistrationUser
+    ): Call<LoginCallback>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
     @GET("days")
@@ -120,7 +121,7 @@ interface API {
     @GET("specializations")
     fun getSpecializations(
         @Header("Authorization") token: String
-    ): Call<Specialization>
+    ): Call<SpecializationList>
     //////////////////////////Specializations//////////////////////////////////
 
 
@@ -129,7 +130,7 @@ interface API {
     @GET("general_specialties")
     fun getGeneralSpecialties(
         @Header("Authorization") token: String
-    ): Call<Specialization>
+    ): Call<GeneralSpecializationList>
 
     //////////////////////////general_specialties//////////////////////////////////
 
@@ -155,11 +156,11 @@ interface API {
         @Body searchDoctor: SearchDoctor
     ): Call<DoctorsList>
 
-    @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("doctors")
-    fun postDoctor(
-        @Header("Authorization") token: String, @Body doctor: Doctor
-    ): Call<Message>
+//    @Headers("Content-Type: application/json", "Accept: application/json")
+//    @POST("doctors")
+//    fun postDoctor(
+//        @Header("Authorization") token: String, @Body doctor: Doctor
+//    ): Call<Message>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
     @PUT("doctors/{id}")

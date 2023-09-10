@@ -33,10 +33,11 @@
             android:id="@+id/action_bookFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.doubleclick.doctorapp.android.Home.fragment.ProfileFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.fragment.ProfileUserFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile_user" />
 
 </navigation>

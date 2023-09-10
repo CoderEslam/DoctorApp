@@ -30,7 +30,10 @@ import com.doubleclick.doctorapp.android.databinding.LogoutBinding
 import com.doubleclick.doctorapp.android.utils.Constants
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentUserEmail
 import com.doubleclick.doctorapp.android.utils.SessionManger.getId
+import com.doubleclick.doctorapp.android.utils.SessionManger.getImage
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
+import com.doubleclick.doctorapp.android.utils.SessionManger.getRole
+import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.utils.SessionManger.logoutManger
 import com.doubleclick.doctorapp.android.views.CircleImageView
 import com.doubleclick.doctorapp.android.views.flowingdrawer.ElasticDrawer
@@ -142,10 +145,11 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
         }
         GlobalScope.launch(Dispatchers.Main) {
             val userId = getId().toString()
+            Toast.makeText(this@HomeActivity, "${getToken()}", Toast.LENGTH_SHORT).show()
             findViewById<TextView>(R.id.name).text = getName()
             findViewById<TextView>(R.id.user_contact).text = getCurrentUserEmail()
             Glide.with(this@HomeActivity).load(
-                "${Constants.IMAGE_URL_USERS}${getName()}_${userId}.jpg"
+                "${Constants.IMAGE_URL_USERS}${getImage()}"
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(findViewById<CircleImageView>(R.id.image_profile))

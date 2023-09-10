@@ -34,6 +34,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/girl" />
 
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/favorite"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/red" />
+
+
             <TextView
                 android:id="@+id/doctor_name"
                 android:layout_width="wrap_content"

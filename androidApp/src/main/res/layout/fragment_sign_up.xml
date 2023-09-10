@@ -141,7 +141,20 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/bg_txt_gray"
                     android:fontFamily="@font/rubik"
-                    android:hint="phone or  Email"
+                    android:hint="Email"
+                    android:paddingStart="15dp"
+                    android:paddingEnd="15dp"
+                    android:textColor="@color/green"
+                    android:textColorHint="@color/text_grey" />
+
+                <EditText
+                    android:id="@+id/phone_sign_up"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_txt_gray"
+                    android:fontFamily="@font/rubik"
+                    android:hint="Phone"
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp"
                     android:textColor="@color/green"

@@ -11,8 +11,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.doubleclick.doctorapp.android.Home.HomeActivity
-import com.doubleclick.doctorapp.android.Model.Auth.Registration
-import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
+import com.doubleclick.doctorapp.android.Model.Auth.LoginCallback
+import com.doubleclick.doctorapp.android.Model.Auth.RegistrationUser
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
@@ -31,7 +31,7 @@ class SignUpFragment : Fragment() {
 
     private lateinit var binding: FragmentSignUpBinding
     private lateinit var viewModel: MainViewModel
-    private val regex = "^(.+)@(.+)$"
+    private val regex = "[a-z0-9]+@[a-z]+\\.[a-z]{2,3}"
     private val TAG = "SignUpFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,89 +71,47 @@ class SignUpFragment : Fragment() {
     private fun signUp() {
         binding.animationView.visibility = View.VISIBLE
         if (isEmpty()) {
-            if (isEmail()) {
-                viewModel.getRegisterResponse(
-                    Registration(
-                        name = binding.nameSignUp.text.toString().trim(),
-                        email = binding.emailSignUp.text.toString().trim(),
-                        phone = "",
-                        password = binding.passwordSignUp.text.toString().trim(),
-                        password_confirmation = binding.passwordSignUp.text.toString().trim()
-                    )
-                ).observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<ResopnsLogin> {
-                        override fun onResponse(
-                            call: Call<ResopnsLogin>,
-                            response: Response<ResopnsLogin>
-                        ) {
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                response.body()?.let { user ->
-                                    requireActivity().updateSession(
-                                        user.user.device_token!!,
-                                        user.user.email!!,
-                                        binding.passwordSignUp.text.toString().trim(),
-                                        user.user.id.toString(),
-                                        user.user.name!!,
-                                        user.user.phone!!
+            viewModel.getRegisterResponse(
+                RegistrationUser(
+                    name = binding.nameSignUp.text.toString().trim(),
+                    email = binding.emailSignUp.text.toString().trim(),
+                    phone = binding.phoneSignUp.text.toString().trim(),
+                    password = binding.passwordSignUp.text.toString().trim(),
+                    password_confirmation = binding.passwordSignUp.text.toString().trim()
+                )
+            ).observe(viewLifecycleOwner) {
+                it.clone().enqueue(object : Callback<LoginCallback> {
+                    override fun onResponse(
+                        call: Call<LoginCallback>,
+                        response: Response<LoginCallback>
+                    ) {
+                        viewLifecycleOwner.lifecycleScope.launch {
+                            response.body()?.let { user ->
+                                requireActivity().updateSession(
+                                    user.user?.device_token.toString(),
+                                    user.user?.email.toString(),
+                                    binding.passwordSignUp.text.toString().trim(),
+                                    user.user?.id.toString(),
+                                    user.user?.name.toString(),
+                                    user.user?.phone.toString(),
+                                    user.role.toString()
+                                )
+                                requireActivity().setImage("${user.user?.name}_${user.user?.id}.jpg")
+                                startActivity(
+                                    Intent(
+                                        requireActivity(),
+                                        HomeActivity::class.java
                                     )
-                                    requireActivity().setImage("${user.user.name}_${user.user.id}.jpg")
-                                    startActivity(
-                                        Intent(
-                                            requireActivity(),
-                                            HomeActivity::class.java
-                                        )
-                                    )
-                                }
+                                )
                             }
                         }
+                    }
 
-                        override fun onFailure(call: Call<ResopnsLogin>, t: Throwable) {
-                            Log.e(TAG, "onFailure: ${t.message}")
-                        }
+                    override fun onFailure(call: Call<LoginCallback>, t: Throwable) {
+                        Log.e(TAG, "onFailure: ${t.message}")
+                    }
 
-                    })
-                }
-            } else {
-                viewModel.getRegisterResponse(
-                    Registration(
-                        name = binding.nameSignUp.text.toString().trim(),
-                        email = "",
-                        phone = binding.emailSignUp.text.toString().trim(),
-                        password = binding.passwordSignUp.text.toString().trim(),
-                        password_confirmation = binding.passwordSignUp.text.toString().trim()
-                    )
-                ).observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<ResopnsLogin> {
-                        override fun onResponse(
-                            call: Call<ResopnsLogin>,
-                            response: Response<ResopnsLogin>
-                        ) {
-                            viewLifecycleOwner.lifecycleScope.launch {
-                                response.body()?.let { user ->
-                                    requireActivity().updateSession(
-                                        user.user.device_token!!,
-                                        user.user.phone!!,
-                                        binding.passwordSignUp.text.toString().trim(),
-                                        user.user.id.toString(),
-                                        user.user.name!!,
-                                        user.user.phone!!
-                                    )
-                                    startActivity(
-                                        Intent(
-                                            requireActivity(),
-                                            HomeActivity::class.java
-                                        )
-                                    )
-                                }
-                            }
-                        }
-
-                        override fun onFailure(call: Call<ResopnsLogin>, t: Throwable) {
-                            Log.e(TAG, "onFailure: ${t.message}")
-                        }
-
-                    })
-                }
+                })
             }
 
         } else {
@@ -164,12 +122,8 @@ class SignUpFragment : Fragment() {
 
     private fun isEmpty(): Boolean =
         binding.emailSignUp.text.toString().isNotEmpty() &&
+                binding.phoneSignUp.text.toString().isNotEmpty() &&
                 binding.passwordSignUp.text.toString().isNotEmpty()
-
-
-    private fun isEmail(): Boolean =
-        Pattern.compile(regex).matcher(binding.emailSignUp.text.toString())
-            .matches()
 
 
 }

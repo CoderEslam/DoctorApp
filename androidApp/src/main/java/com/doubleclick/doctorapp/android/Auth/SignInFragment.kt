@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.doubleclick.doctorapp.android.Home.HomeActivity
 import com.doubleclick.doctorapp.android.Model.Auth.Login
-import com.doubleclick.doctorapp.android.Model.Auth.ResopnsLogin
+import com.doubleclick.doctorapp.android.Model.Auth.LoginCallback
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
@@ -34,7 +34,7 @@ class SignInFragment : Fragment() {
 
     private lateinit var binding: FragmentSignInBinding
     private lateinit var viewModel: MainViewModel
-    private val regex = "^(.+)@(.+)$"
+    private val regex = "[a-z0-9]+@[a-z]+\\.[a-z]{2,3}"
     private val TAG = "SignInFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,7 +59,6 @@ class SignInFragment : Fragment() {
             this,
             MainViewModelFactory(RepositoryRemot())
         )[MainViewModel::class.java]
-
         binding.signIn.setOnClickListener {
             signIn()
         }
@@ -72,9 +71,8 @@ class SignInFragment : Fragment() {
             findNavController().navigate(SignInFragmentDirections.actionSignInFragmentToSignUpFragment())
         }
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            if (requireActivity().getCurrentUserEmail()
-                    ?.isNotEmpty() == true && requireActivity().getCurrentPassword()
-                    ?.isNotEmpty() == true
+            if (requireActivity().getCurrentUserEmail()?.isNotEmpty() == true &&
+                requireActivity().getCurrentPassword()?.isNotEmpty() == true
             ) {
                 binding.emailSignIn.setText(requireActivity().getCurrentUserEmail().toString())
                 binding.passwordSignIn.setText(requireActivity().getCurrentPassword().toString())
@@ -93,22 +91,23 @@ class SignInFragment : Fragment() {
                         password = binding.passwordSignIn.text.toString().trim()
                     )
                 ).observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<ResopnsLogin> {
+                    it.clone().enqueue(object : Callback<LoginCallback> {
                         override fun onResponse(
-                            call: Call<ResopnsLogin>,
-                            response: Response<ResopnsLogin>
+                            call: Call<LoginCallback>,
+                            response: Response<LoginCallback>
                         ) {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 response.body()?.let { user ->
                                     requireActivity().updateSession(
-                                        user.user.device_token!!,
-                                        user.user.email!!,
-                                        binding.passwordSignIn.text.toString().trim()!!,
-                                        user.user.id.toString()!!,
-                                        user.user.name!!,
-                                        user.user.phone!!
+                                        user.user?.device_token.toString(),
+                                        user.user?.email.toString(),
+                                        binding.passwordSignIn.text.toString().trim(),
+                                        user.user?.id.toString(),
+                                        user.user?.name.toString(),
+                                        user.user?.phone.toString(),
+                                        user.role.toString()
                                     )
-                                    requireActivity().setImage("${user.user.name}_${user.user.id}.jpg")
+                                    requireActivity().setImage("${user.user?.name}_${user.user?.id}.jpg")
                                     startActivity(
                                         Intent(
                                             requireActivity(),
@@ -120,7 +119,7 @@ class SignInFragment : Fragment() {
                             }
                         }
 
-                        override fun onFailure(call: Call<ResopnsLogin>, t: Throwable) {
+                        override fun onFailure(call: Call<LoginCallback>, t: Throwable) {
                             Log.e(TAG, "onResponse: ${t.message}")
                         }
 
@@ -134,20 +133,21 @@ class SignInFragment : Fragment() {
                         password = binding.passwordSignIn.text.toString().trim()
                     )
                 ).observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<ResopnsLogin> {
+                    it.clone().enqueue(object : Callback<LoginCallback> {
                         override fun onResponse(
-                            call: Call<ResopnsLogin>,
-                            response: Response<ResopnsLogin>
+                            call: Call<LoginCallback>,
+                            response: Response<LoginCallback>
                         ) {
                             viewLifecycleOwner.lifecycleScope.launch {
                                 response.body()?.let { user ->
                                     requireActivity().updateSession(
-                                        user.user.device_token!!,
-                                        user.user.phone!!,
+                                        user.user?.device_token.toString(),
+                                        user.user?.phone.toString(),
                                         binding.passwordSignIn.text.toString().trim(),
-                                        user.user.id.toString(),
-                                        user.user.name!!,
-                                        user.user.phone!!
+                                        user.user?.id.toString(),
+                                        user.user?.name.toString(),
+                                        user.user?.phone.toString(),
+                                        user.role.toString()
                                     )
                                     startActivity(
                                         Intent(
@@ -159,7 +159,7 @@ class SignInFragment : Fragment() {
                             }
                         }
 
-                        override fun onFailure(call: Call<ResopnsLogin>, t: Throwable) {
+                        override fun onFailure(call: Call<LoginCallback>, t: Throwable) {
                             Log.e(TAG, "onResponse: ${t.message}")
                         }
 
@@ -178,7 +178,8 @@ class SignInFragment : Fragment() {
 
 
     private fun isEmail(): Boolean =
-        Pattern.compile(regex).matcher(binding.emailSignIn.text.toString())
+        Pattern.compile(regex)
+            .matcher(binding.emailSignIn.text.toString())
             .matches()
 
 

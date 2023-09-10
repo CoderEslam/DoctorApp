@@ -2,8 +2,6 @@ package com.doubleclick.doctorapp.android.Model.PatientReservations
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.doubleclick.doctorapp.android.Model.Doctor.Doctor
-import com.doubleclick.doctorapp.android.Model.User.UserModel
 
 data class PatientReservationsModel(
     val age: String?,
@@ -19,10 +17,10 @@ data class PatientReservationsModel(
     val patient: Patient?,
     val patient_id: Int,
     val patient_phone: String?,
-    val reservation_date: String?, //
+    val reservation_date: String?,
     val status: String?,
     val type: String?,
-    val user: UserModel?,
+    val user: User?,
     val user_id: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -42,7 +40,7 @@ data class PatientReservationsModel(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readParcelable(UserModel::class.java.classLoader),
+        TODO("user"),
         parcel.readInt()
     ) {
     }
@@ -64,12 +62,26 @@ data class PatientReservationsModel(
         parcel.writeString(reservation_date)
         parcel.writeString(status)
         parcel.writeString(type)
-        parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
     }
 
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PatientReservationsModel
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id
     }
 
     companion object CREATOR : Parcelable.Creator<PatientReservationsModel> {

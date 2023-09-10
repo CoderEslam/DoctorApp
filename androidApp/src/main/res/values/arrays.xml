@@ -12,4 +12,34 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <string-array name="smokingList">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+
+    <string-array name="alcoholDrinkingList">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
+
+    <string-array name="bloodTypeList">
+        <item>A+</item>
+        <item>B+</item>
+        <item>O+</item>
+        <item>AB+</item>
+        <item>A-</item>
+        <item>B-</item>
+        <item>O-</item>
+        <item>AB-</item>
+    </string-array>
+
+    <string-array name="materielStatusList">
+        <item>Single</item>
+        <item>Married</item>
+        <item>Widower</item>
+        <item>Divorced</item>
+    </string-array>
+
+
 </resources>

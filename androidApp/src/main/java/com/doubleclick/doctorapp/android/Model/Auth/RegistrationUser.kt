@@ -1,6 +1,6 @@
 package com.doubleclick.doctorapp.android.Model.Auth
 
-data class Registration(
+data class RegistrationUser(
     val name: String,
     val email: String,
     val phone: String,
