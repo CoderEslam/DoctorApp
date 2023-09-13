@@ -39,6 +39,7 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.multisearchview.MultiSearchView
+import com.doubleclick.smarthealth.android.pdf.PDFConverter
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -92,6 +93,15 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
             ).diskCacheStrategy(DiskCacheStrategy.NONE)
                 .skipMemoryCache(true)
                 .into(binding.imageProfile)
+
+            binding.imageProfile.setOnClickListener {
+                PDFConverter.createPdf(
+                    requireContext(),
+                    "Ghazy Android",
+                    requireActivity(),
+                    this@HomeFragment
+                )
+            }
 
             RetrofitInstance.api.getMedicalAdvices(token = token)
                 .clone()
@@ -195,13 +205,6 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
                 val intent = Intent(requireActivity(), FilterActivity::class.java)
                 intent.putExtra("searchItem", s.toString())
                 startActivity(intent)
-
-//                PDFConverter.createPdf(
-//                    requireContext(),
-//                    "",
-//                    requireActivity(),
-//                    this@HomeFragment
-//                )
             }
 
             override fun onTextChanged(index: Int, s: CharSequence) {
@@ -221,7 +224,6 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
 
         })
     }
-
 
 
     override fun search(name: String) {
@@ -255,11 +257,11 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
     }
 
     override fun onStartPDF() {
-
+        binding.animationView.visibility = View.VISIBLE
     }
 
     override fun onFinishPDF() {
-
+        binding.animationView.visibility = View.GONE
     }
 
 }

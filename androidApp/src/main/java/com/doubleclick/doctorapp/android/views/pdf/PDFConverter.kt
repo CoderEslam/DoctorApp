@@ -43,10 +43,13 @@ object PDFConverter {
         pdfDetails: String?,
         activity: Activity,
     ): Bitmap {
-//        val image_medico_traslado: ImageView = view.findViewById(R.id.image_medico_traslado);
+        val doctor_name: TextView = view.findViewById(R.id.doctor_name);
+        val specialization_name: TextView = view.findViewById(R.id.specialization_name);
+        val patient_name: TextView = view.findViewById(R.id.patient_name);
+        val date: TextView = view.findViewById(R.id.date);
+        val prescription: ImageView = view.findViewById(R.id.prescription);
+        doctor_name.text = pdfDetails
 
-
-//        setFecha(view)
 
         Glide.with(view).asFile()
             .load("https://firebasestorage.googleapis.com/v0/b/fireapp-5b798.appspot.com/o/default_group_profile.png?alt=media&token=bd06dfb2-0970-4ffc-ab8b-e6fc455b6726")
