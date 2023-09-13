@@ -42,7 +42,6 @@ object PDFConverter {
         view: View,
         pdfDetails: String?,
         activity: Activity,
-        createPDF: CreatePDF
     ): Bitmap {
 //        val image_medico_traslado: ImageView = view.findViewById(R.id.image_medico_traslado);
 
@@ -62,16 +61,14 @@ object PDFConverter {
                 }
 
             });
-        return createBitmap(context, view, activity, createPDF)
+        return createBitmap(context, view, activity)
     }
-
 
 
     private fun createBitmap(
         context: Context,
         view: View,
         activity: Activity,
-        createPDF: CreatePDF
     ): Bitmap {
         val displayMetrics = DisplayMetrics()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -118,7 +115,7 @@ object PDFConverter {
             if (!filePath.exists()) {
                 filePath.mkdirs()
             }
-            var file =
+            val file =
                 File(
                     filePath,
                     "SmartHealth " + " " + System.currentTimeMillis()
@@ -139,14 +136,15 @@ object PDFConverter {
         activity: Activity,
         createPDF: CreatePDF
     ) {
-        createPDF.onStartCreating()
+        createPDF.onStartPDF()
         val view = LayoutInflater.from(context).inflate(R.layout.pdf_page_sheet, null)
         try {
-            val bitmap = createBitmapFromView(context, view, pdfDetails, activity, createPDF)
+            val bitmap = createBitmapFromView(context, view, pdfDetails, activity)
             convertBitmapToPdf(bitmap, pdfDetails, activity, createPDF)
         } catch (e: IndexOutOfBoundsException) {
             Log.e(TAG, "createPdf: " + e.message);
         } catch (_: NullPointerException) {
+
         }
 
     }
@@ -164,7 +162,7 @@ object PDFConverter {
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent.setDataAndType(uri, "application/pdf")
         try {
-            createPDF.onStopCreating()
+            createPDF.onFinishPDF()
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()

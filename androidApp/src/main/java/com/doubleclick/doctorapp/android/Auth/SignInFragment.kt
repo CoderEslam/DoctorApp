@@ -13,12 +13,14 @@ import androidx.navigation.fragment.findNavController
 import com.doubleclick.doctorapp.android.Home.HomeActivity
 import com.doubleclick.doctorapp.android.Model.Auth.Login
 import com.doubleclick.doctorapp.android.Model.Auth.LoginCallback
+import com.doubleclick.doctorapp.android.Model.Role
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentSignInBinding
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentPassword
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentUserEmail
+import com.doubleclick.doctorapp.android.utils.SessionManger.setIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.setImage
 import com.doubleclick.doctorapp.android.utils.SessionManger.updateSession
 import com.google.android.material.snackbar.Snackbar
@@ -108,6 +110,11 @@ class SignInFragment : Fragment() {
                                         user.role.toString()
                                     )
                                     requireActivity().setImage("${user.user?.name}_${user.user?.id}.jpg")
+                                    if (user.role.toString() == Role.Assistant.role) {
+                                        requireActivity().setIdWorker(user.user?.assistant?.id.toString())
+                                    } else if (user.role.toString() == Role.Doctor.role) {
+                                        requireActivity().setIdWorker(user.user?.doctor?.doctor_id.toString())
+                                    }
                                     startActivity(
                                         Intent(
                                             requireActivity(),

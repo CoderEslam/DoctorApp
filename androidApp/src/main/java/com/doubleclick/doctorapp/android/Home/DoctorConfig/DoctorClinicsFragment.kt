@@ -16,10 +16,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.doubleclick.doctorapp.android.Adapters.SpinnerAreaAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGovernoratesAdapter
 import com.doubleclick.doctorapp.android.Model.*
 import com.doubleclick.doctorapp.android.Model.Clinic.AddClinics
 import com.doubleclick.doctorapp.android.Model.Area.Araes
+import com.doubleclick.doctorapp.android.Model.Area.AreaModel
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
@@ -51,7 +53,7 @@ class DoctorClinicsFragment : Fragment() {
     private var governoratesModel: String = ""
     private var areaModel: String = ""
     private var governoratesModelList: List<GovernoratesModel> = mutableListOf()
-    private var areaModelList: List<GovernoratesModel> = mutableListOf()
+    private var areaModelList: List<AreaModel> = mutableListOf()
     private lateinit var mTimePicker: TimePickerDialog
     private var daysList: MutableList<Int> = mutableListOf();
 
@@ -151,9 +153,9 @@ class DoctorClinicsFragment : Fragment() {
                         call: Call<Araes>,
                         response: Response<Araes>
                     ) {
-                        areaModelList = response.body()!!.data
+                        areaModelList = response.body()!!.data!!
                         binding.spinnerArea.adapter =
-                            SpinnerGovernoratesAdapter(areaModelList)
+                            SpinnerAreaAdapter(areaModelList)
                     }
 
                     override fun onFailure(call: Call<Araes>, t: Throwable) {

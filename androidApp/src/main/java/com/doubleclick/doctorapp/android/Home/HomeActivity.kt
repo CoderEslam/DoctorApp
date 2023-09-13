@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,10 +26,15 @@ import com.doubleclick.doctorapp.android.Home.Setting.SettingsActivity
 import com.doubleclick.doctorapp.android.Home.fragment.BottomDialogQRCode
 import com.doubleclick.doctorapp.android.ItemNavigationListener
 import com.doubleclick.doctorapp.android.Model.ItemNavigation
+import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.R
+import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
+import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
+import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.ActivityHomeBinding
 import com.doubleclick.doctorapp.android.databinding.LogoutBinding
 import com.doubleclick.doctorapp.android.utils.Constants
+import com.doubleclick.doctorapp.android.utils.Constants.BEARER
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentUserEmail
 import com.doubleclick.doctorapp.android.utils.SessionManger.getId
 import com.doubleclick.doctorapp.android.utils.SessionManger.getImage
@@ -47,6 +54,9 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 var options = Options()
@@ -54,6 +64,8 @@ var options = Options()
 class HomeActivity : AppCompatActivity(), ItemNavigationListener {
 
     private lateinit var navController: NavController
+    private lateinit var viewModel: MainViewModel
+
     private val barcodeLauncher = registerForActivityResult(
         ScanContract()
     ) { result: ScanIntentResult ->
@@ -73,11 +85,7 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
                 ).show()
             }
         } else {
-            Toast.makeText(
-                this@HomeActivity,
-                "${result.contents}",
-                Toast.LENGTH_LONG
-            ).show()
+            getDataWithId(result.contents)
         }
     }
 
@@ -89,6 +97,10 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        viewModel = ViewModelProvider(
+            this,
+            MainViewModelFactory(RepositoryRemot())
+        )[MainViewModel::class.java]
         val mainFragment = findViewById<View>(R.id.main_fragment)
         navController = Navigation.findNavController(this@HomeActivity, mainFragment.id);
         setSupportActionBar(binding.toolbar)
@@ -121,7 +133,7 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
                 listOf(
                     ItemNavigation(R.drawable.home, R.string.home, 0),
                     ItemNavigation(R.drawable.help_center, R.string.help, 1),
-                    ItemNavigation(R.drawable.setting, R.string.settings, 2),
+//                    ItemNavigation(R.drawable.setting, R.string.settings, 2),
                     ItemNavigation(R.drawable.ic_baseline_manage_accounts_24, R.string.doctor, 3),
                 )
             )
@@ -145,7 +157,6 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
         }
         GlobalScope.launch(Dispatchers.Main) {
             val userId = getId().toString()
-            Toast.makeText(this@HomeActivity, "${getToken()}", Toast.LENGTH_SHORT).show()
             findViewById<TextView>(R.id.name).text = getName()
             findViewById<TextView>(R.id.user_contact).text = getCurrentUserEmail()
             Glide.with(this@HomeActivity).load(
@@ -157,6 +168,7 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
             binding.qr.setOnClickListener {
                 BottomDialogQRCode(userId).show(supportFragmentManager, "")
             }
+
 
         }
     }
@@ -241,6 +253,27 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun getDataWithId(id: String) {
+        GlobalScope.launch(Dispatchers.Main) {
+            viewModel.getPatientWithId(token = BEARER + getToken(), id = "1")
+                .observe(this@HomeActivity) {
+                    it.clone().enqueue(object : Callback<Patient> {
+                        override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
+                            Toast.makeText(
+                                this@HomeActivity,
+                                response.body()?.data?.toString(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                        override fun onFailure(call: Call<Patient>, t: Throwable) {
+
+                        }
+                    })
+                }
+        }
+    }
 
     override fun itemNavigation(index: Int) {
         when (index) {
@@ -251,7 +284,7 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
 
             }
             2 -> {
-                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
+//                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
             }
             3 -> {
                 startActivity(Intent(this@HomeActivity, DoctorConfigActivity::class.java))

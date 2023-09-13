@@ -18,15 +18,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.get
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.AdapterFamilyMember
 import com.doubleclick.doctorapp.android.Adapters.SpinnerAdapter
+import com.doubleclick.doctorapp.android.Adapters.SpinnerAreaAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGovernoratesAdapter
 import com.doubleclick.doctorapp.android.FamilyOption
 import com.doubleclick.doctorapp.android.Model.Area.Araes
+import com.doubleclick.doctorapp.android.Model.Area.AreaModel
 import com.doubleclick.doctorapp.android.Model.Auth.UpdateAccount
 import com.doubleclick.doctorapp.android.Model.Auth.UpdateUser
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
@@ -59,6 +62,8 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.setToken
 import com.doubleclick.doctorapp.android.views.CustomSpinner.CustomSpinner
 import com.google.android.material.snackbar.Snackbar
 import com.iceteck.silicompressorr.SiliCompressor
+import kotlinx.android.synthetic.main.layout_family_member.*
+import kotlinx.android.synthetic.main.menu_left_drawer.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -81,13 +86,17 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
     private lateinit var alcoholDrinkingList: List<String>
     private lateinit var bloodTypeList: List<String>
     private lateinit var materielStatusList: List<String>
+    private var materielStatusSelected: Int = -1
+    private var smokingSelected: Int = -1
+    private var alcoholDrinkingSelected: Int = -1
+    private var bloodSelected: String = ""
     private lateinit var uri: Uri;
     private val TAG = "ProfileFragment"
     private lateinit var viewModel: MainViewModel
     private var governoratesModelList: List<GovernoratesModel> = mutableListOf()
     private lateinit var governoratesModel: GovernoratesModel
-    private var areaModelList: List<GovernoratesModel> = mutableListOf()
-    private lateinit var areaModel: GovernoratesModel
+    private var areaModelList: List<AreaModel> = mutableListOf()
+    private lateinit var areaModel: AreaModel
 
     private var patient_id: String = ""
     private var TOKEN: String = ""
@@ -97,26 +106,20 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
             try {
                 this.uri = uri!!
                 val filePath = SiliCompressor.with(requireActivity()).compress(
-                    uri.toString(),
-                    File(
+                    uri.toString(), File(
                         Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                             .toString() + "/Doctor/Images/"
                     )
                 )
                 binding.imageProfile.setImageURI(Uri.parse(filePath))
-                val parcelFileDescriptor =
-                    requireActivity().contentResolver.openFileDescriptor(
-                        Uri.parse(filePath)!!,
-                        "r",
-                        null
-                    )
-                        ?: return@registerForActivityResult
+                val parcelFileDescriptor = requireActivity().contentResolver.openFileDescriptor(
+                    Uri.parse(filePath)!!, "r", null
+                ) ?: return@registerForActivityResult
                 val inputStream = FileInputStream(parcelFileDescriptor.fileDescriptor)
-                val file =
-                    File(
-                        requireActivity().cacheDir,
-                        requireActivity().contentResolver.getFileName(Uri.parse(filePath)!!)
-                    )
+                val file = File(
+                    requireActivity().cacheDir,
+                    requireActivity().contentResolver.getFileName(Uri.parse(filePath)!!)
+                )
                 binding.progressBar.visibility = View.VISIBLE
                 val outputStream = FileOutputStream(file)
                 inputStream.copyTo(outputStream)
@@ -139,8 +142,7 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         binding = FragmentProfileUserBinding.inflate(inflater, container, false)
@@ -156,8 +158,7 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
         materielStatusList = resources.getStringArray(R.array.materielStatusList).toList()
 
         viewModel = ViewModelProvider(
-            this,
-            MainViewModelFactory(RepositoryRemot())
+            this, MainViewModelFactory(RepositoryRemot())
         )[MainViewModel::class.java]
 
         binding.chooseImage.setOnClickListener {
@@ -169,12 +170,10 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
             binding.etEmail.setText(requireActivity().getCurrentUserEmail().toString())
             binding.etNumberContact.setText(requireActivity().getPhone().toString())
             TOKEN = BEARER + requireActivity().getToken().toString()
-            Log.e("TOKEN", "onViewCreated: $TOKEN")
             patient_id = requireActivity().getId().toString()
             Glide.with(requireActivity()).load(
                 "$IMAGE_URL_USERS${requireActivity().getName()}_${requireActivity().getId()}.jpg"
-            ).diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+            ).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                 .into(binding.imageProfile)
 
             familyMember()
@@ -204,73 +203,49 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
                     view.findViewById(R.id.arrow_spinner_drink_alcohol)
                 val arrow_spinner_marital_status: ImageView =
                     view.findViewById(R.id.arrow_spinner_marital_status)
-                setUpSpinner(spinner_gov, arrow_spinner_gov, requireActivity())
-                setUpSpinner(spinner_area, arrow_spinner_area, requireActivity())
-                val blood = setUpSpinner(
-                    spinner_blood,
-                    arrow_spinner_blood,
-                    requireActivity(),
-                    bloodTypeList
+
+                setUpSpinnerBlood(spinner_blood, arrow_spinner_blood, requireActivity())
+                setUpSpinnerSmoking(spinner_smoking, arrow_spinner_smoking, requireActivity())
+                setUpSpinnerDrinkAlcohol(
+                    spinner_drink_alcohol, arrow_spinner_drink_alcohol, requireActivity()
                 )
-                val smoking = setUpSpinner(
-                    spinner_smoking,
-                    arrow_spinner_smoking,
-                    requireActivity(),
-                    smokingList
+                setUpSpinnerStatus(
+                    spinner_marital_status, arrow_spinner_marital_status, requireActivity()
                 )
-                val drink = setUpSpinner(
-                    spinner_drink_alcohol,
-                    arrow_spinner_drink_alcohol,
-                    requireActivity(),
-                    alcoholDrinkingList
-                )
-                val status = setUpSpinner(
-                    spinner_marital_status,
-                    arrow_spinner_marital_status,
-                    requireActivity(),
-                    materielStatusList
-                )
+
                 builder.setView(view)
-                viewModel.getGovernoratesList(TOKEN)
-                    .observe(viewLifecycleOwner) {
-                        it.clone().enqueue(object : Callback<Governorates> {
-                            override fun onResponse(
-                                call: Call<Governorates>,
-                                response: Response<Governorates>
-                            ) {
-                                governoratesModelList = response.body()!!.data
-                                setUpSpinnerGov(
-                                    spinner_gov,
-                                    arrow_spinner_gov,
-                                    governoratesModelList
-                                )
+                viewModel.getGovernoratesList(TOKEN).observe(viewLifecycleOwner) {
+                    it.clone().enqueue(object : Callback<Governorates> {
+                        override fun onResponse(
+                            call: Call<Governorates>, response: Response<Governorates>
+                        ) {
+                            governoratesModelList = response.body()!!.data
+                            setUpSpinnerGov(
+                                spinner_gov, arrow_spinner_gov, governoratesModelList
+                            )
+                        }
 
-                            }
+                        override fun onFailure(call: Call<Governorates>, t: Throwable) {
+                            Log.e(TAG, "onFailure: ${t.message}")
+                        }
 
-                            override fun onFailure(call: Call<Governorates>, t: Throwable) {
-                                Log.e(TAG, "onFailure: ${t.message}")
-                            }
+                    })
+                }
+                viewModel.getAreaList(TOKEN).observe(viewLifecycleOwner) {
+                    it.clone().enqueue(object : Callback<Araes> {
+                        override fun onResponse(
+                            call: Call<Araes>, response: Response<Araes>
+                        ) {
+                            areaModelList = response.body()!!.data!!
+                            setUpSpinnerArea(spinner_area, arrow_spinner_area, areaModelList)
+                        }
 
-                        })
-                    }
-                viewModel.getAreaList(TOKEN)
-                    .observe(viewLifecycleOwner) {
-                        it.clone().enqueue(object : Callback<Araes> {
-                            override fun onResponse(
-                                call: Call<Araes>,
-                                response: Response<Araes>
-                            ) {
-                                areaModelList = response.body()!!.data
-                                setUpSpinnerArea(spinner_area, arrow_spinner_area, areaModelList)
+                        override fun onFailure(call: Call<Araes>, t: Throwable) {
+                            Log.e(TAG, "onFailure: ${t.message}")
+                        }
 
-                            }
-
-                            override fun onFailure(call: Call<Araes>, t: Throwable) {
-                                Log.e(TAG, "onFailure: ${t.message}")
-                            }
-
-                        })
-                    }
+                    })
+                }
                 // Set Alert Title
                 builder.setTitle("Add Family Member")
 
@@ -282,12 +257,12 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
                             phone = et_phone.text.toString().trim(),
                             governorate_id = governoratesModel.id.toString(),
                             area_id = areaModel.id.toString(),
-                            smoking = smoking,
-                            alcohol_drinking = drink,
+                            smoking = smokingSelected.toString(),
+                            alcohol_drinking = alcoholDrinkingSelected.toString(),
                             weight = et_weight.text.toString().trim(),
                             height = et_height.text.toString().trim(),
-                            blood_type = blood,
-                            materiel_status = status
+                            blood_type = bloodSelected,
+                            materiel_status = materielStatusSelected.toString()
                         )
                     )
                 }
@@ -302,8 +277,7 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
             binding.save.setOnClickListener {
                 if (validation()) {
                     viewModel.updateAccount(
-                        token = TOKEN,
-                        updateAccount = UpdateAccount(
+                        token = TOKEN, updateAccount = UpdateAccount(
                             name = binding.etName.text.toString(),
                             phone = binding.etNumberContact.text.toString(),
                             email = binding.etEmail.text.toString()
@@ -311,8 +285,7 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
                     ).observe(viewLifecycleOwner) {
                         it.clone().enqueue(object : Callback<UpdateUser> {
                             override fun onResponse(
-                                call: Call<UpdateUser>,
-                                response: Response<UpdateUser>
+                                call: Call<UpdateUser>, response: Response<UpdateUser>
                             ) {
                                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                                     response.body()?.user?.name?.let { name ->
@@ -362,33 +335,27 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
     }
 
     private fun familyMember() {
-        viewModel.getFamilyMemberPatient(TOKEN)
-            .observe(viewLifecycleOwner) {
-                it.clone().enqueue(object : Callback<PatientsList> {
-                    override fun onResponse(
-                        call: Call<PatientsList>,
-                        response: Response<PatientsList>
-                    ) {
-                        binding.rvFamilyMember.adapter =
-                            AdapterFamilyMember(
-                                this@ProfileUserFragment,
-                                response.body()!!.data!!.toMutableList()
-                            )
-                    }
+        viewModel.getFamilyMemberPatient(TOKEN).observe(viewLifecycleOwner) {
+            it.clone().enqueue(object : Callback<PatientsList> {
+                override fun onResponse(
+                    call: Call<PatientsList>, response: Response<PatientsList>
+                ) {
+                    binding.rvFamilyMember.adapter = AdapterFamilyMember(
+                        this@ProfileUserFragment, response.body()!!.data!!.toMutableList()
+                    )
+                }
 
-                    override fun onFailure(call: Call<PatientsList>, t: Throwable) {
-                        Log.e(TAG, "onFailure: ${t.message}")
+                override fun onFailure(call: Call<PatientsList>, t: Throwable) {
+                    Log.e(TAG, "onFailure: ${t.message}")
 
-                    }
+                }
 
-                })
-            }
+            })
+        }
     }
 
     private fun validation(): Boolean {
-        return binding.etEmail.isNotNullOrEmptyEditText() &&
-                binding.etName.isNotNullOrEmptyEditText() &&
-                binding.etNumberContact.isNotNullOrEmptyEditText()
+        return binding.etEmail.isNotNullOrEmptyEditText() && binding.etName.isNotNullOrEmptyEditText() && binding.etNumberContact.isNotNullOrEmptyEditText()
     }
 
     private fun openImage() {
@@ -397,75 +364,142 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
 
 
     private fun addPatients(patientStore: PatientStore) {
-        viewModel.postfamilyMemberPatient(TOKEN, patientStore = patientStore)
-            .observe(viewLifecycleOwner) {
-                it.clone().enqueue(object : Callback<Message> {
-                    override fun onResponse(
-                        call: Call<Message>,
-                        response: Response<Message>
-                    ) {
-                        familyMember()
-                        Snackbar.make(requireView(), "Done", Snackbar.LENGTH_SHORT).show()
-                    }
+        //PatientStore(name=fb, status=Active, phone=dfbd, telephone=, notes=, governorate_id=2, area_id=6, smoking=0, weight=585, alcohol_drinking=0, height=22, blood_type=A+, materiel_status=0)
+        Log.e(TAG, "addPatients: ${patientStore.toString()}")
+        viewModel.postFamilyMemberPatient(
+            TOKEN, patientStore = patientStore
+        ).observe(viewLifecycleOwner) {
+            it.clone().enqueue(object : Callback<Message> {
+                override fun onResponse(
+                    call: Call<Message>, response: Response<Message>
+                ) {
+                    familyMember()
+                    Snackbar.make(requireView(), "Done", Snackbar.LENGTH_SHORT).show()
+                }
 
-                    override fun onFailure(call: Call<Message>, t: Throwable) {
+                override fun onFailure(call: Call<Message>, t: Throwable) {
 
-                    }
+                }
 
-                })
-            }
+            })
+        }
     }
 
-    private fun setUpSpinner(
-        spinner: CustomSpinner,
-        arrow: ImageView,
-        context: Context,
-        list: List<String>? = null
-    ): String {
-        var selected = ""
-        if (list != null) {
-            spinner.adapter = SpinnerAdapter(context, list)
-        }
-        spinner.setSpinnerEventsListener(object :
-            OnSpinnerEventsListener {
+    private fun setUpSpinnerDrinkAlcohol(
+        spinner: CustomSpinner, arrow: ImageView, context: Context
+    ) {
+        spinner.adapter = SpinnerAdapter(context, alcoholDrinkingList)
+
+        spinner.setSpinnerEventsListener(object : OnSpinnerEventsListener {
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onPopupWindowOpened(spinner: Spinner?) {
                 arrow.rotation = 180f
-
             }
 
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onPopupWindowClosed(spinner: Spinner?) {
                 arrow.rotation = 0f
-
-
             }
 
         })
-        spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
-                    selected = list?.get(i).toString()
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                alcoholDrinkingSelected = i
             }
-        return selected;
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                alcoholDrinkingSelected = 0
+            }
+
+        }
+    }
+
+    private fun setUpSpinnerSmoking(spinner: CustomSpinner, arrow: ImageView, context: Context) {
+        spinner.adapter = SpinnerAdapter(context, smokingList)
+
+        spinner.setSpinnerEventsListener(object : OnSpinnerEventsListener {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowOpened(spinner: Spinner?) {
+                arrow.rotation = 180f
+            }
+
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowClosed(spinner: Spinner?) {
+                arrow.rotation = 0f
+            }
+
+        })
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                smokingSelected = i
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                smokingSelected = 0
+            }
+
+        }
+    }
+
+    private fun setUpSpinnerStatus(spinner: CustomSpinner, arrow: ImageView, context: Context) {
+        spinner.adapter = SpinnerAdapter(context, materielStatusList)
+
+        spinner.setSpinnerEventsListener(object : OnSpinnerEventsListener {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowOpened(spinner: Spinner?) {
+                arrow.rotation = 180f
+            }
+
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowClosed(spinner: Spinner?) {
+                arrow.rotation = 0f
+            }
+
+        })
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                materielStatusSelected = i
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                materielStatusSelected = 0
+            }
+
+        }
 
     }
 
+    private fun setUpSpinnerBlood(spinner: CustomSpinner, arrow: ImageView, context: Context) {
+        spinner.adapter = SpinnerAdapter(context, bloodTypeList)
+        spinner.setSpinnerEventsListener(object : OnSpinnerEventsListener {
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowOpened(spinner: Spinner?) {
+                arrow.rotation = 180f
+            }
+
+            @SuppressLint("UseCompatLoadingForDrawables")
+            override fun onPopupWindowClosed(spinner: Spinner?) {
+                arrow.rotation = 0f
+            }
+
+        })
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                bloodSelected = bloodTypeList[i]
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                bloodSelected = bloodTypeList[0]
+            }
+
+        }
+    }
 
     private fun setUpSpinnerGov(
-        spinner: CustomSpinner,
-        arrow: ImageView,
-        list: List<GovernoratesModel>
+        spinner: CustomSpinner, arrow: ImageView, list: List<GovernoratesModel>
     ) {
         spinner.adapter = SpinnerGovernoratesAdapter(list)
-        spinner.setSpinnerEventsListener(object :
-            OnSpinnerEventsListener {
+        spinner.setSpinnerEventsListener(object : OnSpinnerEventsListener {
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onPopupWindowOpened(spinner: Spinner?) {
                 arrow.rotation = 180f
@@ -477,52 +511,42 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
             }
 
         })
-        spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
-                    areaModel = list[i]
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                governoratesModel = list[i]
             }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                governoratesModel = list[0]
+            }
+
+        }
     }
 
-    private fun setUpSpinnerArea(
-        spinner: CustomSpinner,
-        arrow: ImageView,
-        list: List<GovernoratesModel>
-    ) {
-        spinner.adapter = SpinnerGovernoratesAdapter(list)
-        spinner.setSpinnerEventsListener(object :
-            OnSpinnerEventsListener {
+    private fun setUpSpinnerArea(spinner: CustomSpinner, arrow: ImageView, list: List<AreaModel>) {
+        spinner.adapter = SpinnerAreaAdapter(list)
+        spinner.setSpinnerEventsListener(object : OnSpinnerEventsListener {
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onPopupWindowOpened(spinner: Spinner?) {
                 arrow.rotation = 180f
-
             }
 
             @SuppressLint("UseCompatLoadingForDrawables")
             override fun onPopupWindowClosed(spinner: Spinner?) {
                 arrow.rotation = 0f
-
-
             }
 
         })
-        spinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
-                    governoratesModel = list[i]
-                }
-
-                override fun onNothingSelected(p0: AdapterView<*>?) {
-
-                }
-
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, i: Int, p3: Long) {
+                areaModel = list[i]
             }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                areaModel = list[0]
+            }
+
+        }
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -537,23 +561,20 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
             ).observe(viewLifecycleOwner) {
                 it.clone().enqueue(object : Callback<Message> {
                     override fun onResponse(
-                        call: Call<Message>,
-                        response: Response<Message>
+                        call: Call<Message>, response: Response<Message>
                     ) {
                         binding.progressBar.visibility = View.GONE
                         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
                             requireActivity().setImage("${name}_$id.jpg")
                             Glide.with(requireActivity()).load(
                                 "$IMAGE_URL_USERS${requireActivity().getImage()}"
-                            ).diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .skipMemoryCache(true)
+                            ).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)
                                 .into(binding.imageProfile)
                         }
                     }
 
                     override fun onFailure(
-                        call: Call<Message>,
-                        t: Throwable
+                        call: Call<Message>, t: Throwable
                     ) {
                         Log.d("MultipartBody", "onFailure: ${t.message}")
                     }
@@ -570,12 +591,10 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
     override fun patientReservations(patient_reservations_id: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             RetrofitInstance.api.getPatientReservations(
-                BEARER + requireActivity().getToken(),
-                patient_reservations_id
+                BEARER + requireActivity().getToken(), patient_reservations_id
             ).clone().enqueue(object : Callback<PatientReservationsList> {
                 override fun onResponse(
-                    call: Call<PatientReservationsList>,
-                    response: Response<PatientReservationsList>
+                    call: Call<PatientReservationsList>, response: Response<PatientReservationsList>
                 ) {
                     if (response.body()?.data != null) {
                         BottomDialogPatiant(response.body()?.data!!).show(childFragmentManager, "")
@@ -593,12 +612,10 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
     override fun patientVisits(patient_visits_id: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             RetrofitInstance.api.getPatientReservations(
-                BEARER + requireActivity().getToken(),
-                patient_visits_id
+                BEARER + requireActivity().getToken(), patient_visits_id
             ).clone().enqueue(object : Callback<PatientReservationsList> {
                 override fun onResponse(
-                    call: Call<PatientReservationsList>,
-                    response: Response<PatientReservationsList>
+                    call: Call<PatientReservationsList>, response: Response<PatientReservationsList>
                 ) {
                     if (response.body()?.data != null) {
                         BottomDialogPatiant(response.body()?.data!!).show(childFragmentManager, "")

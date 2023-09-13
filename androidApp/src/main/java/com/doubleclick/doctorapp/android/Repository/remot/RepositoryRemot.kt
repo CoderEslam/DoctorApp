@@ -6,6 +6,7 @@ import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
 import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
 import com.doubleclick.doctorapp.android.Model.Auth.*
+import com.doubleclick.doctorapp.android.Model.Clinic.ClinicList
 import com.doubleclick.doctorapp.android.Model.Days.Days
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
@@ -13,6 +14,7 @@ import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
+import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
@@ -21,6 +23,9 @@ import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.Header
+import retrofit2.http.Part
+import retrofit2.http.Path
 
 class RepositoryRemot {
 
@@ -74,6 +79,10 @@ class RepositoryRemot {
         return RetrofitInstance.api.postClinic(token = token, store_clinic = store_clinic)
     }
 
+    fun getClinicList(token: String): Call<ClinicList> {
+        return RetrofitInstance.api.getClinicList(token = token)
+    }
+
     //////////////////////////Clinic//////////////////////////////////
 
     //////////////////////////Specializations//////////////////////////////////
@@ -99,6 +108,18 @@ class RepositoryRemot {
             token = token,
             id = id,
             updateDoctor = updateDoctor
+        )
+    }
+
+    fun updateDoctorImage(
+        token: String,
+        id: String,
+        image: MultipartBody.Part,
+    ): Call<Message> {
+        return RetrofitInstance.api.updateDoctorImage(
+            token = token,
+            id = id,
+            image = image,
         )
     }
     //////////////////////////Doctor store//////////////////////////////////
@@ -146,6 +167,10 @@ class RepositoryRemot {
 
     fun getFamilyMemberPatient(token: String): Call<PatientsList> {
         return RetrofitInstance.api.getFamilyMemberPatient(token = token)
+    }
+
+    fun getPatientWithId(token: String, id: String): Call<Patient> {
+        return RetrofitInstance.api.getPatientWithId(token = token, id = id)
     }
 
 

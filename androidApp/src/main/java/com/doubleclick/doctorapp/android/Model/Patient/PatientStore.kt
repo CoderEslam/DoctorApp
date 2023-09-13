@@ -9,8 +9,8 @@ data class PatientStore(
     val governorate_id: String,
     val area_id: String,
     val smoking: String,
-    val alcohol_drinking: String,
     val weight: String,
+    val alcohol_drinking: String,
     val height: String,
     val blood_type: String,
     val materiel_status: String

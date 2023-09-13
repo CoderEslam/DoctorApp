@@ -2,14 +2,11 @@ package com.doubleclick.doctorapp.android.Model.Patient
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.doubleclick.doctorapp.android.Model.Area.Area
 
-data class PatientModel(
+data class Data(
     val alcohol_drinking: Int,
-    val area: Area?,
     val area_id: Int,
     val blood_type: String?,
-    val governorate: Governorate?,
     val governorate_id: Int,
     val height: Int,
     val id: Int,
@@ -20,16 +17,13 @@ data class PatientModel(
     val smoking: Int,
     val status: String?,
     val telephone: String?,
-    val user: User?,
     val user_id: Int,
     val weight: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
-        parcel.readParcelable(Area::class.java.classLoader),
         parcel.readInt(),
         parcel.readString(),
-        parcel.readParcelable(Governorate::class.java.classLoader),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
@@ -40,7 +34,6 @@ data class PatientModel(
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readParcelable(User::class.java.classLoader),
         parcel.readInt(),
         parcel.readInt()
     ) {
@@ -48,10 +41,8 @@ data class PatientModel(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(alcohol_drinking)
-        parcel.writeParcelable(area, flags)
         parcel.writeInt(area_id)
         parcel.writeString(blood_type)
-        parcel.writeParcelable(governorate, flags)
         parcel.writeInt(governorate_id)
         parcel.writeInt(height)
         parcel.writeInt(id)
@@ -62,7 +53,6 @@ data class PatientModel(
         parcel.writeInt(smoking)
         parcel.writeString(status)
         parcel.writeString(telephone)
-        parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
         parcel.writeInt(weight)
     }
@@ -75,7 +65,7 @@ data class PatientModel(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as PatientModel
+        other as Data
 
         if (id != other.id) return false
 
@@ -86,12 +76,12 @@ data class PatientModel(
         return id
     }
 
-    companion object CREATOR : Parcelable.Creator<PatientModel> {
-        override fun createFromParcel(parcel: Parcel): PatientModel {
-            return PatientModel(parcel)
+    companion object CREATOR : Parcelable.Creator<Data> {
+        override fun createFromParcel(parcel: Parcel): Data {
+            return Data(parcel)
         }
 
-        override fun newArray(size: Int): Array<PatientModel?> {
+        override fun newArray(size: Int): Array<Data?> {
             return arrayOfNulls(size)
         }
     }

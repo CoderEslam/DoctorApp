@@ -23,7 +23,7 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
 import com.doubleclick.doctorapp.android.databinding.FragmentAssistantsBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
-import com.doubleclick.doctorapp.android.utils.SessionManger.getDoctorId
+import com.doubleclick.doctorapp.android.utils.SessionManger.getIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,7 +67,7 @@ class AssistantsFragment : Fragment(), DeleteAssistant {
                     AddAssistants(
                         name = binding.assistantName.text.toString(),
                         phone = binding.assistantPhone.text.toString(),
-                        doctor_id = requireActivity().getDoctorId().toString()
+                        doctor_id = requireActivity().getIdWorker().toString()
                     )
                 ).observe(viewLifecycleOwner) {
                     it.clone().enqueue(object : Callback<Message> {

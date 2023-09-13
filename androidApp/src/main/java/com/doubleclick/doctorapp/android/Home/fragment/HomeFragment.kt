@@ -19,6 +19,7 @@ import com.doubleclick.doctorapp.android.Adapters.SpecializationAdapter
 import com.doubleclick.doctorapp.android.CreatePDF
 import com.doubleclick.doctorapp.android.FavoritesDoctor
 import com.doubleclick.doctorapp.android.Home.Filter.FilterActivity
+import com.doubleclick.doctorapp.android.Model.Clinic.ClinicList
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorId
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteModel
@@ -169,7 +170,21 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
 
                     })
                 }
+            viewModel.getClinicList(token).observe(viewLifecycleOwner) {
+                it.clone().enqueue(object : Callback<ClinicList> {
+                    override fun onResponse(
+                        call: Call<ClinicList>,
+                        response: Response<ClinicList>
+                    ) {
+                        Log.e(TAG, "onResponse: ${response.body()?.data.toString()}")
+                    }
 
+                    override fun onFailure(call: Call<ClinicList>, t: Throwable) {
+
+                    }
+
+                })
+            }
 
         }
 
@@ -207,11 +222,7 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
         })
     }
 
-    override fun onStartCreating() {
-    }
 
-    override fun onStopCreating() {
-    }
 
     override fun search(name: String) {
         val intent = Intent(requireActivity(), FilterActivity::class.java)
@@ -241,6 +252,14 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
 
                 })
             }
+    }
+
+    override fun onStartPDF() {
+
+    }
+
+    override fun onFinishPDF() {
+
     }
 
 }

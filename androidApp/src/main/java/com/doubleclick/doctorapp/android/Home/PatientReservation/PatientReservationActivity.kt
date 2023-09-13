@@ -13,10 +13,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.doubleclick.doctorapp.android.Adapters.SpinnerAdapter
+import com.doubleclick.doctorapp.android.Adapters.SpinnerAreaAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerFamilyMemberAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGovernoratesAdapter
 import com.doubleclick.doctorapp.android.Model.*
 import com.doubleclick.doctorapp.android.Model.Area.Araes
+import com.doubleclick.doctorapp.android.Model.Area.AreaModel
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.GovernoratesModel
 import com.doubleclick.doctorapp.android.Model.Patient.PatientModel
@@ -57,7 +59,7 @@ class PatientReservationActivity : AppCompatActivity() {
     private var TOKEN: String = ""
     private lateinit var viewModel: MainViewModel
     private var governoratesModelList: List<GovernoratesModel> = mutableListOf()
-    private var areaModelList: List<GovernoratesModel> = mutableListOf()
+    private var areaModelList: List<AreaModel> = mutableListOf()
     private var reasonModelList: List<String> = mutableListOf()
     private var patientModelList: MutableList<PatientModel> = mutableListOf()
     private lateinit var patientModel: PatientModel
@@ -132,9 +134,9 @@ class PatientReservationActivity : AppCompatActivity() {
                             call: Call<Araes>,
                             response: Response<Araes>
                         ) {
-                            areaModelList = response.body()!!.data
+                            areaModelList = response.body()!!.data!!
                             binding.spinnerArea.adapter =
-                                SpinnerGovernoratesAdapter(
+                                SpinnerAreaAdapter(
                                     areaModelList
                                 )
                         }

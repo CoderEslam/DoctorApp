@@ -1,36 +1,27 @@
-package com.doubleclick.doctorapp.android.Model.Patient
+package com.doubleclick.doctorapp.android.Model.Area
 
 import android.os.Parcel
 import android.os.Parcelable
 
-data class User(
-    val device_token: String?,
-    val email: String?,
+data class Governorate(
     val id: Int,
     val name: String?,
-    val phone: String?,
     val status: String?,
-    val user_image: String?
+    val user_id: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
+        parcel.readInt()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(device_token)
-        parcel.writeString(email)
         parcel.writeInt(id)
         parcel.writeString(name)
-        parcel.writeString(phone)
         parcel.writeString(status)
-        parcel.writeString(user_image)
+        parcel.writeInt(user_id)
     }
 
     override fun describeContents(): Int {
@@ -41,7 +32,7 @@ data class User(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as User
+        other as Governorate
 
         if (id != other.id) return false
 
@@ -52,12 +43,12 @@ data class User(
         return id
     }
 
-    companion object CREATOR : Parcelable.Creator<User> {
-        override fun createFromParcel(parcel: Parcel): User {
-            return User(parcel)
+    companion object CREATOR : Parcelable.Creator<Governorate> {
+        override fun createFromParcel(parcel: Parcel): Governorate {
+            return Governorate(parcel)
         }
 
-        override fun newArray(size: Int): Array<User?> {
+        override fun newArray(size: Int): Array<Governorate?> {
             return arrayOfNulls(size)
         }
     }

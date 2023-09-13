@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.FavoritesDoctor
 import com.doubleclick.doctorapp.android.Home.DoctorDetails.DoctorDetailsActivity
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorModel
@@ -25,6 +26,8 @@ class DoctorsAdapter(val doctorData: List<DoctorModel>, val favorites: Favorites
     override fun onBindViewHolder(holder: DoctorsViewHolder, position: Int) {
         Glide.with(holder.itemView.context)
             .load(IMAGE_URL_DOCTORS + doctorData[holder.bindingAdapterPosition].doctor_image)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
             .into(holder.doctor_image)
         holder.doctor_name.text = doctorData[holder.bindingAdapterPosition].name
         holder.doctor_name.isSelected = true

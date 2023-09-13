@@ -7,6 +7,7 @@ import com.doubleclick.doctorapp.android.Model.Area.StoreArea
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
 import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
 import com.doubleclick.doctorapp.android.Model.Auth.*
+import com.doubleclick.doctorapp.android.Model.Clinic.ClinicList
 import com.doubleclick.doctorapp.android.Model.Days.Days
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
@@ -16,6 +17,7 @@ import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpec
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
 import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
+import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
@@ -114,6 +116,15 @@ interface API {
     fun postClinic(
         @Header("Authorization") token: String, @Body store_clinic: AddClinics
     ): Call<Message>
+
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @POST("clinics")
+    fun getClinicList(
+        @Header("Authorization") token: String,
+    ): Call<ClinicList>
+
+
     //////////////////////////Clinic//////////////////////////////////
 
     //////////////////////////Specializations//////////////////////////////////
@@ -169,6 +180,16 @@ interface API {
         @Path("id") id: String,
         @Body updateDoctor: UpdateDoctor
     ): Call<Message>
+
+    @Multipart
+    @POST("doctor/{id}/upload_image")
+    fun updateDoctorImage(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Part image: MultipartBody.Part,
+    ): Call<Message>
+
+
     //////////////////////////Doctors//////////////////////////////////
 
     //////////////////////////Days at clinic//////////////////////////////////
@@ -208,6 +229,13 @@ interface API {
     fun getFamilyMemberPatient(
         @Header("Authorization") token: String,
     ): Call<PatientsList>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("patients/{id}")
+    fun getPatientWithId(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Call<Patient>
 
     //////////////////////////patients//////////////////////////////////
 

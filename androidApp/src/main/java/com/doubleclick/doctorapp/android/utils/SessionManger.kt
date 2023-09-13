@@ -18,7 +18,7 @@ object SessionManger {
         token: String,
         email: String,
         password: String,
-        id: String,
+        user_id: String,
         name: String,
         phone: String,
         role: String,
@@ -30,43 +30,20 @@ object SessionManger {
         val nameKey = stringPreferencesKey(ConstantsSession.NAME_KEY.text)
         val phoneKey = stringPreferencesKey(ConstantsSession.PHONE_KEY.text)
         val roleKey = stringPreferencesKey(ConstantsSession.ROLE.text)
-
         /*
         * to save name , email , token in local phone by preferences
         * */
-
-        /*updateSession: token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJOb3RlQXV0aCIsImlzcyI6Im5vdGVTZXJ2ZXIiLCJlbWFpbCI6ImVzbGFtZ2hhenk1NTVAZ21haWwuY29tIn0.pcy21quPrOSmzJ_RcbdP55e_gaTGANgH8SeZBt7kRlO4wO3zPP5GBRp671LcugASvzUbzu6eQrNuflRfva1jWA name: Eslam Ghazy email: eslamghazy555@gmail.com*/
-
         dataStore.edit { preferences ->
             preferences[jwtTokenKey] = token
             preferences[passwordKey] = password
             preferences[emailKey] = email
-            preferences[idKey] = id
+            preferences[idKey] = user_id
             preferences[nameKey] = name
             preferences[phoneKey] = phone
             preferences[roleKey] = role
         }
 
 
-    }
-
-
-    suspend fun Context.doctorId(
-        id: String,
-    ) {
-        val id_doctor = stringPreferencesKey(ConstantsSession.ID_DOCTOR.text)
-        /*
-        * to save name , email , token in local phone by preferences
-        * */
-        dataStore.edit { preferences ->
-            preferences[id_doctor] = id
-        }
-    }
-
-    suspend fun Context.getDoctorId(): String? {
-        val id_doctor = stringPreferencesKey(ConstantsSession.ID_DOCTOR.text)
-        val preferences = dataStore.data.first()
-        return /*preferences[id_doctor]*/"3"
     }
 
     /*
@@ -161,6 +138,18 @@ object SessionManger {
         return preferences[roleKey]
     }
 
+    suspend fun Context.setIdWorker(id: String) {
+        val idKey = stringPreferencesKey(ConstantsSession.ID_WORKER.text)
+        dataStore.edit { preferences ->
+            preferences[idKey] = id
+        }
+    }
+
+    suspend fun Context.getIdWorker(): String? {
+        val idKey = stringPreferencesKey(ConstantsSession.ID_WORKER.text)
+        val preferences = dataStore.data.first()
+        return preferences[idKey]
+    }
 
     /*
     * delete all data by logout

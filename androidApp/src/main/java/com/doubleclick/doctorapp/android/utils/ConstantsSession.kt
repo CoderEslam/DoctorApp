@@ -8,6 +8,6 @@ enum class ConstantsSession(val text: String) {
     IMAGE_KEY("IMAGE_KEY"),
     PHONE_KEY("PHONE_KEY"),
     ID_KEY("ID_KEY"),
-    ID_DOCTOR("ID_DOCTOR"),
+    ID_WORKER("ID_WORKER"),
     ROLE("ROLE")
 }

@@ -9,6 +9,7 @@ import com.doubleclick.doctorapp.android.Model.Area.Araes
 import com.doubleclick.doctorapp.android.Model.Assistants.AddAssistants
 import com.doubleclick.doctorapp.android.Model.Assistants.AssistantsList
 import com.doubleclick.doctorapp.android.Model.Auth.*
+import com.doubleclick.doctorapp.android.Model.Clinic.ClinicList
 import com.doubleclick.doctorapp.android.Model.Days.Days
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinic
 import com.doubleclick.doctorapp.android.Model.Days.DaysAtClinicModel
@@ -16,6 +17,7 @@ import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
+import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
@@ -47,6 +49,8 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////patients//////////////////////////////////
     private val patientsList: MutableLiveData<Call<PatientsList>> = MutableLiveData()
 
+    private val patient: MutableLiveData<Call<Patient>> = MutableLiveData()
+
     //////////////////////////patients//////////////////////////////////
 
     //////////////////////////Area//////////////////////////////////
@@ -59,10 +63,12 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
 
     /////////////////////////Clinic//////////////////////////////////
     private val specializations: MutableLiveData<Call<SpecializationList>> = MutableLiveData()
+    private val clinicList: MutableLiveData<Call<ClinicList>> = MutableLiveData()
     //////////////////////////Clinic//////////////////////////////////
 
     /////////////////////////general_specialties//////////////////////////////////
-    private val general_specialties: MutableLiveData<Call<GeneralSpecializationList>> = MutableLiveData()
+    private val general_specialties: MutableLiveData<Call<GeneralSpecializationList>> =
+        MutableLiveData()
     //////////////////////////general_specialties//////////////////////////////////
 
 
@@ -145,6 +151,11 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         return message;
     }
 
+    fun getClinicList(token: String): LiveData<Call<ClinicList>> {
+        clinicList.value = repository.getClinicList(token = token);
+        return clinicList;
+    }
+
     //////////////////////////Clinic//////////////////////////////////
 
 
@@ -175,6 +186,15 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     ): LiveData<Call<Message>> {
         message.value =
             repository.updateDoctor(token = token, id = id, updateDoctor = updateDoctor);
+        return message;
+    }
+
+    fun updateDoctorImage(
+        token: String,
+        id: String,
+        image: MultipartBody.Part,
+    ): LiveData<Call<Message>> {
+        message.value = repository.updateDoctorImage(token = token, id = id, image = image);
         return message;
     }
     //////////////////////////Doctor store//////////////////////////////////
@@ -220,7 +240,7 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////Days at clinic//////////////////////////////////
 
     //////////////////////////patient//////////////////////////////////
-    fun postfamilyMemberPatient(
+    fun postFamilyMemberPatient(
         token: String,
         patientStore: PatientStore
     ): LiveData<Call<Message>> {
@@ -231,6 +251,11 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     fun getFamilyMemberPatient(token: String): LiveData<Call<PatientsList>> {
         patientsList.value = repository.getFamilyMemberPatient(token = token);
         return patientsList;
+    }
+
+    fun getPatientWithId(token: String, id: String): LiveData<Call<Patient>> {
+        patient.value = repository.getPatientWithId(token = token, id = id);
+        return patient;
     }
     //////////////////////////patient//////////////////////////////////
 
@@ -244,7 +269,7 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
 
     //////////////////////////patient_visits//////////////////////////////////
 
-    fun getPatientVisits(token: String, id: String){
+    fun getPatientVisits(token: String, id: String) {
 
     }
 

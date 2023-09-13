@@ -1,4 +1,4 @@
-package com.doubleclick.doctorapp.android.Model.Patient
+package com.doubleclick.doctorapp.android.Model.Clinic
 
 import android.os.Parcel
 import android.os.Parcelable

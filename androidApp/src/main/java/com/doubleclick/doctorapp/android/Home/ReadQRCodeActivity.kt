@@ -45,7 +45,7 @@ class ReadQRCodeActivity : AppCompatActivity() {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState!!)
+        super.onSaveInstanceState(outState)
         capture.onSaveInstanceState(outState)
     }
 

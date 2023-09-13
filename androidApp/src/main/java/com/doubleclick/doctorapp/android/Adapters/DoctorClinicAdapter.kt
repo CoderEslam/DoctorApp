@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.doubleclick.doctorapp.android.Home.PatientReservation.PatientReservationActivity
-import com.doubleclick.doctorapp.android.Model.Clinic.ClinicData
+import com.doubleclick.doctorapp.android.Model.Clinic.ClinicList
+import com.doubleclick.doctorapp.android.Model.Clinic.ClinicModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorClinicViewHolder
 
-class DoctorClinicAdapter(val clinicData: List<ClinicData>) :
+class DoctorClinicAdapter(val clinicData: List<ClinicModel>) :
     RecyclerView.Adapter<DoctorClinicViewHolder>() {
 
 
