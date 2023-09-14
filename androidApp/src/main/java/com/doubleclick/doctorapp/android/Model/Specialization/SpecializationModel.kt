@@ -8,7 +8,6 @@ data class SpecializationModel(
     val name: String?,
     val specialization_image: String?,
     val status: String?,
-    val user: User?,
     val user_id: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -16,7 +15,6 @@ data class SpecializationModel(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readParcelable(User::class.java.classLoader),
         parcel.readInt()
     ) {
     }
@@ -26,7 +24,6 @@ data class SpecializationModel(
         parcel.writeString(name)
         parcel.writeString(specialization_image)
         parcel.writeString(status)
-        parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
     }
 

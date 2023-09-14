@@ -203,26 +203,36 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
                                 .skipMemoryCache(true)
                                 .into(binding.doctorImage)
 
-                            /*binding.spinnerSpecializations.setSelection(
-                                specializationList.data?.indexOf(
-                                    data?.specialization
-                                ), true
-                            )*/
-                            val general_specialty = data?.general_specialty_id?.let { it1 ->
-                                SpecializationModel(
-                                    id = it1,
-                                    "",
-                                    "",
-                                    "",
-                                    null,
-                                    0
+                            val specializationModel = SpecializationModel(
+                                data?.specialization?.id!!,
+                                data?.specialization?.name,
+                                data?.specialization?.specialization_image,
+                                data?.specialization?.status,
+                                data?.specialization?.user_id!!,
+                            )
+                            specializationList?.indexOf(specializationModel)
+                                ?.let { it1 ->
+                                    binding.spinnerSpecializations.setSelection(
+                                        it1,
+                                        true
+                                    )
+                                }
+
+                            val general_specialty = GeneralSpecializationModel(
+                                data.general_specialty?.id!!,
+                                data.general_specialty?.name,
+                                data.general_specialty?.status,
+                                data.general_specialty?.user_id!!,
+                            )
+
+
+                            generalSpecializationList?.indexOf(
+                                general_specialty
+                            )?.let { it1 ->
+                                binding.spinnerGeneralSpecializations.setSelection(
+                                    it1, true
                                 )
                             }
-                            /* binding.spinnerGeneralSpecializations.setSelection(
-                                 general_specializationList.data?.indexOf(
-                                     general_specialty
-                                 ), true
-                             )*/
                         }
                     }
 

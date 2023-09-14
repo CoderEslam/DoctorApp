@@ -5,8 +5,10 @@ import android.os.Parcelable
 
 data class Data(
     val alcohol_drinking: Int,
+    val area: Area?,
     val area_id: Int,
     val blood_type: String?,
+    val governorate: Governorate?,
     val governorate_id: Int,
     val height: Int,
     val id: Int,
@@ -14,35 +16,45 @@ data class Data(
     val name: String?,
     val notes: String?,
     val phone: String?,
+    val reservations: List<Reservation>?,
     val smoking: Int,
     val status: String?,
     val telephone: String?,
+    val user: User?,
     val user_id: Int,
+    val visits: List<Visit>?,
     val weight: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
+        parcel.readParcelable(Area::class.java.classLoader),
         parcel.readInt(),
         parcel.readString(),
+        parcel.readParcelable(Governorate::class.java.classLoader),
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
-        parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
+        parcel.createTypedArrayList(Reservation),
         parcel.readInt(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readParcelable(User::class.java.classLoader),
+        parcel.readInt(),
+        parcel.createTypedArrayList(Visit),
         parcel.readInt()
     ) {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(alcohol_drinking)
+        parcel.writeParcelable(area, flags)
         parcel.writeInt(area_id)
         parcel.writeString(blood_type)
+        parcel.writeParcelable(governorate, flags)
         parcel.writeInt(governorate_id)
         parcel.writeInt(height)
         parcel.writeInt(id)
@@ -50,10 +62,13 @@ data class Data(
         parcel.writeString(name)
         parcel.writeString(notes)
         parcel.writeString(phone)
+        parcel.writeTypedList(reservations)
         parcel.writeInt(smoking)
         parcel.writeString(status)
         parcel.writeString(telephone)
+        parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
+        parcel.writeTypedList(visits)
         parcel.writeInt(weight)
     }
 

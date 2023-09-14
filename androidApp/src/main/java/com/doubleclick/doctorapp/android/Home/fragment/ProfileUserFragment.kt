@@ -337,25 +337,27 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
     private fun familyMember() {
         viewModel.getFamilyMemberPatient(TOKEN).observe(viewLifecycleOwner) {
             it.clone().enqueue(object : Callback<PatientsList> {
-                override fun onResponse(
-                    call: Call<PatientsList>, response: Response<PatientsList>
-                ) {
-                    binding.rvFamilyMember.adapter = AdapterFamilyMember(
-                        this@ProfileUserFragment, response.body()!!.data!!.toMutableList()
-                    )
+                override fun onResponse(call: Call<PatientsList>, response: Response<PatientsList>) {
+                    try {
+                        if (response.body()?.data != null) {
+                            binding.rvFamilyMember.adapter = AdapterFamilyMember(this@ProfileUserFragment, response.body()!!.data!!.toMutableList())
+                        }
+                    } catch (e: NullPointerException) {
+                        Log.e(TAG, "onResponse: ${e.message}")
+                    }
                 }
 
                 override fun onFailure(call: Call<PatientsList>, t: Throwable) {
                     Log.e(TAG, "onFailure: ${t.message}")
-
                 }
-
             })
         }
     }
 
-    private fun validation(): Boolean {
-        return binding.etEmail.isNotNullOrEmptyEditText() && binding.etName.isNotNullOrEmptyEditText() && binding.etNumberContact.isNotNullOrEmptyEditText()
+    private fun validation() : Boolean {
+        return binding.etEmail.isNotNullOrEmptyEditText() &&
+                binding.etName.isNotNullOrEmptyEditText() &&
+                binding.etNumberContact.isNotNullOrEmptyEditText()
     }
 
     private fun openImage() {

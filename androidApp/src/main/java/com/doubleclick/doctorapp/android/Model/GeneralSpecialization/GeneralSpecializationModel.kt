@@ -7,14 +7,12 @@ data class GeneralSpecializationModel(
     val id: Int,
     val name: String?,
     val status: String?,
-    val user: User?,
     val user_id: Int
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readParcelable(User::class.java.classLoader),
         parcel.readInt()
     ) {
     }
@@ -23,7 +21,6 @@ data class GeneralSpecializationModel(
         parcel.writeInt(id)
         parcel.writeString(name)
         parcel.writeString(status)
-        parcel.writeParcelable(user, flags)
         parcel.writeInt(user_id)
     }
 

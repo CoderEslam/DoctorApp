@@ -33,6 +33,7 @@ import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentDoctorClinicsBinding
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
+import com.doubleclick.doctorapp.android.utils.SessionManger.getIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.views.SeekArc.SeekArc
 import com.doubleclick.doctorapp.android.views.SeekArc.`interface`.OnSeekArcChangeListener
@@ -50,13 +51,14 @@ class DoctorClinicsFragment : Fragment() {
     private lateinit var viewModel: MainViewModel
     private val TAG = "DoctorClinicsFragment"
     private var TOKEN: String = ""
+    private var doctor_id: String = ""
     private var governoratesModel: String = ""
     private var areaModel: String = ""
     private var governoratesModelList: List<GovernoratesModel> = mutableListOf()
     private var areaModelList: List<AreaModel> = mutableListOf()
     private lateinit var mTimePicker: TimePickerDialog
     private var daysList: MutableList<Int> = mutableListOf();
-
+    private var daysAtClinicModel: List<DaysAtClinicModel> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +85,7 @@ class DoctorClinicsFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             TOKEN = requireActivity().getToken().toString()
+            doctor_id = requireActivity().getIdWorker().toString()
             viewModel.getDoctorDaysAtClinicList("$BEARER$TOKEN")
                 .observe(viewLifecycleOwner) {
                     it.enqueue(object : Callback<DaysAtClinic> {
@@ -90,7 +93,7 @@ class DoctorClinicsFragment : Fragment() {
                             call: Call<DaysAtClinic>,
                             response: Response<DaysAtClinic>
                         ) {
-                            val daysAtClinicModel: List<DaysAtClinicModel> = response.body()!!.data
+                            daysAtClinicModel = response.body()!!.data
                             for (days in daysAtClinicModel) {
                                 if (days.day_id == 0) {
                                     binding.saturday.isChecked = true
@@ -216,7 +219,7 @@ class DoctorClinicsFragment : Fragment() {
                         overview = binding.overview.text.toString(),
                         governorate_id = governoratesModel,
                         area_id = areaModel,
-                        doctor_id = "3",
+                        doctor_id = doctor_id,
                         price = binding.price.text.toString()
                     )
 
@@ -238,7 +241,7 @@ class DoctorClinicsFragment : Fragment() {
                     })
                 }
                 for (i in daysList) {
-                    addDay(id = i, token = "$BEARER$TOKEN")
+                    addDay(id = i/*id of day*/, token = "$BEARER$TOKEN")
                 }
                 for (i in 0..6) {
                     if (!daysList.contains(i)) {
@@ -395,7 +398,17 @@ class DoctorClinicsFragment : Fragment() {
     private fun deleteDay(id: Int, token: String) {
         viewModel.deleteDoctorDaysAtClinic(
             token,
-            id.toString()
+            daysAtClinicModel[daysAtClinicModel.indexOf(
+                DaysAtClinicModel(
+                    0,
+                    id,
+                    0,
+                    "",
+                    0,
+                    "",
+                    0
+                )
+            )].id.toString()
         ).observe(viewLifecycleOwner) {
             it.clone().enqueue(object : Callback<Message> {
                 override fun onResponse(

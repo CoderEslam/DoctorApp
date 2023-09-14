@@ -13,7 +13,6 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,11 +21,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.AdapterNavigation
 import com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorConfigActivity
-import com.doubleclick.doctorapp.android.Home.Setting.SettingsActivity
 import com.doubleclick.doctorapp.android.Home.fragment.BottomDialogQRCode
 import com.doubleclick.doctorapp.android.ItemNavigationListener
 import com.doubleclick.doctorapp.android.Model.ItemNavigation
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
+import com.doubleclick.doctorapp.android.Model.Role
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
@@ -37,6 +36,7 @@ import com.doubleclick.doctorapp.android.utils.Constants
 import com.doubleclick.doctorapp.android.utils.Constants.BEARER
 import com.doubleclick.doctorapp.android.utils.SessionManger.getCurrentUserEmail
 import com.doubleclick.doctorapp.android.utils.SessionManger.getId
+import com.doubleclick.doctorapp.android.utils.SessionManger.getIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.getImage
 import com.doubleclick.doctorapp.android.utils.SessionManger.getName
 import com.doubleclick.doctorapp.android.utils.SessionManger.getRole
@@ -44,7 +44,6 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.utils.SessionManger.logoutManger
 import com.doubleclick.doctorapp.android.views.CircleImageView
 import com.doubleclick.doctorapp.android.views.flowingdrawer.ElasticDrawer
-import com.doubleclick.doctorapp.android.views.slidingrootnav.callback.LogoutListener
 import com.google.zxing.client.android.Intents
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
@@ -157,6 +156,16 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
         }
         GlobalScope.launch(Dispatchers.Main) {
             val userId = getId().toString()
+            val workerId = getIdWorker().toString()
+            val roleUser = (getRole().toString() == Role.User.role)
+            val roleDoctor = (getRole().toString() == Role.Doctor.role)
+            val roleAssistant = (getRole().toString() == Role.Assistant.role)
+            if (roleUser) {
+                binding.scannQr.visibility = View.GONE
+            }
+            if (roleDoctor || roleAssistant) {
+                binding.qr.visibility = View.GONE
+            }
             findViewById<TextView>(R.id.name).text = getName()
             findViewById<TextView>(R.id.user_contact).text = getCurrentUserEmail()
             Glide.with(this@HomeActivity).load(
@@ -166,7 +175,9 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
                 .into(findViewById<CircleImageView>(R.id.image_profile))
 
             binding.qr.setOnClickListener {
-                BottomDialogQRCode(userId).show(supportFragmentManager, "")
+                if (roleUser) {
+                    BottomDialogQRCode("patient/" + userId).show(supportFragmentManager, "")
+                }
             }
 
 
@@ -255,23 +266,31 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun getDataWithId(id: String) {
-        GlobalScope.launch(Dispatchers.Main) {
-            viewModel.getPatientWithId(token = BEARER + getToken(), id = "1")
-                .observe(this@HomeActivity) {
-                    it.clone().enqueue(object : Callback<Patient> {
-                        override fun onResponse(call: Call<Patient>, response: Response<Patient>) {
-                            Toast.makeText(
-                                this@HomeActivity,
-                                response.body()?.data?.toString(),
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+        if (id.contains("patient/")) {
+            GlobalScope.launch(Dispatchers.Main) {
+                viewModel.getPatientWithId(
+                    token = BEARER + getToken(),
+                    id = id.replace("patient/", "")
+                )
+                    .observe(this@HomeActivity) {
+                        it.clone().enqueue(object : Callback<Patient> {
+                            override fun onResponse(
+                                call: Call<Patient>,
+                                response: Response<Patient>
+                            ) {
+                                Toast.makeText(
+                                    this@HomeActivity,
+                                    response.body()?.data?.toString(),
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
 
-                        override fun onFailure(call: Call<Patient>, t: Throwable) {
+                            override fun onFailure(call: Call<Patient>, t: Throwable) {
 
-                        }
-                    })
-                }
+                            }
+                        })
+                    }
+            }
         }
     }
 
