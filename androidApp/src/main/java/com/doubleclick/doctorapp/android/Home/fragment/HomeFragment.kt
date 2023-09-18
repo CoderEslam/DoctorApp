@@ -186,7 +186,8 @@ class HomeFragment : Fragment(), CreatePDF, Search, FavoritesDoctor {
                         call: Call<ClinicList>,
                         response: Response<ClinicList>
                     ) {
-                        Log.e(TAG, "onResponse: ${response.body()?.data.toString()}")
+
+                        Log.e(TAG, "ClinicList: ${response.body()?.data.toString()}")
                     }
 
                     override fun onFailure(call: Call<ClinicList>, t: Throwable) {

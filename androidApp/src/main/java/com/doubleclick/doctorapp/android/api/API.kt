@@ -119,7 +119,7 @@ interface API {
 
 
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @POST("clinics")
+    @GET("clinics")
     fun getClinicList(
         @Header("Authorization") token: String,
     ): Call<ClinicList>

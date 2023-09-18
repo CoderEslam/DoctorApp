@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.SpinnerGeneralSpecializationAdapter
 import com.doubleclick.doctorapp.android.Adapters.SpinnerSpecializationAdapter
+import com.doubleclick.doctorapp.android.BaseApplication
 import com.doubleclick.doctorapp.android.Model.Doctor.DoctorsList
 import com.doubleclick.doctorapp.android.Model.Doctor.UpdateDoctor
 import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
@@ -69,8 +70,8 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
     private lateinit var uri: Uri;
     private var TOKEN: String = ""
     private var specializations: Int = -1
-    private lateinit var specializationList: List<SpecializationModel>
-    private lateinit var generalSpecializationList: List<GeneralSpecializationModel>
+    private var specializationList: List<SpecializationModel> = mutableListOf()
+    private var generalSpecializationList: List<GeneralSpecializationModel> = mutableListOf()
     private val getContent =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             try {
@@ -133,7 +134,8 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
         )[MainViewModel::class.java]
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             binding.animationView.visibility = View.VISIBLE
-            viewModel.getSpecializations("$BEARER${requireActivity().getToken()}")
+            TOKEN = BEARER + requireActivity().getToken()
+            viewModel.getSpecializations(TOKEN)
                 .observe(viewLifecycleOwner) {
                     it.enqueue(object : Callback<SpecializationList> {
                         override fun onResponse(
@@ -154,7 +156,7 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
                     })
                 }
 
-            viewModel.getGeneralSpecialties("$BEARER${requireActivity().getToken()}")
+            viewModel.getGeneralSpecialties(TOKEN)
                 .observe(viewLifecycleOwner) {
                     it.enqueue(object : Callback<GeneralSpecializationList> {
                         override fun onResponse(
@@ -181,7 +183,7 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
                 }
 
             viewModel.getDoctorsInfoById(
-                "$BEARER${requireActivity().getToken()}",
+                TOKEN,
                 requireActivity().getIdWorker().toString() /*here must put id of doctor*/
             ).observe(viewLifecycleOwner) {
                 it.enqueue(object : Callback<DoctorsList> {
@@ -197,41 +199,47 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
                             binding.instagramPageLink.setText(data?.instagram_page_link)
                             binding.instagramPageName.setText(data?.instagram_page_name)
                             binding.animationView.visibility = View.GONE
-                            Glide.with(this@DoctorInfoFragment)
+                            Glide.with(BaseApplication.applicationContext())
                                 .load(IMAGE_URL_DOCTORS + data?.doctor_image)
                                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 .skipMemoryCache(true)
                                 .into(binding.doctorImage)
 
-                            val specializationModel = SpecializationModel(
-                                data?.specialization?.id!!,
-                                data?.specialization?.name,
-                                data?.specialization?.specialization_image,
-                                data?.specialization?.status,
-                                data?.specialization?.user_id!!,
-                            )
-                            specializationList?.indexOf(specializationModel)
-                                ?.let { it1 ->
+                            if (data?.specialization != null) {
+                                val specializationModel = SpecializationModel(
+                                    data.specialization.id,
+                                    data.specialization.name,
+                                    data.specialization.specialization_image,
+                                    data.specialization.status,
+                                    data.specialization.user_id,
+                                )
+
+                                specializationList.indexOf(
+                                    specializationModel
+                                ).let { item ->
                                     binding.spinnerSpecializations.setSelection(
-                                        it1,
+                                        item,
                                         true
                                     )
                                 }
+                            }
 
-                            val general_specialty = GeneralSpecializationModel(
-                                data.general_specialty?.id!!,
-                                data.general_specialty?.name,
-                                data.general_specialty?.status,
-                                data.general_specialty?.user_id!!,
-                            )
-
-
-                            generalSpecializationList?.indexOf(
-                                general_specialty
-                            )?.let { it1 ->
-                                binding.spinnerGeneralSpecializations.setSelection(
-                                    it1, true
+                            if (data?.general_specialty != null) {
+                                val generalSpecialty = GeneralSpecializationModel(
+                                    data.general_specialty.id,
+                                    data.general_specialty.name,
+                                    data.general_specialty.status,
+                                    data.general_specialty.user_id,
                                 )
+
+                                generalSpecializationList.indexOf(
+                                    generalSpecialty
+                                ).let { item ->
+                                    binding.spinnerGeneralSpecializations.setSelection(
+                                        item,
+                                        true
+                                    )
+                                }
                             }
                         }
                     }
@@ -250,7 +258,7 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
                 if (isFieldsEmpty() && requireActivity().getToken()
                         ?.isNotEmpty() == true
                 ) viewModel.updateDoctor(
-                    "$BEARER${requireActivity().getToken()}",
+                    TOKEN,
                     id = requireActivity().getIdWorker().toString(),
                     UpdateDoctor(
                         facebook_page_link = binding.facebookPageLink.text.toString(),
@@ -370,7 +378,7 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
         binding.progressBar.visibility = View.VISIBLE
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             viewModel.updateDoctorImage(
-                BEARER + requireActivity().getToken(),
+                TOKEN,
                 requireActivity().getIdWorker().toString(),
                 MultipartBody.Part.createFormData(
                     "image", "${System.currentTimeMillis()}.jpg", body

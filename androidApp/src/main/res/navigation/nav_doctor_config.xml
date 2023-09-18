@@ -27,7 +27,11 @@
         android:id="@+id/doctorClinicsFragment"
         android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorClinicsFragment"
         android:label="fragment_doctor_clinics"
-        tools:layout="@layout/fragment_doctor_clinics" />
+        tools:layout="@layout/fragment_doctor_clinics" >
+        <action
+            android:id="@+id/action_doctorClinicsFragment_to_addClinicFragment"
+            app:destination="@id/addClinicFragment" />
+    </fragment>
     <fragment
         android:id="@+id/doctorInfoFragment"
         android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorInfoFragment"
@@ -38,6 +42,11 @@
         android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.AssistantsFragment"
         android:label="fragment_assistants"
         tools:layout="@layout/fragment_assistants" />
+    <fragment
+        android:id="@+id/addClinicFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.AddClinicFragment"
+        android:label="fragment_add_clinic"
+        tools:layout="@layout/fragment_add_clinic" />
 
 
 </navigation>
