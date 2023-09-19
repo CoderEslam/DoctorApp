@@ -10,6 +10,7 @@ data class Doctor(
     val id: Int,
     val instagram_page_link: String?,
     val instagram_page_name: String?,
+    val doctor_image: String?,
     val name: String?,
     val specialization_id: Int,
     val status: String?,
@@ -21,6 +22,7 @@ data class Doctor(
         parcel.readString(),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -38,6 +40,7 @@ data class Doctor(
         parcel.writeInt(id)
         parcel.writeString(instagram_page_link)
         parcel.writeString(instagram_page_name)
+        parcel.writeString(doctor_image)
         parcel.writeString(name)
         parcel.writeInt(specialization_id)
         parcel.writeString(status)

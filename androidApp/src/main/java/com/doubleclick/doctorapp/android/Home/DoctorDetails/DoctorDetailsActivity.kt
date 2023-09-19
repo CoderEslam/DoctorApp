@@ -56,7 +56,7 @@ class DoctorDetailsActivity : AppCompatActivity() {
                             response: Response<DoctorsList>
                         ) {
                             val data = response.body()!!.data?.get(0)
-//                            binding.rv.adapter = data?.clinics?.let { it1 -> DoctorClinicAdapter(it1) }
+                            binding.rvClinics.adapter = data?.clinics?.let { clinics -> DoctorClinicAdapter(clinics) }
 
                             Glide.with(this@DoctorDetailsActivity)
                                 .load("${IMAGE_URL_USERS}${data?.user?.user_image}")

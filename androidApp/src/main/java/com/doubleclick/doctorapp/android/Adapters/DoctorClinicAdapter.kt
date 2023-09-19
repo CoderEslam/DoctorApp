@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.doubleclick.doctorapp.android.Home.PatientReservation.PatientReservationActivity
 import com.doubleclick.doctorapp.android.Model.Clinic.ClinicList
 import com.doubleclick.doctorapp.android.Model.Clinic.ClinicModel
+import com.doubleclick.doctorapp.android.Model.Doctor.Clinic
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorClinicViewHolder
 
-class DoctorClinicAdapter(val clinicData: List<ClinicModel>) :
+class DoctorClinicAdapter(val clinicData: List<Clinic>) :
     RecyclerView.Adapter<DoctorClinicViewHolder>() {
 
 

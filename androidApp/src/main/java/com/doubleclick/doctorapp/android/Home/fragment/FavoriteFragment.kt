@@ -1,5 +1,6 @@
 package com.doubleclick.doctorapp.android.Home.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import com.doubleclick.doctorapp.android.Adapters.FavoriteDoctorsAdapter
 import com.doubleclick.doctorapp.android.BookingTime
 import com.doubleclick.doctorapp.android.FavoritesDoctor
+import com.doubleclick.doctorapp.android.Home.DoctorDetails.DoctorDetailsActivity
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteModel
 import com.doubleclick.doctorapp.android.Model.Message
@@ -93,8 +95,13 @@ class FavoriteFragment() : Fragment(), BookingTime, FavoritesDoctor {
     }
 
 
-    override fun book() {
-        Toast.makeText(requireActivity(), "Book", Toast.LENGTH_SHORT).show()
+    override fun book(favoriteModel: FavoriteModel) {
+        startActivity(
+            Intent(
+                requireActivity(),
+                DoctorDetailsActivity::class.java
+            ).putExtra("doctor_id", favoriteModel.doctor_id.toString())
+        )
     }
 
 

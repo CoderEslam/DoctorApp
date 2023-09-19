@@ -44,11 +44,12 @@ android {
             isMinifyEnabled = false
         }
     }
+
     buildFeatures {
         viewBinding = true
         dataBinding = true
-
     }
+
 }
 
 dependencies {
