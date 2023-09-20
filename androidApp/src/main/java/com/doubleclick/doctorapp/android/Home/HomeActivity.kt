@@ -119,8 +119,6 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
 //        hideActionBar()
         binding.drawerlayoutNormal.setTouchMode(ElasticDrawer.TOUCH_MODE_BEZEL)
 //        binding.drawerlayoutNormal.toggleMenu()
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
         binding.openMenu.setOnClickListener {
             binding.drawerlayoutNormal.openMenu();

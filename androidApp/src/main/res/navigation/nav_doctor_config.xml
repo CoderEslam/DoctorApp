@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_routeFragment_to_assistantsFragment"
             app:destination="@id/assistantsFragment" />
+        <action
+            android:id="@+id/action_routeFragment_to_reservationsFragment"
+            app:destination="@id/reservationsFragment" />
 
     </fragment>
 
@@ -47,6 +50,11 @@
         android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.AddClinicFragment"
         android:label="fragment_add_clinic"
         tools:layout="@layout/fragment_add_clinic" />
+    <fragment
+        android:id="@+id/reservationsFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.ReservationsFragment"
+        android:label="fragment_reservations"
+        tools:layout="@layout/fragment_reservations" />
 
 
 </navigation>

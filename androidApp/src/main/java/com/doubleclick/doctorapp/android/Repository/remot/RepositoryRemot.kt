@@ -17,6 +17,7 @@ import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.api.RetrofitInstance
@@ -117,6 +118,15 @@ class RepositoryRemot {
             token = token,
             id = id,
             image = image,
+        )
+    }
+    fun getPatientVisitsDoctorList(
+        token: String,
+        id: String,
+    ): Call<MyReservation> {
+        return RetrofitInstance.api.getPatientVisitsDoctorList(
+            token = token,
+            id = id,
         )
     }
     //////////////////////////Doctor store//////////////////////////////////

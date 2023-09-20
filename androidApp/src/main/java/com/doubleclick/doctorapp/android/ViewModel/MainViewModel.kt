@@ -20,6 +20,7 @@ import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
@@ -96,6 +97,7 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////Doctors//////////////////////////////////
     private val doctorsList: MutableLiveData<Call<DoctorsList>> = MutableLiveData()
     private val doctorsInfo: MutableLiveData<Call<DoctorsList>> = MutableLiveData()
+    private val myReservation: MutableLiveData<Call<MyReservation>> = MutableLiveData()
     //////////////////////////Doctors//////////////////////////////////
 
 
@@ -196,6 +198,14 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     ): LiveData<Call<Message>> {
         message.value = repository.updateDoctorImage(token = token, id = id, image = image);
         return message;
+    }
+
+    fun getPatientVisitsDoctorList(
+        token: String,
+        id: String,
+    ): LiveData<Call<MyReservation>> {
+        myReservation.value = repository.getPatientVisitsDoctorList(token = token, id = id);
+        return myReservation;
     }
     //////////////////////////Doctor store//////////////////////////////////
 

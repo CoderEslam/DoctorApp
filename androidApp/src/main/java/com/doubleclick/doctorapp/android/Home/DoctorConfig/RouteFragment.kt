@@ -51,22 +51,26 @@ class RouteFragment : Fragment() {
             findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorInfoFragment())
         }
 
+        binding.reservation.setOnClickListener {
+            findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToReservationsFragment())
+        }
+
         binding.video.setOnClickListener {
             startActivity(Intent(requireActivity(), PixCameraActivity::class.java))
         }
 
-       /* pixFragment(options) {
-            when (it.status) {
-                PixEventCallback.Status.SUCCESS -> {
+        /* pixFragment(options) {
+             when (it.status) {
+                 PixEventCallback.Status.SUCCESS -> {
 
-                }//use results as it.data
+                 }//use results as it.data
 
-                PixEventCallback.Status.BACK_PRESSED -> {
+                 PixEventCallback.Status.BACK_PRESSED -> {
 
-                }// back pressed called
+                 }// back pressed called
 
-            }
-        }*/
+             }
+         }*/
 
     }
 }
