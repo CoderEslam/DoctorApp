@@ -23,6 +23,7 @@ import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
+import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctor
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
 import com.google.gson.JsonObject
 import okhttp3.MultipartBody
@@ -191,11 +192,11 @@ interface API {
     ): Call<Message>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
-    @GET("patient_visits/doctor/{id}")
-    fun getPatientVisitsDoctorList(
+    @GET("patient_reservations/doctor/{id}")
+    fun getPatientReservationDoctorList(
         @Header("Authorization") token: String,
         @Path("id") id: String
-    ): Call<MyReservation>
+    ): Call<ShowPatientOfDoctor>
 
     //////////////////////////Doctors//////////////////////////////////
 

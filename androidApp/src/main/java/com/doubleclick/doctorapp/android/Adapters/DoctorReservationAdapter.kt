@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.ReservationModel
+import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctorModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorReservationViewHolder
 import com.doubleclick.doctorapp.android.utils.collapse
@@ -17,7 +18,7 @@ import com.doubleclick.doctorapp.android.utils.isNotNullOrEmptyString
 import java.time.LocalDate
 import java.time.Period
 
-class DoctorReservationAdapter(val reservationModelList: List<ReservationModel>) :
+class DoctorReservationAdapter(val reservationModelList: List<ShowPatientOfDoctorModel>) :
     RecyclerView.Adapter<DoctorReservationViewHolder>() {
     private val TAG = "DoctorReservationAdapte"
 
@@ -35,12 +36,12 @@ class DoctorReservationAdapter(val reservationModelList: List<ReservationModel>)
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: DoctorReservationViewHolder, position: Int) {
         var images = listOf<String>()
-        if (reservationModelList[holder.bindingAdapterPosition].images?.isNotNullOrEmptyString() == true) {
-            images = reservationModelList[holder.bindingAdapterPosition].images?.split(",")!!
-        }
-        if (reservationModelList[holder.bindingAdapterPosition].patient_reservation?.age?.isNotNullOrEmptyString() == true) {
+//        if (reservationModelList[holder.bindingAdapterPosition].images?.isNotNullOrEmptyString() == true) {
+//            images = reservationModelList[holder.bindingAdapterPosition].images?.split(",")!!
+//        }
+        if (reservationModelList[holder.bindingAdapterPosition].age?.isNotNullOrEmptyString() == true) {
             val age =
-                reservationModelList[holder.bindingAdapterPosition].patient_reservation?.age?.split(
+                reservationModelList[holder.bindingAdapterPosition].age?.split(
                     "/"
                 )
             holder.stack_item_image.adapter = StackViewAdapter(holder.itemView.context, images)
@@ -66,11 +67,11 @@ class DoctorReservationAdapter(val reservationModelList: List<ReservationModel>)
             append(reservationModelList[holder.bindingAdapterPosition].patient?.name)
         }
         holder.patent_phone.text = buildString {
-            append(if (reservationModelList[holder.bindingAdapterPosition].patient_reservation?.patient_phone?.isNotNullOrEmptyString() == true) reservationModelList[holder.bindingAdapterPosition].patient_reservation?.patient_phone else "--")
+            append(if (reservationModelList[holder.bindingAdapterPosition].patient_phone?.isNotNullOrEmptyString() == true) reservationModelList[holder.bindingAdapterPosition].patient_phone else "--")
         }
 
         holder.patent_reservation_time.text = buildString {
-            append(reservationModelList[holder.bindingAdapterPosition].patient_reservation?.reservation_date)
+            append(reservationModelList[holder.bindingAdapterPosition].reservation_date)
         }
         holder.patent_blood.text = buildString {
             append(reservationModelList[holder.bindingAdapterPosition].patient?.blood_type)

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.doubleclick.doctorapp.android.Adapters.DoctorReservationAdapter
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
+import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctor
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
@@ -18,6 +19,7 @@ import com.doubleclick.doctorapp.android.utils.SessionManger.getIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.apache.http.client.utils.CloneUtils.clone
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,15 +60,15 @@ class ReservationsFragment : Fragment() {
             TOKEN = Constants.BEARER + requireActivity().getToken().toString()
             doctor_id = requireActivity().getIdWorker().toString()
 
-            viewModel.getPatientVisitsDoctorList(
+            viewModel.getPatientReservationDoctorList(
                 TOKEN,
                 id = doctor_id
             )
                 .observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<MyReservation> {
+                    it.clone().enqueue(object : Callback<ShowPatientOfDoctor> {
                         override fun onResponse(
-                            call: Call<MyReservation>,
-                            response: Response<MyReservation>
+                            call: Call<ShowPatientOfDoctor>,
+                            response: Response<ShowPatientOfDoctor>
                         ) {
                             if (response.body()?.data != null) {
                                 binding.rvReservation.adapter =
@@ -74,7 +76,7 @@ class ReservationsFragment : Fragment() {
                             }
                         }
 
-                        override fun onFailure(call: Call<MyReservation>, t: Throwable) {
+                        override fun onFailure(call: Call<ShowPatientOfDoctor>, t: Throwable) {
 
                         }
 
