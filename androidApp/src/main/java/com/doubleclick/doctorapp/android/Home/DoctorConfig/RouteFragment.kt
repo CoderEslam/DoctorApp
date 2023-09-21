@@ -55,6 +55,10 @@ class RouteFragment : Fragment() {
             findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToReservationsFragment())
         }
 
+        binding.oldReservation.setOnClickListener {
+            findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToMyPatientsFragment())
+        }
+
         binding.video.setOnClickListener {
             startActivity(Intent(requireActivity(), PixCameraActivity::class.java))
         }

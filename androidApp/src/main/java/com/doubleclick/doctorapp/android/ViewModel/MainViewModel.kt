@@ -20,7 +20,7 @@ import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyPatientReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctor
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
@@ -98,7 +98,8 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     //////////////////////////Doctors//////////////////////////////////
     private val doctorsList: MutableLiveData<Call<DoctorsList>> = MutableLiveData()
     private val doctorsInfo: MutableLiveData<Call<DoctorsList>> = MutableLiveData()
-    private val myReservation: MutableLiveData<Call<ShowPatientOfDoctor>> = MutableLiveData()
+    private val showPatientOfDoctor: MutableLiveData<Call<ShowPatientOfDoctor>> = MutableLiveData()
+    private val myReservation: MutableLiveData<Call<MyPatientReservation>> = MutableLiveData()
     //////////////////////////Doctors//////////////////////////////////
 
 
@@ -205,7 +206,16 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         token: String,
         id: String,
     ): LiveData<Call<ShowPatientOfDoctor>> {
-        myReservation.value = repository.getPatientReservationDoctorList(token = token, id = id);
+        showPatientOfDoctor.value = repository.getPatientReservationDoctorList(token = token, id = id);
+        return showPatientOfDoctor;
+    }
+
+    // to see patients which visit this doctor by doctor id
+    fun getPatientVisitDoctorList(
+        token: String,
+        id: String,
+    ): LiveData<Call<MyPatientReservation>> {
+        myReservation.value = repository.getPatientVisitDoctorList(token = token, id = id);
         return myReservation;
     }
     //////////////////////////Doctor store//////////////////////////////////

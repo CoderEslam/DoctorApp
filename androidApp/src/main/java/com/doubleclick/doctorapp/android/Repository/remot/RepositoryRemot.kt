@@ -17,7 +17,7 @@ import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyPatientReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctor
 import com.doubleclick.doctorapp.android.Model.Specialization.SpecializationList
@@ -126,6 +126,15 @@ class RepositoryRemot {
         id: String,
     ): Call<ShowPatientOfDoctor> {
         return RetrofitInstance.api.getPatientReservationDoctorList(
+            token = token,
+            id = id,
+        )
+    }
+    fun getPatientVisitDoctorList(
+        token: String,
+        id: String,
+    ): Call<MyPatientReservation> {
+        return RetrofitInstance.api.getPatientVisitDoctorList(
             token = token,
             id = id,
         )

@@ -1,18 +1,20 @@
 package com.doubleclick.doctorapp.android.Home.DoctorConfig
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.doubleclick.doctorapp.android.Adapters.DoctorReservationAdapter
+import com.doubleclick.doctorapp.android.Adapters.MyPatientOfDoctorAdapter
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyPatientReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctor
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
-import com.doubleclick.doctorapp.android.databinding.FragmentReservationsBinding
+import com.doubleclick.doctorapp.android.databinding.FragmentMyPatientsBinding
 import com.doubleclick.doctorapp.android.utils.Constants
 import com.doubleclick.doctorapp.android.utils.SessionManger.getIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
@@ -23,9 +25,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ReservationsFragment : Fragment() {
+class MyPatientsFragment : Fragment() {
 
-    private lateinit var binding: FragmentReservationsBinding
+    private lateinit var binding: FragmentMyPatientsBinding
     private lateinit var viewModel: MainViewModel
     private var TOKEN: String = ""
     private var doctor_id: String = ""
@@ -42,10 +44,9 @@ class ReservationsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        binding = FragmentReservationsBinding.inflate(inflater, container, false)
+        binding = FragmentMyPatientsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,34 +54,33 @@ class ReservationsFragment : Fragment() {
             this,
             MainViewModelFactory(RepositoryRemot())
         )[MainViewModel::class.java]
-
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             TOKEN = Constants.BEARER + requireActivity().getToken().toString()
             doctor_id = requireActivity().getIdWorker().toString()
 
-            viewModel.getPatientReservationDoctorList(
+            viewModel.getPatientVisitDoctorList(
                 TOKEN,
                 id = doctor_id
             )
                 .observe(viewLifecycleOwner) {
-                    it.clone().enqueue(object : Callback<ShowPatientOfDoctor> {
+                    it.clone().enqueue(object : Callback<MyPatientReservation> {
                         override fun onResponse(
-                            call: Call<ShowPatientOfDoctor>,
-                            response: Response<ShowPatientOfDoctor>
+                            call: Call<MyPatientReservation>,
+                            response: Response<MyPatientReservation>
                         ) {
                             if (response.body()?.data != null) {
-                                binding.rvReservation.adapter =
-                                    DoctorReservationAdapter(response.body()?.data!!)
+                                binding.rvMyPatients.adapter =
+                                    MyPatientOfDoctorAdapter(response.body()?.data!!)
                             }
                         }
 
-                        override fun onFailure(call: Call<ShowPatientOfDoctor>, t: Throwable) {
+                        override fun onFailure(call: Call<MyPatientReservation>, t: Throwable) {
 
                         }
 
                     })
                 }
         }
-    }
 
+    }
 }

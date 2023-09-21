@@ -20,7 +20,7 @@ import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
+import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyPatientReservation
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PostPatientReservations
 import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctor
@@ -197,6 +197,13 @@ interface API {
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): Call<ShowPatientOfDoctor>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("patient_visits/doctor/{id}")
+    fun getPatientVisitDoctorList(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Call<MyPatientReservation>
 
     //////////////////////////Doctors//////////////////////////////////
 
