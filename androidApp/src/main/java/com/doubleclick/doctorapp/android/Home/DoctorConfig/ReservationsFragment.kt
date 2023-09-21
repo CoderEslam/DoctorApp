@@ -1,21 +1,19 @@
 package com.doubleclick.doctorapp.android.Home.DoctorConfig
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.doubleclick.doctorapp.android.Adapters.DoctorReservationAdapter
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.MyReservation
-import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.FragmentReservationsBinding
 import com.doubleclick.doctorapp.android.utils.Constants
-import com.doubleclick.doctorapp.android.utils.Constants.TOKEN
 import com.doubleclick.doctorapp.android.utils.SessionManger.getIdWorker
 import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import kotlinx.coroutines.Dispatchers
@@ -70,11 +68,10 @@ class ReservationsFragment : Fragment() {
                             call: Call<MyReservation>,
                             response: Response<MyReservation>
                         ) {
-                            Toast.makeText(
-                                requireActivity(),
-                                response.body().toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            if (response.body()?.data != null) {
+                                binding.rvReservation.adapter =
+                                    DoctorReservationAdapter(response.body()?.data!!)
+                            }
                         }
 
                         override fun onFailure(call: Call<MyReservation>, t: Throwable) {

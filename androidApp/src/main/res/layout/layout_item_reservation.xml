@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:id="@+id/arrow_open_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="5dp"
+                android:src="@drawable/arrow_down"
+                app:layout_constraintBottom_toBottomOf="@+id/linearLayout9"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/linearLayout9"
+                app:layout_constraintTop_toTopOf="@+id/linearLayout9" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout9"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/patient_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/patient_image">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Name : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Phone : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Age : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Reservation time : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_reservation_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/more_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout9"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Blood type : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_blood"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Somking : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_smoking"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Marital status : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_marital_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Drinking alcohol : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_drinking_alcohol"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Height : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_height"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik"
+                        android:text="Weight : "
+                        android:textColor="@color/grey"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        app:layout_constraintTop_toTopOf="@+id/patient_image" />
+
+                    <TextView
+                        android:id="@+id/patent_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/rubik_bold"
+                        android:text="name"
+                        android:textColor="@color/green"
+                        android:textSize="18sp"
+                        app:layout_constraintStart_toEndOf="@+id/patient_image"
+                        tools:layout_editor_absoluteY="386dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp">
+
+                    <StackView
+                        android:id="@+id/stack_view_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:listitem="@layout/stack_item_image" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
