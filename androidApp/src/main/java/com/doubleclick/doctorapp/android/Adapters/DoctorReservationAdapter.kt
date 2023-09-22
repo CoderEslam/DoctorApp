@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientOldReservation.ReservationModel
 import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctorModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorReservationViewHolder
@@ -96,7 +95,6 @@ class DoctorReservationAdapter(val reservationModelList: List<ShowPatientOfDocto
             if (holder.more_info.visibility == View.GONE) {
                 holder.itemView.expand(holder.more_info)
                 holder.arrow_open_more.animate().rotation(180f).start()
-                holder.more_info.visibility = View.VISIBLE
             } else {
                 holder.itemView.collapse(holder.more_info)
                 holder.arrow_open_more.animate().rotation(0f).start()
