@@ -17,16 +17,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_reservation"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reservation_date"
+        app:layout_constraintVertical_bias="1.0"
         tools:listitem="@layout/layout_item_reservation" />
+
+
+    <EditText
+        android:id="@+id/reservation_date"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/bg_txt_gray"
+        android:drawableStart="@drawable/ic_baseline_date_range_24"
+        android:drawablePadding="5dp"
+        android:editable="false"
+        android:focusable="false"
+        android:fontFamily="@font/rubik"
+        android:hint="00/00/0000"
+        android:inputType="date"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:textColor="@color/green"
+        android:textColorHint="@color/text_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <DatePicker
+        android:id="@+id/simpleDatePicker"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/green"
+        android:datePickerMode="spinner"
+        android:elevation="9dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reservation_date"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

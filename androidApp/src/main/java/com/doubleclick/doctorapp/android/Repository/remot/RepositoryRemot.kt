@@ -124,10 +124,12 @@ class RepositoryRemot {
     fun getPatientReservationDoctorList(
         token: String,
         id: String,
+        date: String
     ): Call<ShowPatientOfDoctor> {
         return RetrofitInstance.api.getPatientReservationDoctorList(
             token = token,
             id = id,
+            date = date
         )
     }
     fun getPatientVisitDoctorList(
@@ -137,6 +139,15 @@ class RepositoryRemot {
         return RetrofitInstance.api.getPatientVisitDoctorList(
             token = token,
             id = id,
+        )
+    }
+    fun getHistoryPatientVisitDoctorList(
+        token: String,
+        id: String,
+    ): Call<MyPatientReservation> {
+        return RetrofitInstance.api.getHistoryPatientVisitDoctorList(
+            token = token,
+            patient_id = id,
         )
     }
     //////////////////////////Doctor store//////////////////////////////////

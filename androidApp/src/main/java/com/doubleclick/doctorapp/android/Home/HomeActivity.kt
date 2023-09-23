@@ -21,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.doubleclick.doctorapp.android.Adapters.AdapterNavigation
 import com.doubleclick.doctorapp.android.Home.DoctorConfig.DoctorConfigActivity
+import com.doubleclick.doctorapp.android.Home.Setting.SettingsActivity
 import com.doubleclick.doctorapp.android.Home.fragment.BottomDialogQRCode
 import com.doubleclick.doctorapp.android.ItemNavigationListener
 import com.doubleclick.doctorapp.android.Model.ItemNavigation
@@ -130,8 +131,9 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
                 listOf(
                     ItemNavigation(R.drawable.home, R.string.home, 0),
                     ItemNavigation(R.drawable.help_center, R.string.help, 1),
-//                    ItemNavigation(R.drawable.setting, R.string.settings, 2),
-                    ItemNavigation(R.drawable.ic_baseline_manage_accounts_24, R.string.doctor, 3),
+                    ItemNavigation(R.drawable.ic_baseline_history_24, R.string.history, 2),
+//                    ItemNavigation(R.drawable.setting, R.string.settings, 3),
+                    ItemNavigation(R.drawable.ic_baseline_manage_accounts_24, R.string.doctor, 4),
                 )
             )
 
@@ -298,12 +300,15 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
 
             }
             1 -> {
-
+                startActivity(Intent(this@HomeActivity, HistoryActivity::class.java))
             }
             2 -> {
-//                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
+
             }
             3 -> {
+//                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
+            }
+            4 -> {
                 startActivity(Intent(this@HomeActivity, DoctorConfigActivity::class.java))
             }
         }

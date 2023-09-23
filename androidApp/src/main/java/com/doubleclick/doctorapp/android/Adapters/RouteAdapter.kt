@@ -24,7 +24,7 @@ class RouteAdapter(val routs: List<RouteModel>, val onRoute: OnRoute) :
                 ConstraintLayout.LayoutParams.MATCH_PARENT,
                 ConstraintLayout.LayoutParams.WRAP_CONTENT
             )
-            layoutParams.setMargins(0, 100, 0, 0)
+            layoutParams.setMargins(0, 150, 0, 0)
             holder.constrain_parent.layoutParams = layoutParams
         }
         holder.name.text = routs[holder.bindingAdapterPosition].name

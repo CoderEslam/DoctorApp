@@ -205,8 +205,9 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     fun getPatientReservationDoctorList(
         token: String,
         id: String,
+        date: String
     ): LiveData<Call<ShowPatientOfDoctor>> {
-        showPatientOfDoctor.value = repository.getPatientReservationDoctorList(token = token, id = id);
+        showPatientOfDoctor.value = repository.getPatientReservationDoctorList(token = token, id = id, date = date);
         return showPatientOfDoctor;
     }
 
@@ -216,6 +217,13 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         id: String,
     ): LiveData<Call<MyPatientReservation>> {
         myReservation.value = repository.getPatientVisitDoctorList(token = token, id = id);
+        return myReservation;
+    }
+    fun getHistoryPatientVisitDoctorList(
+        token: String,
+        id: String,
+    ): LiveData<Call<MyPatientReservation>> {
+        myReservation.value = repository.getHistoryPatientVisitDoctorList(token = token, id = id);
         return myReservation;
     }
     //////////////////////////Doctor store//////////////////////////////////

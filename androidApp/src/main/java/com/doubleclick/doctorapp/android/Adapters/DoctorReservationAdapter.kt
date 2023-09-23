@@ -1,5 +1,6 @@
 package com.doubleclick.doctorapp.android.Adapters
 
+import android.content.Intent
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.doubleclick.doctorapp.android.Home.PatientVisitsActivity
 import com.doubleclick.doctorapp.android.Model.PatientReservations.ShowPatientOfDoctor.ShowPatientOfDoctorModel
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.ViewHolders.DoctorReservationViewHolder
@@ -91,7 +93,7 @@ class DoctorReservationAdapter(val reservationModelList: List<ShowPatientOfDocto
         holder.patent_weight.text = buildString {
             append(reservationModelList[holder.bindingAdapterPosition].patient?.weight)
         }
-        holder.itemView.setOnClickListener {
+        holder.arrow_open_more.setOnClickListener {
             if (holder.more_info.visibility == View.GONE) {
                 holder.itemView.expand(holder.more_info)
                 holder.arrow_open_more.animate().rotation(180f).start()
@@ -99,6 +101,20 @@ class DoctorReservationAdapter(val reservationModelList: List<ShowPatientOfDocto
                 holder.itemView.collapse(holder.more_info)
                 holder.arrow_open_more.animate().rotation(0f).start()
             }
+        }
+        holder.itemView.setOnClickListener {
+            holder.itemView.context.startActivity(
+                Intent(
+                    holder.itemView.context,
+                    PatientVisitsActivity::class.java
+                ).putExtra(
+                    "doctor_id",
+                    "${reservationModelList[holder.bindingAdapterPosition].doctor_id}"
+                ).putExtra(
+                    "clinic_id",
+                    "${reservationModelList[holder.bindingAdapterPosition].clinic_id}"
+                )
+            )
         }
 
     }

@@ -195,7 +195,8 @@ interface API {
     @GET("patient_reservations/doctor/{id}")
     fun getPatientReservationDoctorList(
         @Header("Authorization") token: String,
-        @Path("id") id: String
+        @Path("id") id: String,
+        @Query("date") date: String
     ): Call<ShowPatientOfDoctor>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
@@ -203,6 +204,13 @@ interface API {
     fun getPatientVisitDoctorList(
         @Header("Authorization") token: String,
         @Path("id") id: String
+    ): Call<MyPatientReservation>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("patient_visits/patient/{id}")
+    fun getHistoryPatientVisitDoctorList(
+        @Header("Authorization") token: String,
+        @Path("id") patient_id: String
     ): Call<MyPatientReservation>
 
     //////////////////////////Doctors//////////////////////////////////
