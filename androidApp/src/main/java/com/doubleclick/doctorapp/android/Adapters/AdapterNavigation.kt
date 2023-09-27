@@ -34,7 +34,7 @@ class AdapterNavigation(
             )
         )
 
-        if (items[holder.absoluteAdapterPosition].index == lastCheckedPosition) {
+        /*if (items[holder.absoluteAdapterPosition].index == lastCheckedPosition) {
             holder.name.setTextColor(
                 holder.itemView.context.resources.getColor(
                     R.color.grey_text
@@ -57,7 +57,7 @@ class AdapterNavigation(
                     R.color.black
                 )
             )
-        }
+        }*/
         holder.itemView.setOnClickListener {
             itemNavigationListener.itemNavigation(items[position].index)
             lastCheckedPosition = items[position].index

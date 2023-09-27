@@ -13,6 +13,7 @@
         android:background="@drawable/bg" />
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -246,6 +247,16 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:backgroundTint="@color/green"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/search" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_clinics"
         android:layout_width="match_parent"
@@ -269,4 +280,5 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/heart_loading" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

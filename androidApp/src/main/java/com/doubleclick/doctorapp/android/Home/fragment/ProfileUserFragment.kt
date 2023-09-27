@@ -35,6 +35,7 @@ import com.doubleclick.doctorapp.android.Model.Auth.UpdateUser
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.GovernoratesModel
 import com.doubleclick.doctorapp.android.Model.Message
+import com.doubleclick.doctorapp.android.Model.Patient.MyVisits.MyVisits
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
 import com.doubleclick.doctorapp.android.Model.PatientReservations.PatientReservationsList
@@ -69,6 +70,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
+import org.apache.http.client.utils.CloneUtils.clone
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -596,6 +598,7 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
         binding.progressBar.progress = percentage
     }
 
+    // to get Reservations ot this patient
     override fun patientReservations(patient_reservations_id: String) {
         viewLifecycleOwner.lifecycleScope.launch {
             RetrofitInstance.api.getPatientReservations(
@@ -619,22 +622,27 @@ class ProfileUserFragment : Fragment(), UploadRequestBody.UploadCallback, Family
 
     override fun patientVisits(patient_visits_id: String) {
         viewLifecycleOwner.lifecycleScope.launch {
-            RetrofitInstance.api.getPatientReservations(
+            viewModel.getHistoryPatientVisitDoctorList(
                 BEARER + requireActivity().getToken(), patient_visits_id
-            ).clone().enqueue(object : Callback<PatientReservationsList> {
-                override fun onResponse(
-                    call: Call<PatientReservationsList>, response: Response<PatientReservationsList>
-                ) {
-                    if (response.body()?.data != null) {
-                        BottomDialogPatiant(response.body()?.data!!).show(childFragmentManager, "")
+            ).observe(viewLifecycleOwner) {
+                it.clone().enqueue(object : Callback<MyVisits> {
+                    override fun onResponse(
+                        call: Call<MyVisits>, response: Response<MyVisits>
+                    ) {
+                        if (response.body()?.data != null) {
+                            BottomDialogPatiantMyVisits(response.body()?.data!!).show(
+                                childFragmentManager,
+                                ""
+                            )
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<PatientReservationsList>, t: Throwable) {
+                    override fun onFailure(call: Call<MyVisits>, t: Throwable) {
 
-                }
+                    }
 
-            })
+                })
+            }
         }
     }
 

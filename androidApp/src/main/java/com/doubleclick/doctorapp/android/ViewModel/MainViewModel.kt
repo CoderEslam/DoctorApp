@@ -17,6 +17,7 @@ import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
+import com.doubleclick.doctorapp.android.Model.Patient.MyVisits.MyVisits
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
@@ -100,6 +101,7 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     private val doctorsInfo: MutableLiveData<Call<DoctorsList>> = MutableLiveData()
     private val showPatientOfDoctor: MutableLiveData<Call<ShowPatientOfDoctor>> = MutableLiveData()
     private val myReservation: MutableLiveData<Call<MyPatientReservation>> = MutableLiveData()
+    private val myVisits: MutableLiveData<Call<MyVisits>> = MutableLiveData()
     //////////////////////////Doctors//////////////////////////////////
 
 
@@ -207,7 +209,8 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         id: String,
         date: String
     ): LiveData<Call<ShowPatientOfDoctor>> {
-        showPatientOfDoctor.value = repository.getPatientReservationDoctorList(token = token, id = id, date = date);
+        showPatientOfDoctor.value =
+            repository.getPatientReservationDoctorList(token = token, id = id, date = date);
         return showPatientOfDoctor;
     }
 
@@ -215,16 +218,19 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
     fun getPatientVisitDoctorList(
         token: String,
         id: String,
+        date: String
     ): LiveData<Call<MyPatientReservation>> {
-        myReservation.value = repository.getPatientVisitDoctorList(token = token, id = id);
+        myReservation.value =
+            repository.getPatientVisitDoctorList(token = token, id = id, date = date);
         return myReservation;
     }
+
     fun getHistoryPatientVisitDoctorList(
         token: String,
         id: String,
-    ): LiveData<Call<MyPatientReservation>> {
-        myReservation.value = repository.getHistoryPatientVisitDoctorList(token = token, id = id);
-        return myReservation;
+    ): LiveData<Call<MyVisits>> {
+        myVisits.value = repository.getHistoryPatientVisitDoctorList(token = token, id = id);
+        return myVisits;
     }
     //////////////////////////Doctor store//////////////////////////////////
 
@@ -302,7 +308,7 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
 
     }
 
-    fun uploadPatientImages(
+    fun storePatientVisit(
         token: String,
         type: RequestBody,
         doctor_id: RequestBody,
@@ -313,7 +319,7 @@ class MainViewModel(private val repository: RepositoryRemot) : ViewModel() {
         diagnosis: RequestBody,
         images: List<MultipartBody.Part>
     ): LiveData<Call<Message>> {
-        message.value = repository.uploadPatientImages(
+        message.value = repository.storePatientVisit(
             token = token,
             type = type,
             doctor_id = doctor_id,

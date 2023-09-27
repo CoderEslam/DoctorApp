@@ -14,6 +14,7 @@ import com.doubleclick.doctorapp.android.Model.Doctor.*
 import com.doubleclick.doctorapp.android.Model.Favorite.FavoriteDoctor
 import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpecializationList
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
+import com.doubleclick.doctorapp.android.Model.Patient.MyVisits.MyVisits
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
@@ -121,6 +122,7 @@ class RepositoryRemot {
             image = image,
         )
     }
+
     fun getPatientReservationDoctorList(
         token: String,
         id: String,
@@ -132,19 +134,23 @@ class RepositoryRemot {
             date = date
         )
     }
+
     fun getPatientVisitDoctorList(
         token: String,
         id: String,
+        date: String
     ): Call<MyPatientReservation> {
         return RetrofitInstance.api.getPatientVisitDoctorList(
             token = token,
             id = id,
+            date = date
         )
     }
+
     fun getHistoryPatientVisitDoctorList(
         token: String,
         id: String,
-    ): Call<MyPatientReservation> {
+    ): Call<MyVisits> {
         return RetrofitInstance.api.getHistoryPatientVisitDoctorList(
             token = token,
             patient_id = id,
@@ -210,7 +216,7 @@ class RepositoryRemot {
 
 
     //////////////////////////patient_visits//////////////////////////////////
-    fun uploadPatientImages(
+    fun storePatientVisit(
         token: String,
         type: RequestBody,
         doctor_id: RequestBody,
@@ -221,7 +227,7 @@ class RepositoryRemot {
         diagnosis: RequestBody,
         images: List<MultipartBody.Part>
     ): Call<Message> {
-        return RetrofitInstance.api.uploadPatientImages(
+        return RetrofitInstance.api.storePatientVisit(
             token = token,
             type = type,
             doctor_id = doctor_id,

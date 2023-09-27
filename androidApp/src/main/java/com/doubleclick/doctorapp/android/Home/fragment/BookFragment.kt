@@ -54,7 +54,7 @@ class BookFragment : Fragment(), SlyCalendarDialog.Callback {
             Log.e(TAG, "onViewCreated: ${requireActivity().getId().toString()}")
             RetrofitInstance.api.getPatientReservations(
                 BEARER + requireActivity().getToken(),
-                /*requireActivity().getId().toString()*/"1"
+                requireActivity().getId().toString()
             ).clone().enqueue(object : Callback<PatientReservationsList> {
                 override fun onResponse(
                     call: Call<PatientReservationsList>,

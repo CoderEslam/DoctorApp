@@ -160,7 +160,7 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
     }
 
     fun upload() {
-        viewModel.uploadPatientImages(
+        viewModel.storePatientVisit(
             "$BEARER${TOKEN}",
             type = RequestBody.create(
                 "multipart/form-data".toMediaTypeOrNull(),

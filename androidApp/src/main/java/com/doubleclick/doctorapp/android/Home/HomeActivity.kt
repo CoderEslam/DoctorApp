@@ -107,7 +107,7 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
         val appBarConfiguration: AppBarConfiguration = AppBarConfiguration.Builder(
             R.id.homeFragment,
             R.id.favoriteFragment,
-            R.id.bookFragment,
+//            R.id.bookFragment,
             R.id.profileFragment
         ).build()
         NavigationUI.setupActionBarWithNavController(
@@ -129,11 +129,8 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
             AdapterNavigation(
                 this@HomeActivity,
                 listOf(
-                    ItemNavigation(R.drawable.home, R.string.home, 0),
+                    ItemNavigation(R.drawable.ic_baseline_manage_accounts_24, R.string.doctor, 0),
                     ItemNavigation(R.drawable.help_center, R.string.help, 1),
-                    ItemNavigation(R.drawable.ic_baseline_history_24, R.string.history, 2),
-//                    ItemNavigation(R.drawable.setting, R.string.settings, 3),
-                    ItemNavigation(R.drawable.ic_baseline_manage_accounts_24, R.string.doctor, 4),
                 )
             )
 
@@ -297,20 +294,12 @@ class HomeActivity : AppCompatActivity(), ItemNavigationListener {
     override fun itemNavigation(index: Int) {
         when (index) {
             0 -> {
-
-            }
-            1 -> {
-                startActivity(Intent(this@HomeActivity, HistoryActivity::class.java))
-            }
-            2 -> {
-
-            }
-            3 -> {
-//                startActivity(Intent(this@HomeActivity, SettingsActivity::class.java))
-            }
-            4 -> {
                 startActivity(Intent(this@HomeActivity, DoctorConfigActivity::class.java))
             }
+            1 -> {
+                // Help activity
+            }
+
         }
     }
 

@@ -17,6 +17,7 @@ import com.doubleclick.doctorapp.android.Model.GeneralSpecialization.GeneralSpec
 import com.doubleclick.doctorapp.android.Model.Governorates.Governorates
 import com.doubleclick.doctorapp.android.Model.Governorates.StoreGovernorates
 import com.doubleclick.doctorapp.android.Model.MedicalAdvice.MedicalAdvice
+import com.doubleclick.doctorapp.android.Model.Patient.MyVisits.MyVisits
 import com.doubleclick.doctorapp.android.Model.Patient.Patient
 import com.doubleclick.doctorapp.android.Model.Patient.PatientStore
 import com.doubleclick.doctorapp.android.Model.Patient.PatientsList
@@ -203,7 +204,8 @@ interface API {
     @GET("patient_visits/doctor/{id}")
     fun getPatientVisitDoctorList(
         @Header("Authorization") token: String,
-        @Path("id") id: String
+        @Path("id") id: String,
+        @Query("date") date: String
     ): Call<MyPatientReservation>
 
     @Headers("Content-Type: application/json", "Accept: application/json")
@@ -211,7 +213,7 @@ interface API {
     fun getHistoryPatientVisitDoctorList(
         @Header("Authorization") token: String,
         @Path("id") patient_id: String
-    ): Call<MyPatientReservation>
+    ): Call<MyVisits>
 
     //////////////////////////Doctors//////////////////////////////////
 
@@ -291,7 +293,7 @@ interface API {
 
     @Multipart
     @POST("patient_visits")
-    fun uploadPatientImages(
+    fun storePatientVisit(
         @Header("Authorization") token: String,
         @Part("type") type: RequestBody,
         @Part("doctor_id") doctor_id: RequestBody,
@@ -344,6 +346,13 @@ interface API {
         @Header("Authorization") token: String,
         @Path("id") id: String
     ): Call<PatientReservationsList>
+
+    @Headers("Content-Type: application/json", "Accept: application/json")
+    @GET("patient_visits/patient/{id}")
+    fun getPatientVisitsById(
+        @Header("Authorization") token: String,
+        @Path("id") id: String
+    ): Call<MyPatientReservation>
     //////////////////////////patient_reservations//////////////////////////////////
 
     @Headers("Content-Type: application/json", "Accept: application/json")

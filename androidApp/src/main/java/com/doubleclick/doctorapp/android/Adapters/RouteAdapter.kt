@@ -28,6 +28,7 @@ class RouteAdapter(val routs: List<RouteModel>, val onRoute: OnRoute) :
             holder.constrain_parent.layoutParams = layoutParams
         }
         holder.name.text = routs[holder.bindingAdapterPosition].name
+        holder.name.isSelected = true
         holder.itemView.setOnClickListener {
             onRoute.onClick(routs[holder.bindingAdapterPosition].tag)
         }

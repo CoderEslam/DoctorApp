@@ -12,11 +12,11 @@
         android:icon="@drawable/favorite"
         android:title="@string/favorite" />
 
-    <item
-        android:id="@+id/bookFragment"
-        android:contentDescription="@string/book"
-        android:icon="@drawable/book"
-        android:title="@string/book" />
+<!--    <item-->
+<!--        android:id="@+id/bookFragment"-->
+<!--        android:contentDescription="@string/book"-->
+<!--        android:icon="@drawable/book"-->
+<!--        android:title="@string/book" />-->
     <item
         android:id="@+id/profileFragment"
         android:contentDescription="@string/profile"

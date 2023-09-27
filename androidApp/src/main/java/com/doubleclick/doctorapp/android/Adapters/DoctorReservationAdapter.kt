@@ -50,13 +50,13 @@ class DoctorReservationAdapter(val reservationModelList: List<ShowPatientOfDocto
             val curDate: LocalDate = LocalDate.now()
             val period: Period = Period.between(dob, curDate)
             holder.patent_age.text = buildString {
-                append("Your age is ")
+                append("The age is ")
                 append(period.years)
                 append(" years ,")
                 append(period.months)
                 append(" months ,")
                 append(period.days)
-                append(" days ,")
+                append(" days")
 //                append(reservationModelList[holder.bindingAdapterPosition].patient_reservation?.age)
             }
         } else {
@@ -113,6 +113,18 @@ class DoctorReservationAdapter(val reservationModelList: List<ShowPatientOfDocto
                 ).putExtra(
                     "clinic_id",
                     "${reservationModelList[holder.bindingAdapterPosition].clinic_id}"
+                ).putExtra(
+                    "patient_id",
+                    "${reservationModelList[holder.bindingAdapterPosition].patient_id}"
+                ).putExtra(
+                    "type",
+                    "${reservationModelList[holder.bindingAdapterPosition].type}"
+                ).putExtra(
+                    "reservation_date",
+                    "${reservationModelList[holder.bindingAdapterPosition].reservation_date}"
+                ).putExtra(
+                    "id",
+                    "${reservationModelList[holder.bindingAdapterPosition].id}"
                 )
             )
         }
