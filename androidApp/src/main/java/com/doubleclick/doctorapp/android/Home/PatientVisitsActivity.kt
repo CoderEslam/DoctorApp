@@ -57,11 +57,7 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
                             body
                         )
                     )
-                    Toast.makeText(
-                        this,
-                        "Saved at =>  ${binding.viewSignature.getSavePath().toString()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    upload()
 
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -71,63 +67,61 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
             }
         }
 
-        fun upload() {
-            viewModel.storePatientVisit(
-                "${Constants.BEARER}${TOKEN}",
-                type = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    intent.extras?.getString("type").toString()
-                ),
-                doctor_id = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    intent.extras?.getString("doctor_id").toString()
-                ),
-                patient_id = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    intent.extras?.getString("patient_id").toString()
-                ),
-                clinic_id = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    intent.extras?.getString("clinic_id").toString()
-                ),
-                reservation_date = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    intent.extras?.getString("reservation_date").toString()
-                ),
-                patient_reservation_id = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    intent.extras?.getString("id").toString()
-                ),
-                diagnosis = RequestBody.create(
-                    "multipart/form-data".toMediaTypeOrNull(),
-                    ""
-                ),
-                listImages
-            ).observe(this@PatientVisitsActivity) {
-                it.clone().enqueue(object : Callback<Message> {
-                    override fun onResponse(
-                        call: Call<Message>,
-                        response: Response<Message>
-                    ) {
-                        Toast.makeText(
-                            this@PatientVisitsActivity,
-                            "response = ${response.body()?.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
 
-                    override fun onFailure(call: Call<Message>, t: Throwable) {
-                        Toast.makeText(
-                            this@PatientVisitsActivity,
-                            "onFailure = ${t.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
 
-                })
-            };
-        }
+    }
 
+    fun upload() {
+        viewModel.storePatientVisit(
+            "${Constants.BEARER}${TOKEN}",
+            type = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                intent.extras?.getString("type").toString()
+            ),
+            doctor_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                intent.extras?.getString("doctor_id").toString()
+            ),
+            patient_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                intent.extras?.getString("patient_id").toString()
+            ),
+            clinic_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                intent.extras?.getString("clinic_id").toString()
+            ),
+            reservation_date = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                intent.extras?.getString("reservation_date").toString()
+            ),
+            patient_reservation_id = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                intent.extras?.getString("id").toString()
+            ),
+            diagnosis = RequestBody.create(
+                "multipart/form-data".toMediaTypeOrNull(),
+                ""
+            ),
+            listImages
+        ).observe(this@PatientVisitsActivity) {
+            it.clone().enqueue(object : Callback<Message> {
+                override fun onResponse(
+                    call: Call<Message>,
+                    response: Response<Message>
+                ) {
+                    Toast.makeText(
+                        this@PatientVisitsActivity,
+                        "Done",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onFailure(call: Call<Message>, t: Throwable) {
+                    Log.e(TAG, "onFailure: = ${t.message}" )
+                }
+
+            })
+        };
     }
 
     override fun onProgressUpdate(percentage: Int) {
