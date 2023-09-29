@@ -7,18 +7,20 @@ import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.doubleclick.doctorapp.android.Model.Message
-import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.Repository.remot.RepositoryRemot
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModel
 import com.doubleclick.doctorapp.android.ViewModel.MainViewModelFactory
 import com.doubleclick.doctorapp.android.databinding.ActivityPatientVisitsBinding
 import com.doubleclick.doctorapp.android.utils.Constants
-import com.doubleclick.doctorapp.android.utils.Constants.TOKEN
+import com.doubleclick.doctorapp.android.utils.SessionManger.getToken
 import com.doubleclick.doctorapp.android.utils.UploadRequestBody
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import org.apache.http.client.utils.CloneUtils.clone
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +33,9 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
     private lateinit var viewModel: MainViewModel
     val listImages: MutableList<MultipartBody.Part> = mutableListOf();
     private val TAG = "PatientVisitsActivity"
+    private var TOKEN = ""
+
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPatientVisitsBinding.inflate(layoutInflater)
@@ -41,6 +46,9 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
         )[MainViewModel::class.java]
         binding.clear.setOnClickListener {
             binding.viewSignature.clear();
+        }
+        GlobalScope.launch(Dispatchers.Main) {
+            TOKEN = getToken().toString()
         }
         binding.done.setOnClickListener {
 
@@ -57,7 +65,7 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
                             body
                         )
                     )
-                    upload()
+                    upload(listImages)
 
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -68,40 +76,33 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
         }
 
 
-
     }
 
-    fun upload() {
+    private fun upload(listImages: MutableList<MultipartBody.Part>) {
+
+        Log.e(TAG, "upload: ${intent.extras?.getString("type").toString()}")
+        Log.e(TAG, "upload: ${intent.extras?.getString("doctor_id").toString()}")
+        Log.e(TAG, "upload: ${intent.extras?.getString("patient_id").toString()}")
+        Log.e(TAG, "upload: ${intent.extras?.getString("clinic_id").toString()}")
+        Log.e(TAG, "upload: ${intent.extras?.getString("reservation_date").toString()}")
+        Log.e(TAG, "upload: ${intent.extras?.getString("id").toString()}")
+
         viewModel.storePatientVisit(
             "${Constants.BEARER}${TOKEN}",
-            type = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                intent.extras?.getString("type").toString()
-            ),
-            doctor_id = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                intent.extras?.getString("doctor_id").toString()
-            ),
-            patient_id = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                intent.extras?.getString("patient_id").toString()
-            ),
-            clinic_id = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                intent.extras?.getString("clinic_id").toString()
-            ),
-            reservation_date = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                intent.extras?.getString("reservation_date").toString()
-            ),
-            patient_reservation_id = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                intent.extras?.getString("id").toString()
-            ),
-            diagnosis = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                ""
-            ),
+            type = intent.extras?.getString("type").toString()
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
+            doctor_id = intent.extras?.getString("doctor_id").toString()
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
+            patient_id = intent.extras?.getString("patient_id").toString()
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
+            clinic_id = intent.extras?.getString("clinic_id").toString()
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
+            reservation_date = intent.extras?.getString("reservation_date").toString()
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
+            patient_reservation_id = intent.extras?.getString("id").toString()
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
+            diagnosis = "--"
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
             listImages
         ).observe(this@PatientVisitsActivity) {
             it.clone().enqueue(object : Callback<Message> {
@@ -117,7 +118,7 @@ class PatientVisitsActivity : AppCompatActivity(), UploadRequestBody.UploadCallb
                 }
 
                 override fun onFailure(call: Call<Message>, t: Throwable) {
-                    Log.e(TAG, "onFailure: = ${t.message}" )
+                    Log.e(TAG, "onFailure: = ${t.message}")
                 }
 
             })

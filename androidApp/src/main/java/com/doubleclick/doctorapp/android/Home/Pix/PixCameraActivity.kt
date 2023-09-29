@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -162,10 +163,8 @@ class PixCameraActivity : AppCompatActivity(), UploadRequestBody.UploadCallback 
     fun upload() {
         viewModel.storePatientVisit(
             "$BEARER${TOKEN}",
-            type = RequestBody.create(
-                "multipart/form-data".toMediaTypeOrNull(),
-                "Check Up F"
-            ),
+            type = "Check Up F"
+                .toRequestBody("multipart/form-data".toMediaTypeOrNull()),
             doctor_id = RequestBody.create(
                 "multipart/form-data".toMediaTypeOrNull(),
                 "1"
