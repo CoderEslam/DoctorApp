@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_routeFragment_to_myPatientsFragment"
             app:destination="@id/myPatientsFragment" />
+        <action
+            android:id="@+id/action_routeFragment_to_pixVideoFragment"
+            app:destination="@id/pixVideoFragment" />
 
     </fragment>
 
@@ -63,6 +66,11 @@
         android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.MyPatientsFragment"
         android:label="fragment_my_patients"
         tools:layout="@layout/fragment_my_patients" />
+    <fragment
+        android:id="@+id/pixVideoFragment"
+        android:name="com.doubleclick.doctorapp.android.Home.DoctorConfig.PixVideoFragment"
+        android:label="fragment_pix_video"
+        tools:layout="@layout/fragment_pix_video" />
 
 
 </navigation>

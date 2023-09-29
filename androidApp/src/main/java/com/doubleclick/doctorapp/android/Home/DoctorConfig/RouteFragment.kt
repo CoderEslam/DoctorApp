@@ -8,23 +8,34 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.doubleclick.doctorapp.android.Adapters.PixAdapter
 import com.doubleclick.doctorapp.android.Adapters.RouteAdapter
 import com.doubleclick.doctorapp.android.Home.Pix.PixCameraActivity
 import com.doubleclick.doctorapp.android.Home.fragment.fragmentBody
 import com.doubleclick.doctorapp.android.Home.options
+import com.doubleclick.doctorapp.android.Model.Role
 import com.doubleclick.doctorapp.android.Model.RouteModel
 import com.doubleclick.doctorapp.android.OnRoute
 import com.doubleclick.doctorapp.android.R
 import com.doubleclick.doctorapp.android.databinding.FragmentRouteBinding
+import com.doubleclick.doctorapp.android.utils.SessionManger.getRole
 import io.ak1.pix.helpers.PixEventCallback
 import io.ak1.pix.helpers.pixFragment
+import io.ak1.pix.models.Flash
+import io.ak1.pix.models.Mode
+import io.ak1.pix.models.Options
+import io.ak1.pix.models.Ratio
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class RouteFragment : Fragment(), OnRoute {
 
     private lateinit var binding: FragmentRouteBinding
+    private var role = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -55,34 +66,39 @@ class RouteFragment : Fragment(), OnRoute {
         )
 
         binding.video.setOnClickListener {
-            startActivity(Intent(requireActivity(), PixCameraActivity::class.java))
+            findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToPixVideoFragment())
         }
 
-        /* pixFragment(options) {
-             when (it.status) {
-                 PixEventCallback.Status.SUCCESS -> {
-
-                 }//use results as it.data
-
-                 PixEventCallback.Status.BACK_PRESSED -> {
-
-                 }// back pressed called
-
-             }
-         }*/
-
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            role = requireActivity().getRole().toString()
+        }
     }
 
     override fun onClick(tag: Int) {
         when (tag) {
             0 -> {
-                findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorClinicsFragment())
+                if (role == Role.Doctor.role) {
+                    findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorClinicsFragment())
+                } else {
+                    Toast.makeText(requireActivity(), "you don't have access", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
             1 -> {
-                findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToAssistantsFragment())
+                if (role == Role.Doctor.role) {
+                    findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToAssistantsFragment())
+                } else {
+                    Toast.makeText(requireActivity(), "you don't have access", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
             2 -> {
-                findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorInfoFragment())
+                if (role == Role.Doctor.role) {
+                    findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToDoctorInfoFragment())
+                } else {
+                    Toast.makeText(requireActivity(), "you don't have access", Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
             3 -> {
                 findNavController().navigate(RouteFragmentDirections.actionRouteFragmentToReservationsFragment())
@@ -93,3 +109,5 @@ class RouteFragment : Fragment(), OnRoute {
         }
     }
 }
+
+

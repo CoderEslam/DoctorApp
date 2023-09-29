@@ -190,57 +190,61 @@ class DoctorInfoFragment : Fragment(), UploadRequestBody.UploadCallback {
                     override fun onResponse(
                         call: Call<DoctorsList>, response: Response<DoctorsList>
                     ) {
-                        if (response.body()?.data != null) {
-                            val data = response.body()?.data?.get(0)
-                            binding.clinicName.setText(data?.name)
-                            binding.websiteLink.setText(data?.website)
-                            binding.facebookPageLink.setText(data?.facebook_page_link)
-                            binding.facebookPageName.setText(data?.facebook_page_name)
-                            binding.instagramPageLink.setText(data?.instagram_page_link)
-                            binding.instagramPageName.setText(data?.instagram_page_name)
-                            binding.animationView.visibility = View.GONE
-                            Glide.with(BaseApplication.applicationContext())
-                                .load(IMAGE_URL_DOCTORS + data?.doctor_image)
-                                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                                .skipMemoryCache(true)
-                                .into(binding.doctorImage)
+                        try {
+                            if (response.body()?.data != null) {
+                                val data = response.body()?.data?.get(0)
+                                binding.clinicName.setText(data?.name)
+                                binding.websiteLink.setText(data?.website)
+                                binding.facebookPageLink.setText(data?.facebook_page_link)
+                                binding.facebookPageName.setText(data?.facebook_page_name)
+                                binding.instagramPageLink.setText(data?.instagram_page_link)
+                                binding.instagramPageName.setText(data?.instagram_page_name)
+                                binding.animationView.visibility = View.GONE
+                                Glide.with(BaseApplication.applicationContext())
+                                    .load(IMAGE_URL_DOCTORS + data?.doctor_image)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .skipMemoryCache(true)
+                                    .into(binding.doctorImage)
 
-                            if (data?.specialization != null) {
-                                val specializationModel = SpecializationModel(
-                                    data.specialization.id,
-                                    data.specialization.name,
-                                    data.specialization.specialization_image,
-                                    data.specialization.status,
-                                    data.specialization.user_id,
-                                )
-
-                                specializationList.indexOf(
-                                    specializationModel
-                                ).let { item ->
-                                    binding.spinnerSpecializations.setSelection(
-                                        item,
-                                        true
+                                if (data?.specialization != null) {
+                                    val specializationModel = SpecializationModel(
+                                        data.specialization.id,
+                                        data.specialization.name,
+                                        data.specialization.specialization_image,
+                                        data.specialization.status,
+                                        data.specialization.user_id,
                                     )
+
+                                    specializationList.indexOf(
+                                        specializationModel
+                                    ).let { item ->
+                                        binding.spinnerSpecializations.setSelection(
+                                            item,
+                                            true
+                                        )
+                                    }
+                                }
+
+                                if (data?.general_specialty != null) {
+                                    val generalSpecialty = GeneralSpecializationModel(
+                                        data.general_specialty.id,
+                                        data.general_specialty.name,
+                                        data.general_specialty.status,
+                                        data.general_specialty.user_id,
+                                    )
+
+                                    generalSpecializationList.indexOf(
+                                        generalSpecialty
+                                    ).let { item ->
+                                        binding.spinnerGeneralSpecializations.setSelection(
+                                            item,
+                                            true
+                                        )
+                                    }
                                 }
                             }
-
-                            if (data?.general_specialty != null) {
-                                val generalSpecialty = GeneralSpecializationModel(
-                                    data.general_specialty.id,
-                                    data.general_specialty.name,
-                                    data.general_specialty.status,
-                                    data.general_specialty.user_id,
-                                )
-
-                                generalSpecializationList.indexOf(
-                                    generalSpecialty
-                                ).let { item ->
-                                    binding.spinnerGeneralSpecializations.setSelection(
-                                        item,
-                                        true
-                                    )
-                                }
-                            }
+                        } catch (e: IndexOutOfBoundsException) {
+                            Log.e(TAG, "onResponse: ${e.message}")
                         }
                     }
 
